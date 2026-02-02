@@ -1,0 +1,59 @@
+---
+// src/pages/blog/index.astro
+import Layout from '../../layouts/Layout.astro';
+import BlogCard from '../../components/blog/BlogCard.astro';
+import { getCollection } from 'astro:content';
+
+// 1. 抓取所有文章並排序
+const allPosts = await getCollection('posts');
+const sortedPosts = allPosts.sort((a, b) => 
+  new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+
+// 2. 提取所有標籤 (用於篩選列，這裡先做靜態展示，進階可用 React/Alpine)
+const allTags = [...new Set(allPosts.map(post => post.data.tags || []).flat())];
+
+const pageTitle = "衛教專欄 | 周孟翰醫師";
+const pageDesc = "提供專業的泌尿科衛教知識，包含攝護腺、性功能、微創手術等專題文章。";
+---
+
+<Layout title={pageTitle} description={pageDesc}>
+  <div class="bg-bg min-h-screen py-24">
+    <div class="container mx-auto px-4">
+      
+      {/* 頁面標題 */}
+      <div class="text-center mb-16 animate-fade-in-up">
+        <h1 class="text-4xl md:text-5xl font-serif text-primary mb-4">衛教專欄</h1>
+        <p class="text-text text-lg max-w-2xl mx-auto">
+          這裡匯集了我在診間常被問到的問題，希望透過文字，讓您對泌尿健康有更正確的認識。
+        </p>
+      </div>
+
+      {/* 標籤篩選區 (簡易版) */}
+      <div class="flex flex-wrap justify-center gap-3 mb-12">
+        <a href="/blog" class="px-4 py-2 rounded-full bg-primary text-white text-sm font-medium shadow-md">
+          全部文章
+        </a>
+        {allTags.map(tag => (
+          <button class="px-4 py-2 rounded-full bg-surface text-text hover:bg-highlight hover:text-accent transition-colors text-sm font-medium border border-transparent hover:border-accent/20">
+            {tag}
+          </button>
+        ))}
+      </div>
+
+      {/* 文章列表網格 */}
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {sortedPosts.map(post => (
+          <BlogCard post={post} />
+        ))}
+      </div>
+
+      {/* 無文章時的顯示 */}
+      {sortedPosts.length === 0 && (
+        <div class="text-center py-20 text-gray-400">
+          <p>目前尚無文章，敬請期待。</p>
+        </div>
+      )}
+    </div>
+  </div>
+</Layout>

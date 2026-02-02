@@ -1,0 +1,22 @@
+---
+// src/pages/blog/[slug].astro
+import { getCollection } from 'astro:content';
+import MarkdownLayout from '../../layouts/MarkdownLayout.astro';
+
+// 1. 生成所有文章的路徑 (Static Site Generation 需要)
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  return posts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+// 2. 獲取當前文章資料
+const { post } = Astro.props;
+const { Content } = await post.render();
+---
+
+<MarkdownLayout frontmatter={post.data}>
+  <Content />
+</MarkdownLayout>

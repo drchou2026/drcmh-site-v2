@@ -1,0 +1,74 @@
+---
+// src/layouts/MarkdownLayout.astro
+import Layout from './Layout.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  frontmatter: CollectionEntry<'posts'>['data'];
+}
+
+const { frontmatter } = Astro.props;
+---
+
+<Layout 
+  title={`${frontmatter.seoTitle || frontmatter.title} | 周孟翰醫師`}
+  description={frontmatter.seoDescription || frontmatter.excerpt}
+>
+  <article class="py-24 bg-surface min-h-screen">
+    {/* 文章 Header */}
+    <header class="container mx-auto px-4 max-w-4xl text-center mb-12">
+      <div class="flex items-center justify-center gap-2 mb-6">
+        {frontmatter.tags?.map(tag => (
+          <span class="text-xs font-bold text-accent tracking-widest uppercase border border-accent/30 px-2 py-1 rounded">
+            {tag}
+          </span>
+        ))}
+      </div>
+      
+      <h1 class="text-3xl md:text-5xl font-serif font-bold text-primary leading-tight mb-6">
+        {frontmatter.title}
+      </h1>
+
+      <div class="flex items-center justify-center gap-4 text-sm text-gray-500">
+        <span>{new Date(frontmatter.date).toLocaleDateString('zh-TW')}</span>
+        <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
+        <span>{frontmatter.author || '周孟翰 醫師'}</span>
+      </div>
+    </header>
+
+    {/* 封面圖 (若有) */}
+    {/* {frontmatter.coverImage && (
+      <div class="container mx-auto px-4 max-w-5xl mb-16">
+        <Image src={frontmatter.coverImage} alt={frontmatter.title} class="w-full h-auto rounded-2xl shadow-lg" />
+      </div>
+    )} 
+    */}
+
+    {/* 文章內容 (Prose) */}
+    <div class="container mx-auto px-4 max-w-3xl">
+      {/* 這裡使用了 Tailwind Typography 插件 
+         prose-headings:font-serif -> 標題改用襯線體
+         prose-a:text-accent -> 連結改為金棕色
+      */}
+      <div class="prose prose-lg prose-slate mx-auto
+        prose-headings:font-serif prose-headings:text-primary 
+        prose-p:text-text prose-p:leading-loose
+        prose-a:text-accent prose-a:no-underline hover:prose-a:underline
+        prose-blockquote:border-l-accent prose-blockquote:bg-bg prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:not-italic
+        prose-li:text-text
+        prose-img:rounded-xl prose-img:shadow-md
+      ">
+        <slot />
+      </div>
+
+      {/* 文末 CTA */}
+      <div class="mt-16 p-8 bg-highlight/30 rounded-2xl border border-accent/20 text-center">
+        <h3 class="text-xl font-serif font-bold text-primary mb-3">有相關困擾嗎？</h3>
+        <p class="text-text mb-6">每個人的狀況不盡相同，建議實際到診間進行評估。</p>
+        <a href="/#clinic" class="inline-block bg-primary text-white px-8 py-3 rounded-full hover:bg-accent transition-colors shadow-lg">
+          預約門診諮詢
+        </a>
+      </div>
+    </div>
+  </article>
+</Layout>

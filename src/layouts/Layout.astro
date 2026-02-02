@@ -1,33 +1,76 @@
 ---
 import '../styles/global.css';
+import { ViewTransitions } from 'astro:transitions';
+import Header from '../components/common/Header.astro';
+import Footer from '../components/common/Footer.astro';
 
 interface Props {
-	title: string;
-	description?: string;
+  title?: string;
+  description?: string;
+  image?: string;
 }
 
-const { title, description = "周孟翰醫師 - 新店高美泌尿科診所院長，泌尿科專科醫師。" } = Astro.props;
+// 預設 SEO 資訊 (從 PRD 提取)
+const { 
+  title = "周孟翰醫師 | 新店高美泌尿科診所院長",
+  description = "新店高美泌尿科診所院長周孟翰醫師，專精於攝護腺肥大微創手術 (UroLift, Rezūm)、泌尿道結石、性功能障礙與私密處健康。提供隱私、專業且溫暖的診療服務。",
+  image = "/images/og-default.jpg" // 之後記得放一張預設分享圖在 public/images/
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <!doctype html>
-<html lang="zh-TW">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="description" content={description} />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
-	</head>
-	<body class="flex flex-col min-h-screen">
-        <!-- 導覽列 Slot -->
-		<slot name="header" /> 
-		
-        <main class="flex-grow">
-			<slot />
-		</main>
+<html lang="zh-TW" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    
+    <!-- SEO Meta Tags -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
 
-        <!-- 頁尾 Slot -->
-		<slot name="footer" />
-	</body>
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={Astro.url} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(image, Astro.site)} />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={Astro.url} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={new URL(image, Astro.site)} />
+
+    <!-- Google Fonts 引入 (Noto Serif TC + Noto Sans TC) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Astro View Transitions (讓換頁更順暢，可選) -->
+    <ViewTransitions />
+  </head>
+  <body class="bg-bg text-text font-sans antialiased selection:bg-accent selection:text-white flex flex-col min-h-screen">
+    
+	<Header slot="header" />
+
+	<main class="flex-grow">
+		<slot />
+	</main>
+	
+	<Footer slot="footer" />
+    
+  </body>
 </html>
+
+
+
+
+
+
+---

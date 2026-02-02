@@ -1,0 +1,28 @@
+---
+// src/pages/404.astro
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="頁面不存在 | 周孟翰醫師">
+  <div class="min-h-[80vh] flex flex-col items-center justify-center bg-bg text-center px-4">
+    <div class="font-serif text-[12rem] font-bold text-accent/20 leading-none select-none">
+      404
+    </div>
+    <h1 class="text-3xl md:text-4xl font-serif text-primary font-bold -mt-10 mb-6 relative z-10">
+      頁面迷路了
+    </h1>
+    <p class="text-text text-lg max-w-md mx-auto mb-10">
+      您所尋找的頁面可能已經移除，或是暫時無法使用。<br/>
+      不用擔心，您可以回到首頁，或查看門診資訊。
+    </p>
+    
+    <div class="flex gap-4">
+      <a href="/" class="px-8 py-3 bg-primary text-white rounded-full hover:bg-primary/90 transition-colors shadow-lg">
+        返回首頁
+      </a>
+      <a href="/#clinic" class="px-8 py-3 bg-surface text-primary border border-gray-200 rounded-full hover:border-accent hover:text-accent transition-colors">
+        門診資訊
+      </a>
+    </div>
+  </div>
+</Layout>
