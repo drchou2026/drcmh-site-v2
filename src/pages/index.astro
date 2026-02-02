@@ -1,11 +1,29 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import Header from '../components/common/Header.astro';
+import Footer from '../components/common/Footer.astro';
+import Hero from '../components/home/Hero.astro';
+import Expertise from '../components/home/Expertise.astro';
+import About from '../components/home/About.astro';
+import ClinicInfo from '../components/home/ClinicInfo.astro';
+import BlogPreview from '../components/home/BlogPreview.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
-<Layout>
-	<Welcome />
+<Layout title="周孟翰醫師 | 新店高美泌尿科診所院長 | 泌尿科權威">
+  
+  <Header slot="header" />
+  
+  <Hero />
+  
+  <About />
+
+  <Expertise />
+
+  <ClinicInfo />
+
+  <BlogPreview />
+
+  <Footer slot="footer" />
+
 </Layout>

@@ -1,0 +1,155 @@
+---
+import { ArrowRight, Activity, Award } from 'lucide-react';
+import { Image } from 'astro:assets';
+
+// 暫時使用 Placeholder 圖片，實際上線時請替換為真實的醫師去背 PNG
+// 請確保有一張 src/assets/doctor-hero.png (或 jpg)
+const doctorImage = "/images/doctor-placeholder.png"; // 假設放在 public/images/
+
+// 文案資料 (源自 PRD v3.1)
+const content = {
+  tag: "PERSONAL BRAND",
+  name: "周孟翰",
+  title: "醫師",
+  subTitle: "新店高美泌尿科診所 院長",
+  slogan: "讓難以啟齒的煩惱，變成輕鬆自在的日常",
+  intro: "醫學的進步，是為了提供更多元的選擇。在我的診間，我將透過充分的溝通與尖端技術，協助您找到最符合生活型態的最佳解。",
+};
+---
+
+<section class="relative min-h-[90vh] flex items-center pt-24 md:pt-32 overflow-hidden bg-bg">
+  
+  {/* 1. 背景裝飾字 (UROLOGY) - 大氣排版 */}
+  <div class="absolute top-1/4 -left-12 md:left-0 text-[18vw] md:text-[15vw] font-serif font-bold text-primary/5 pointer-events-none select-none leading-none z-0">
+    UROLOGY
+  </div>
+
+  {/* 2. 背景裝飾色塊 (增加層次感) */}
+  <div class="absolute top-0 right-0 w-2/3 h-full bg-gradient-to-l from-[#F0EBE3] to-transparent z-0 opacity-60"></div>
+
+  <div class="container mx-auto px-6 relative z-10 flex flex-col md:flex-row items-center">
+    
+    {/* 3. 左側文字區塊 */}
+    <div class="w-full md:w-5/12 pt-8 md:pt-0 z-20 order-2 md:order-1 fade-in-up">
+      
+      {/* 標籤 */}
+      <div class="inline-block px-3 py-1 mb-6 border border-accent/50 rounded-full bg-white/50 backdrop-blur-sm">
+         <span class="text-xs font-bold tracking-[0.2em] uppercase text-accent">
+           {content.tag}
+         </span>
+      </div>
+      
+      {/* 醫師姓名 */}
+      <h1 class="text-5xl md:text-6xl lg:text-7xl font-serif font-medium leading-tight mb-4 text-primary">
+        {content.name}<br/>
+        <span class="text-3xl md:text-4xl block mt-2 text-text/60 font-sans font-normal">{content.title}</span>
+      </h1>
+      
+      {/* 分隔線 */}
+      <div class="w-24 h-1 mb-8 bg-accent rounded-full"></div>
+      
+      {/* 職稱 */}
+      <h2 class="text-xl md:text-2xl font-medium mb-6 text-primary/80 flex items-center gap-3">
+        {/* 修正：React 元件使用 className */}
+        <Award className="text-accent" size={24} />
+        {content.subTitle}
+      </h2>
+
+      {/* Slogan & Intro */}
+      <blockquote class="border-l-4 border-accent/30 pl-6 mb-8">
+        <p class="text-xl md:text-2xl font-serif text-primary mb-4 leading-snug">
+          「{content.slogan}」
+        </p>
+        <p class="text-text leading-relaxed text-sm md:text-base text-justify">
+          {content.intro}
+        </p>
+      </blockquote>
+
+      {/* CTA 按鈕 */}
+      <div class="flex gap-4">
+        <a 
+          href="/#clinic" 
+          class="group flex items-center gap-3 px-8 py-4 bg-primary text-white rounded-full transition-all hover:bg-accent hover:shadow-lg hover:-translate-y-1"
+        >
+           <span class="font-bold tracking-wide">預約門診</span>
+           {/* 修正：React 元件使用 className */}
+           <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform"/>
+        </a>
+      </div>
+    </div>
+
+    {/* 4. 右側醫師形象照區塊 */}
+    <div class="w-full md:w-7/12 relative mt-12 md:mt-0 h-[50vh] md:h-[85vh] order-1 md:order-2 flex justify-center md:justify-end items-end">
+       
+       {/* 圖片容器 (遮罩效果) */}
+       <div class="relative w-full max-w-lg md:max-w-xl aspect-[3/4] md:aspect-[4/5] z-10">
+          
+          <div class="w-full h-full relative rounded-t-[12rem] overflow-hidden shadow-2xl bg-gradient-to-b from-[#E3Ddd5] to-[#F0EBE3] border-8 border-white">
+             
+             {/* 模擬人物 (Placeholder) */}
+             <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[120%] h-auto">
+                {/* 備註：HTML/Astro 元件繼續使用 class */}
+                <img 
+                  src="/images/doctor-placeholder.png" 
+                  alt="周孟翰醫師形象照" 
+                  class="w-full h-full object-cover object-top mask-image-gradient"
+                  loading="eager"
+                />
+                <div class="absolute inset-0 flex items-center justify-center text-primary/20 font-serif text-4xl font-bold opacity-30">
+                   Doctor Image
+                </div>
+             </div>
+
+             {/* 浮動特色卡片 (微創手術) */}
+             <div class="absolute bottom-8 left-4 md:-left-8 bg-white/90 backdrop-blur-md p-5 rounded-2xl shadow-xl border-l-4 border-accent max-w-[280px] animate-float">
+                <div class="flex items-start gap-4">
+                   <div class="p-3 bg-bg rounded-full text-accent shadow-inner">
+                      {/* Activity 若沒有特別樣式，保持原樣即可；若有樣式也需用 className */}
+                      <Activity size={24} />
+                   </div>
+                   <div>
+                      <h4 class="font-bold text-primary mb-1">精準微創治療</h4>
+                      <p class="text-xs text-text leading-relaxed">
+                         攝護腺水蒸氣消融 (Rezūm) <br/>
+                         UroLift 拉提手術
+                      </p>
+                   </div>
+                </div>
+             </div>
+
+          </div>
+          
+          {/* 裝飾圓點 */}
+          <div class="absolute -top-4 -right-4 w-24 h-24 bg-accent/10 rounded-full blur-xl z-[-1]"></div>
+          <div class="absolute bottom-20 -left-12 w-32 h-32 bg-primary/5 rounded-full blur-2xl z-[-1]"></div>
+       </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  /* 簡單的進場動畫 */
+  .fade-in-up {
+    animation: fadeInUp 1s ease-out forwards;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* 浮動動畫 */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+</style>

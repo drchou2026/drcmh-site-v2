@@ -1,0 +1,150 @@
+---
+import { GraduationCap, Award, Stethoscope, Building2, CheckCircle2 } from 'lucide-react';
+
+// 資料來源：個人單頁履歷_周孟翰_20260111_更新版.pptx
+const experiences = [
+  "三軍總醫院外科住院醫師、部總醫師",
+  "三軍總醫院泌尿科住院醫師、總醫師",
+  "國軍花蓮總醫院泌尿科主治醫師",
+  "三軍總醫院急診部主治醫師",
+  "台北榮民總醫院桃園分院泌尿科兼任主治醫師",
+  "台北門診中心泌尿科主治醫師",
+  "三軍總醫院泌尿科主治醫師",
+  "教育部部定講師",
+  "國防醫學大學外科學科專任講師",
+];
+
+const associations = [
+  "台灣泌尿科醫學會(TUA)會員",
+  "台灣男性學暨性醫學醫學會(TAASM)會員",
+  "台灣尿失禁防治協會(TCS)會員"
+];
+
+const educations = [
+  "國防醫學院醫學系學士",
+  "台灣科技大學應用科技研究所博士候選人"
+];
+
+const certifications = [
+  "台灣外科醫學會專科醫師",
+  "台灣泌尿科醫學會專科醫師",
+  "台灣泌尿科達文西機械手臂手術專科醫師",
+  "性傳染病友善門診專家醫師"
+];
+---
+
+<section id="about" class="py-24 bg-surface relative">
+  <div class="container mx-auto px-6">
+    
+    {/* Section Heading */}
+    <div class="mb-16 text-center md:text-left">
+      <h3 class="text-xs font-bold tracking-[0.2em] uppercase text-accent mb-3">ABOUT DR. CHOU</h3>
+      <h2 class="text-3xl md:text-4xl font-serif font-bold text-primary">學經歷與認證</h2>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+      
+      {/* 左欄：經歷與學會 */}
+      <div class="space-y-12">
+        
+        {/* 專業經歷 */}
+        <div>
+          <h3 class="text-xl font-bold text-primary mb-6 flex items-center gap-3">
+            <span class="w-10 h-10 rounded-full bg-highlight flex items-center justify-center text-accent">
+               <Building2 size={20} />
+            </span>
+            專業經歷
+          </h3>
+          
+          <div class="relative pl-4 ml-5 border-l-2 border-highlight space-y-6">
+            {experiences.map((exp, index) => (
+              <div class="relative">
+                {/* 裝飾圓點 */}
+                <span class="absolute -left-[23px] top-2 w-3.5 h-3.5 bg-bg border-2 border-accent rounded-full"></span>
+                <p class="text-text leading-relaxed hover:text-primary transition-colors duration-300">
+                  {exp}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* 專業醫學會 */}
+        <div>
+          <h3 class="text-xl font-bold text-primary mb-6 flex items-center gap-3">
+             <span class="w-10 h-10 rounded-full bg-highlight flex items-center justify-center text-accent">
+               <Award size={20} />
+            </span>
+            專業醫學會
+          </h3>
+          <ul class="grid grid-cols-1 gap-3">
+            {associations.map(assoc => (
+              <li class="flex items-center gap-3 text-text">
+                <CheckCircle2 size={18} className="text-accent/60" />
+                <span>{assoc}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+      </div>
+
+      {/* 右欄：學歷與證照 */}
+      <div class="space-y-12">
+        
+        {/* 學歷 (卡片式強調) */}
+        <div class="bg-highlight/30 p-8 rounded-3xl border border-highlight">
+          <h3 class="text-xl font-bold text-primary mb-6 flex items-center gap-3">
+             <span class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-accent shadow-sm">
+               <GraduationCap size={20} />
+            </span>
+            學歷
+          </h3>
+          <ul class="space-y-4">
+            {educations.map(edu => (
+              <li class="flex flex-col">
+                <span class="font-bold text-primary text-lg">{edu}</span>
+                {/* 如果未來有年份或備註可以加在這裡 */}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* 專科證照 (Grid 排列) */}
+        <div>
+          <h3 class="text-xl font-bold text-primary mb-6 flex items-center gap-3">
+             <span class="w-10 h-10 rounded-full bg-highlight flex items-center justify-center text-accent">
+               <Stethoscope size={20} />
+            </span>
+            專科證照
+          </h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {certifications.map(cert => (
+              <div class="group flex items-center gap-3 p-4 rounded-xl border border-highlight bg-white hover:border-accent/50 hover:shadow-md transition-all duration-300">
+                <div class="w-8 h-8 rounded-full bg-highlight flex items-center justify-center text-text/50 group-hover:bg-accent group-hover:text-white transition-colors">
+                   <Award size={16} />
+                </div>
+                <span class="text-sm font-bold text-text group-hover:text-primary transition-colors">
+                  {cert}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* 醫師的話 (引用) */}
+        <div class="pt-8 border-t border-highlight">
+           <blockquote class="text-text italic leading-relaxed text-sm">
+             「持續進修與參與學術研討，是為了將世界最新的醫療技術帶回台灣，讓我的病患能享有最高品質的醫療照護。」
+           </blockquote>
+           <div class="mt-4 flex items-center gap-3">
+              <div class="w-8 h-0.5 bg-accent"></div>
+              <span class="font-serif font-bold text-primary text-sm">Dr. Chou Meng-Han</span>
+           </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</section>

@@ -1,0 +1,201 @@
+---
+import { MapPin, Phone, Mail, Clock, Calendar, ExternalLink } from 'lucide-react';
+
+// 診所資訊 (未來可從 Keystatic 全域設定讀取)
+const clinicData = {
+  name: "新店高美泌尿科診所",
+  doctor: "周孟翰",
+  title: "院長",
+  address: "新北市新店區二十張路5號1樓",
+  phone: "02-2915-XXXX (建置中)", // 暫時 Placeholder
+  email: "d10822201@gmail.com",
+  mapLink: "https://www.google.com/maps/search/?api=1&query=新北市新店區二十張路5號1樓",
+  bookingLink: "#", // 待補上正式掛號連結
+};
+
+// 門診表模擬資料 (true: 看診, false: 休診)
+// 實際上線前需確認正確診次
+const schedule = [
+  { day: "週一", morning: true, afternoon: true, evening: true },
+  { day: "週二", morning: false, afternoon: true, evening: true },
+  { day: "週三", morning: true, afternoon: false, evening: true },
+  { day: "週四", morning: false, afternoon: true, evening: true },
+  { day: "週五", morning: true, afternoon: true, evening: false },
+  { day: "週六", morning: true, afternoon: false, evening: false },
+];
+---
+
+<section id="clinic" class="py-24 bg-bg relative overflow-hidden">
+  
+  {/* 背景裝飾：右側傾斜色塊 */}
+  <div class="absolute top-0 right-0 w-1/3 h-full bg-highlight/30 -skew-x-12 translate-x-20 z-0 pointer-events-none"></div>
+
+  <div class="container mx-auto px-6 relative z-10">
+    
+    {/* 標題區塊 */}
+    <div class="mb-16 text-center md:text-left">
+      <h3 class="text-xs font-bold tracking-[0.2em] uppercase text-accent mb-3">CLINIC INFO</h3>
+      <h2 class="text-3xl md:text-4xl font-serif font-bold text-primary">門診資訊</h2>
+    </div>
+
+    <div class="flex flex-col lg:flex-row gap-12 lg:gap-20">
+      
+      {/* 左側：診所詳情卡片 */}
+      <div class="lg:w-1/2">
+        <div class="bg-surface border border-white/50 shadow-2xl rounded-3xl p-8 md:p-12 relative overflow-hidden group">
+          
+          {/* 裝飾光暈 */}
+          <div class="absolute -top-24 -right-24 w-48 h-48 bg-accent/10 rounded-full blur-3xl group-hover:bg-accent/20 transition-colors duration-500"></div>
+
+          {/* 標籤 */}
+          <div class="inline-block px-4 py-1.5 bg-primary text-white text-xs font-bold tracking-wider rounded-md mb-8 shadow-md">
+            CURRENT LOCATION
+          </div>
+
+          {/* 診所名稱 */}
+          <h3 class="text-3xl font-serif font-bold text-primary mb-2">
+            {clinicData.name}
+          </h3>
+          <p class="text-accent font-medium mb-10 text-lg flex items-center gap-2">
+            <span class="w-8 h-0.5 bg-accent inline-block"></span>
+            {clinicData.title} | {clinicData.doctor} 醫師
+          </p>
+
+          {/* 聯絡資訊列表 */}
+          <div class="space-y-8">
+            
+            {/* 地址 */}
+            <div class="flex items-start gap-5">
+              <div class="w-10 h-10 rounded-full bg-bg flex items-center justify-center text-accent shrink-0 mt-1">
+                <MapPin size={20} />
+              </div>
+              <div>
+                <p class="text-xs font-bold text-text/40 uppercase tracking-widest mb-1">Address</p>
+                <p class="text-lg text-primary font-medium">{clinicData.address}</p>
+                <a 
+                  href={clinicData.mapLink} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-1 text-sm text-accent font-bold mt-2 hover:text-primary transition-colors border-b border-accent/30 pb-0.5 hover:border-primary"
+                >
+                  在 Google Maps 上查看 <ExternalLink size={14} />
+                </a>
+              </div>
+            </div>
+            
+            {/* 電話 */}
+            <div class="flex items-start gap-5">
+              <div class="w-10 h-10 rounded-full bg-bg flex items-center justify-center text-accent shrink-0 mt-1">
+                <Phone size={20} />
+              </div>
+              <div>
+                <p class="text-xs font-bold text-text/40 uppercase tracking-widest mb-1">Phone</p>
+                <p class="text-lg text-primary font-medium">{clinicData.phone}</p>
+              </div>
+            </div>
+
+            {/* Email */}
+            <div class="flex items-start gap-5">
+              <div class="w-10 h-10 rounded-full bg-bg flex items-center justify-center text-accent shrink-0 mt-1">
+                <Mail size={20} />
+              </div>
+              <div>
+                <p class="text-xs font-bold text-text/40 uppercase tracking-widest mb-1">Email</p>
+                <p class="text-lg text-primary font-medium break-all">{clinicData.email}</p>
+              </div>
+            </div>
+
+          </div>
+
+          {/* CTA 按鈕 */}
+          <div class="mt-12 pt-8 border-t border-gray-100">
+            <a 
+              href={clinicData.bookingLink} 
+              target="_blank"
+              class="block w-full text-center py-4 bg-accent hover:bg-[#B08D55] text-white font-bold rounded-xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-1"
+            >
+              前往線上掛號
+            </a>
+            <p class="text-center text-xs text-text/50 mt-3">
+              * 將開啟外部掛號系統頁面
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+      {/* 右側：門診時間表 */}
+      <div class="lg:w-1/2 flex flex-col justify-center">
+        
+        <div class="mb-8 flex items-center gap-3">
+           <div class="p-3 bg-white rounded-full text-accent shadow-sm">
+             <Clock size={24} />
+           </div>
+           <div>
+             <h3 class="text-xl font-bold text-primary">門診時刻表</h3>
+             <p class="text-sm text-text/60">週日休診，國定假日請見公告</p>
+           </div>
+        </div>
+        
+        <div class="bg-surface rounded-3xl p-6 md:p-10 shadow-sm border border-white/50">
+           {/* 表頭 */}
+           <div class="grid grid-cols-4 gap-4 mb-6 text-center">
+              <div class="text-text/40 font-bold text-sm flex items-center justify-center">
+                <Calendar size={16} />
+              </div>
+              <div class="text-primary font-bold text-sm bg-highlight/50 py-2 rounded-lg">早</div>
+              <div class="text-primary font-bold text-sm bg-highlight/50 py-2 rounded-lg">午</div>
+              <div class="text-primary font-bold text-sm bg-highlight/50 py-2 rounded-lg">晚</div>
+           </div>
+           
+           {/* 表格內容 */}
+           <div class="space-y-3">
+              {schedule.map((s) => (
+                 <div class="grid grid-cols-4 gap-4 items-center text-center group hover:bg-bg/50 rounded-xl transition-colors py-2 px-1">
+                    {/* 星期 */}
+                    <div class="font-bold text-primary text-sm group-hover:text-accent transition-colors">
+                      {s.day}
+                    </div>
+                    
+                    {/* 早診 */}
+                    <div class={`text-sm py-2 rounded-lg flex justify-center items-center transition-all ${
+                      s.morning 
+                        ? 'text-accent font-bold bg-accent/10' 
+                        : 'text-text/20'
+                    }`}>
+                       {s.morning ? '●' : '-'}
+                    </div>
+                    
+                    {/* 午診 */}
+                    <div class={`text-sm py-2 rounded-lg flex justify-center items-center transition-all ${
+                      s.afternoon 
+                        ? 'text-accent font-bold bg-accent/10' 
+                        : 'text-text/20'
+                    }`}>
+                       {s.afternoon ? '●' : '-'}
+                    </div>
+                    
+                    {/* 晚診 */}
+                    <div class={`text-sm py-2 rounded-lg flex justify-center items-center transition-all ${
+                      s.evening 
+                        ? 'text-accent font-bold bg-accent/10' 
+                        : 'text-text/20'
+                    }`}>
+                       {s.evening ? '●' : '-'}
+                    </div>
+                 </div>
+              ))}
+           </div>
+
+           <div class="mt-8 p-4 bg-highlight/30 rounded-xl border border-highlight/50 text-xs text-text/70 leading-relaxed flex gap-3">
+              <div class="mt-0.5 min-w-[16px] text-accent">!</div>
+              <p>
+                實際看診時間可能因會議或手術有所異動，建議看診前先透過電話或線上系統確認。
+              </p>
+           </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
