@@ -9,7 +9,12 @@ const blog = defineCollection({
     date: z.date(), 
     tags: z.array(z.string()),
     coverImage: image().optional(),
-    excerpt: z.string(),
+
+    // 👇 新增這些欄位以配合 MarkdownLayout 和 Keystatic
+    excerpt: z.string().optional(), // 建議設為 optional 以防舊文章沒有
+    author: z.string().default('周孟翰 醫師'), // 給予預設值
+    seoTitle: z.string().optional(),
+    seoDescription: z.string().optional(),
   }),
 });
 

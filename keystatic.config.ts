@@ -17,7 +17,7 @@ export default config({
   ui: {
     brand: { name: '周孟翰醫師後台' },
     navigation: {
-        '網站內容': ['posts', 'schedule'],
+        '網站內容': ['blog', 'schedule'],
         '全站設定': ['settings'],
     }
   },
@@ -54,7 +54,7 @@ export default config({
   },
 
   collections: {
-    posts: collection({
+    blog: collection({
       label: '衛教文章管理',
       slugField: 'title',
       path: 'src/content/blog/*',// 每個文章一個資料夾 (包含圖片)

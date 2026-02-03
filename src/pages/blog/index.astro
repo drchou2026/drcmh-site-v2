@@ -6,8 +6,8 @@ import BlogCard from '../../components/blog/BlogCard.astro';
 import { getCollection } from 'astro:content';
 
 // 1. 從 Content Collection 獲取所有文章
-// 注意：這裡使用 'posts' 是因為 src/content/config.ts 定義的名稱是 posts
-const allPosts = await getCollection('posts');
+// 注意：這裡使用 'blog' 是因為 src/content/config.ts 定義的名稱是 blog
+const allPosts = await getCollection('blog');
 
 // 2. 依照日期排序 (新 -> 舊)
 const sortedPosts = allPosts.sort(

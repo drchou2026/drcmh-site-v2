@@ -4,7 +4,7 @@ import Layout from './Layout.astro';
 import type { CollectionEntry } from 'astro:content';
 
 interface Props {
-  frontmatter: CollectionEntry<'posts'>['data'];
+  frontmatter: CollectionEntry<'blog'>['data'];
 }
 
 const { frontmatter } = Astro.props;

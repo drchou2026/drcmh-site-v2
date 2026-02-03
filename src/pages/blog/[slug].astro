@@ -11,7 +11,7 @@ import { Calendar, Tag, ChevronLeft, User, Clock } from 'lucide-react';
 
 // 1. 生成靜態路徑 (Static Paths)
 export async function getStaticPaths() {
-  const posts = await getCollection('posts');
+  const posts = await getCollection('blog');
   return posts.map((post) => ({
     params: { slug: post.slug },
     props: { post },
@@ -22,7 +22,7 @@ const { post } = Astro.props;
 const { Content, headings } = await post.render();
 
 // 2. 獲取相關文章邏輯
-const allPosts = await getCollection('posts');
+const allPosts = await getCollection('blog');
 const relatedPosts = allPosts
   .filter((p) => p.slug !== post.slug) // 排除自己
   .map((p) => {
