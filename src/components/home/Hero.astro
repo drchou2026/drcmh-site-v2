@@ -42,7 +42,7 @@ const content = {
       
       {/* 醫師姓名 */}
       <h1 class="text-5xl md:text-6xl lg:text-7xl font-serif font-medium leading-tight mb-4 text-primary">
-        {content.name}<br/>
+        {content.name}
         <span class="text-3xl md:text-4xl block mt-2 text-text/60 font-sans font-normal">{content.title}</span>
       </h1>
       
@@ -84,11 +84,10 @@ const content = {
        
        {/* 圖片容器 (遮罩效果) */}
        <div class="relative w-full max-w-lg md:max-w-xl aspect-[3/4] md:aspect-[4/5] z-10">
-          
-          <div class="w-full h-full relative rounded-t-[12rem] overflow-hidden shadow-2xl bg-gradient-to-b from-[#E3Ddd5] to-[#F0EBE3] border-8 border-white">
-             
-             {/* 模擬人物 (Placeholder) */}
-             <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[120%] h-auto">
+          {/*<div class="w-full h-full relative rounded-tr-[6rem] rounded-bl-[6rem] rounded-tl-3xl rounded-br-3xl overflow-hidden shadow-2xl bg-gradient-to-b from-[#E3Ddd5] to-[#F0EBE3] border-8 border-white">*/}
+          <div class="w-full h-full relative rounded-[2.5rem] overflow-hidden shadow-2xl bg-gradient-to-b from-[#E3Ddd5] to-[#F0EBE3] border-8 border-white">   
+             {/* 浮動效果容器 */}
+             <div class="absolute top-0 left-1/2 -translate-x-1/2 h-auto w-[140%] md:w-[120%]">
                 {/* 備註：HTML/Astro 元件繼續使用 class */}
                 <Image 
                   src={doctorProfile}
@@ -96,16 +95,10 @@ const content = {
                   class="w-full h-full object-cover object-top mask-image-gradient"
                   loading="eager"
                 />
-
              </div>
-
-
-
+       
           </div>
-          
-          {/* 裝飾圓點 */}
-          <div class="absolute -top-4 -right-4 w-24 h-24 bg-accent/10 rounded-full blur-xl z-[-1]"></div>
-          <div class="absolute bottom-20 -left-12 w-32 h-32 bg-primary/5 rounded-full blur-2xl z-[-1]"></div>
+
        </div>
     </div>
 
