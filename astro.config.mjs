@@ -5,17 +5,14 @@ import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
 import partytown from '@astrojs/partytown';
 import keystatic from '@keystatic/astro';
-
 import cloudflare from '@astrojs/cloudflare';
-
 import mdx from '@astrojs/mdx';
-
 import markdoc from '@astrojs/markdoc';
 
 // https://astro.build/config
 export default defineConfig({
   // 上線前記得改
-  site: 'https://dr-chou.com',
+
 
   integrations: [// Astro 會自動讀取 tailwind.config.mjs
   react(), 
@@ -32,6 +29,12 @@ export default defineConfig({
   mdx(), 
   markdoc()],
 
-  output: 'static',
-  adapter: cloudflare(),
+
+  
+  output: 'static', 
+  adapter: cloudflare({
+    // 這裡可以針對圖片做優化設定，讓 Cloudflare 幫你處理圖片
+    imageService: 'compile', 
+  }),
+
 });

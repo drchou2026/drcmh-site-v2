@@ -1,0 +1,5 @@
+# public/_headers
+
+# 對所有路徑 (/*) 加上禁止索引的標籤
+/*
+  X-Robots-Tag: noindex, nofollow
