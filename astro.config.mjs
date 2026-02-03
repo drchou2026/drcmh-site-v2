@@ -30,7 +30,7 @@ export default defineConfig({
   markdoc()],
 
 
-  
+  site: 'https://drcmh-site-v2.pages.dev',
   output: 'static', 
   adapter: cloudflare({
     // 這裡可以針對圖片做優化設定，讓 Cloudflare 幫你處理圖片
