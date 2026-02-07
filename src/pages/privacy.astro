@@ -1,0 +1,100 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/common/Header.astro';
+import Footer from '../components/common/Footer.astro';
+
+const lastUpdated = new Date().toLocaleDateString('zh-TW', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+});
+---
+
+<Layout 
+  title="隱私權政策與服務條款 | 周孟翰醫師"
+  description="周孟翰醫師網站的隱私權政策、服務條款與醫療免責聲明。"
+>
+  <Header slot="header" />
+
+  <main class="pt-32 pb-16 bg-bg min-h-screen">
+    <div class="container mx-auto px-6 max-w-4xl">
+      
+      <div class="bg-surface p-8 md:p-12 rounded-3xl shadow-sm border border-gray-100">
+        <h1 class="text-3xl md:text-4xl font-serif font-bold text-primary mb-2">隱私權政策與服務條款</h1>
+        <p class="text-text/60 text-sm mb-8 border-b border-gray-200 pb-6">
+          最後更新日期：{lastUpdated}
+        </p>
+
+        {/* 使用 Tailwind Typography (prose) 來自動排版法律條文 */}
+        <div class="prose prose-slate max-w-none 
+          prose-headings:font-serif prose-headings:text-primary 
+          prose-a:text-accent prose-a:no-underline hover:prose-a:underline
+          prose-strong:text-primary
+        ">
+          
+          <div class="p-6 bg-highlight-gold/30 rounded-xl border border-accent/20 mb-8 not-prose">
+            <h3 class="font-serif font-bold text-lg text-primary mb-2">⚠️ 醫療免責聲明 (Medical Disclaimer)</h3>
+            <p class="text-text/80 text-sm leading-relaxed">
+              本網站（以下簡稱「本站」）所提供之衛教文章、影音與資訊，僅供一般民眾參考與健康教育用途，<strong>並非醫療建議，亦不能取代專業醫師的親自診斷、治療或用藥建議。</strong>
+              <br/><br/>
+              若您有任何身體不適或醫療需求，請務必前往醫療機構尋求專業協助。請勿因為在本站閱讀過相關資訊，而忽視專業醫療建議或延誤就醫。
+            </p>
+          </div>
+
+          <hr class="my-8 border-gray-200" />
+
+          <h2>一、隱私權政策 (Privacy Policy)</h2>
+          <p>
+            周孟翰醫師（以下簡稱「我們」）非常重視您的隱私權。本政策說明我們如何收集、使用與保護您在本站的資訊。
+          </p>
+
+          <h3>1. 資料的收集與使用</h3>
+          <p>
+            本站為靜態衛教網站，原則上<strong>不會</strong>要求您註冊會員或提供敏感個人資料（如身分證字號、病歷等）。我們可能透過以下方式收集非識別性資訊：
+          </p>
+          <ul>
+            <li><strong>Cookies 與流量分析：</strong> 我們可能使用 Google Analytics 等第三方工具來分析網站流量（如瀏覽頁面、停留時間、裝置類型），以優化網站體驗。這些數據是匿名的，無法直接識別您的個人身分。</li>
+            <li><strong>聯絡表單或預約連結：</strong> 若您透過網站提供的連結進行掛號或聯絡，相關資料將依循該醫療機構或掛號系統之隱私權規範處理。</li>
+          </ul>
+
+          <h3>2. 資料的保護</h3>
+          <p>
+            我們採取合理的技術與管理措施來保護網站資訊安全。然而，網際網路傳輸無法保證百分之百安全，請您在網路上傳輸資訊時仍需保持警覺。
+          </p>
+
+          <hr class="my-8 border-gray-200" />
+
+          <h2>二、服務條款 (Terms of Service)</h2>
+
+          <h3>1. 著作權聲明</h3>
+          <p>
+            本站所有內容（包括但不限於文字、圖片、影音、Logo、網頁設計）之著作權，均歸屬於<strong>周孟翰醫師</strong>或原創作者所有，受中華民國著作權法及國際著作權法保護。
+          </p>
+          <p>
+            <strong>未經授權，禁止轉載：</strong> 未經書面同意，不得擅自重製、改作、轉載或進行商業利用。若需引用衛教文章，請註明出處並附上原文連結。
+          </p>
+
+          <h3>2. 外部連結</h3>
+          <p>
+            本站可能包含通往第三方網站（如醫院掛號系統、衛福部資訊）的連結。這些網站的內容與隱私權政策與本站無關，點擊時請自行參閱該網站之規定。
+          </p>
+
+          <h3>3. 條款之修訂</h3>
+          <p>
+            我們保留隨時修改本法律聲明的權利。修改後的條款將公佈於本頁面，恕不另行個別通知。建議您定期查閱以確保權益。
+          </p>
+
+          <hr class="my-8 border-gray-200" />
+
+          <h2>三、聯絡我們</h2>
+          <p>
+            若您對本站的隱私權政策或服務條款有任何疑問，歡迎透過門診時間與我們聯繫。
+          </p>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <Footer slot="footer" />
+</Layout>
