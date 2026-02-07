@@ -26,9 +26,9 @@ const clinicInfo = {
       <div class="md:col-span-2 space-y-4">
         <div class="flex flex-col">
           <span class="font-serif text-2xl font-bold tracking-wide text-white">Dr. Chou</span>
-          <span class="text-xs text-accent tracking-[0.2em] uppercase">Urology Clinic</span>
+          <span class="text-xs text-accent tracking-[0.2em] uppercase font-semibold">Urology Clinic</span>
         </div>
-        <p class="text-white/70 text-sm leading-relaxed max-w-sm">
+        <p class="text-white/90 text-sm leading-relaxed max-w-sm">
           周孟翰醫師致力於提供隱私、專業且溫暖的泌尿科診療服務。
           我們相信，好的治療始於良好的醫病溝通。
         </p>
@@ -69,12 +69,34 @@ const clinicInfo = {
     </div>
 
     <!-- Copyright -->
-    <div class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500">
-      <p>&copy; {currentYear} Dr. Chou Meng-Han. All rights reserved.</p>
+    <div class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-white/70">
+      <p>
+        &copy; {currentYear} 
+        
+        {/* 🟢 隱藏的後台入口：包在名字上 */}
+        <a 
+          href="/admin" 
+          class="cursor-text hover:text-inherit text-inherit no-underline"
+          target="_blank" 
+          rel="noopener noreferrer"
+          title="Staff Only"
+          aria-label="Admin Login"
+        >
+          Dr. Chou Meng-Han
+        </a>
+        
+        . All rights reserved.
+      </p>
+      
       <div class="flex gap-6">
         <a href="/privacy" class="hover:text-white transition-colors">隱私權政策</a>
         <a href="#" class="hover:text-white transition-colors">服務條款</a>
       </div>
+      <div>
+        <a href="#top" class="inline-flex items-center gap-1 text-white/80 hover:text-white transition-colors">
+          <ArrowUp size={16} />
+          回到頂部
+        </a>
     </div>
   </div>
 </footer>

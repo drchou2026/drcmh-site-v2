@@ -1,60 +1,112 @@
+// src/content/config.ts
 import { defineCollection, z } from 'astro:content';
+import { glob } from 'astro/loaders';
 
-// 1. 文章集合
-// 修正重點：變數名稱必須定義為 'blog'
+// 1. 衛教文章 (Blog)
 const blog = defineCollection({
-  type: 'content', 
+  loader: glob({ pattern: "**/*.mdoc", base: "./src/content/blog" }),
   schema: ({ image }) => z.object({
     title: z.string(),
-    date: z.date(), 
-    tags: z.array(z.string()),
+    date: z.date(), // 或是 z.string().transform((str) => new Date(str)), 視情況而定
+    author: z.string().default('周孟翰 醫師'),
+    tags: z.array(z.string()).default([]),
     coverImage: image().optional(),
+    
+    // 🟢 對應 Keystatic 的 Conditional 欄位 (advanced)
+    advanced: z.union([
+      // 情況 A: 有勾選 (true)
+      z.object({
+        discriminant: z.literal(true),
+        value: z.object({
+          excerpt: z.string().optional(),
+          seoTitle: z.string().optional(),
+          seoDescription: z.string().optional(),
+        })
+      }),
+      // 情況 B: 沒勾選 (false)
+      z.object({
+        discriminant: z.literal(false),
+      }),
+    ]).default({ discriminant: false }), // 給個預設值避免報錯
 
-    // 👇 新增這些欄位以配合 MarkdownLayout 和 Keystatic
-    excerpt: z.string().optional(), // 建議設為 optional 以防舊文章沒有
-    author: z.string().default('周孟翰 醫師'), // 給予預設值
-    seoTitle: z.string().optional(),
-    seoDescription: z.string().optional(),
+    // 墊高欄位
+    z_layout_spacer: z.string().optional(),
   }),
 });
 
-// 2. 全站設定 (Singleton)
-const settings = defineCollection({
-  type: 'data',
+// 2. 最新消息 (News) [NEW]
+const news = defineCollection({
+  loader: glob({ pattern: "**/*.mdoc", base: "./src/content/news" }),
   schema: ({ image }) => z.object({
-    // 醫師資料
-    doctorName: z.string(),
+    title: z.string(),
+    date: z.date(),
+    isPinned: z.boolean().default(false),
+    category: z.enum(['announcement', 'closed', 'activity']).default('announcement'),
+    coverImage: image().optional(),
+    
+    // 墊高欄位
+    z_layout_spacer: z.string().optional(),
+  }),
+});
+
+// 3. 影音專區 (Videos) [NEW]
+const videos = defineCollection({
+  loader: glob({ pattern: "**/*.yaml", base: "./src/content/videos" }), // 注意: 如果 Keystatic 存成 yaml 這裡就要改
+  // Keystatic 預設 collection 可能是 .mdoc 或 .yaml，請檢查實際產生的檔案副檔名
+  // 假設 videos 是沒有 content 欄位的，Keystatic 通常存成 .yaml 或 .json
+  schema: ({ image }) => z.object({
+    title: z.string(),
+    date: z.date(),
+    platform: z.enum(['youtube', 'instagram']).default('youtube'),
+    videoUrl: z.string().url(),
+    category: z.enum(['education', 'vlog', 'media']).default('education'),
+    customThumbnail: image().optional(),
+    description: z.string().optional(),
+
+    // 墊高欄位
+    z_layout_spacer: z.string().optional(),
+  }),
+});
+
+// 4. 全站設定 (Settings)
+const settings = defineCollection({
+  loader: glob({ pattern: "global.yaml", base: "./src/content/settings" }),
+  schema: ({ image }) => z.object({
+    doctorName: z.string().default('周孟翰'),
     doctorTitle: z.string().default('院長'),
     clinicName: z.string(),
-    
-    // 圖片：使用 image() helper，這樣 Astro 會自動處理路徑優化
-    avatar: image().optional(), 
-    
-    // 文案
+    avatar: image().optional(),
     slogan: z.string().optional(),
     heroIntro: z.string().optional(),
+    doctorWord: z.string().optional(), // [NEW]
     sidebarIntro: z.string().optional(),
-    
-    // 原本的欄位
     phone: z.string().optional(),
     address: z.string().optional(),
     bookingLink: z.string().url().optional(),
-    announcement: z.string().optional(),
+    googleMapEmbedLink: z.string().url().optional(), // [NEW]
+    
+    // 墊高欄位
+    z_layout_spacer: z.string().optional(),
   }),
 });
 
-// 3. 門診表 (Singleton)
+// 5. 門診表 (Schedule)
 const schedule = defineCollection({
-  type: 'data',
-  schema: z.object({
-    image: z.string().optional(),
-    lastUpdated: z.string().or(z.date()),
+  loader: glob({ pattern: "timetable.yaml", base: "./src/content/schedule" }),
+  schema: ({ image }) => z.object({
+    image: image().optional(),
+    lastUpdated: z.date().optional(), // 或是 z.string()
+    note: z.string().optional(),
+    
+    // 墊高欄位
+    z_layout_spacer: z.string().optional(),
   }),
 });
 
-// 匯出設定
 export const collections = { 
-    'blog': blog,      // 這裡參照上方的 const blog
+    'blog': blog,
+    'news': news,
+    'videos': videos,
     'settings': settings,
     'schedule': schedule
 };

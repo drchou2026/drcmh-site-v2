@@ -6,8 +6,8 @@ export default config({
     ? {
         kind: 'github',
         repo: {
-          owner: 'YOUR_GITHUB_USERNAME', // TODO: 開發者請修改這裡
-          name: 'drcmh-site-v2',         // TODO: 開發者請修改這裡
+          owner: 'drchou2026', // 已填上您的 username
+          name: 'drcmh-site-v2', // 已填上您的 repo name
         },
       }
     : {
@@ -17,7 +17,7 @@ export default config({
   ui: {
     brand: { name: '周孟翰醫師後台' },
     navigation: {
-        '網站內容': ['blog', 'schedule'],
+        '網站內容': ['blog', 'news', 'videos', 'schedule'],
         '全站設定': ['settings'],
     }
   },
@@ -52,6 +52,14 @@ export default config({
             multiline: true,
             defaultValue: '在診間，沒有尷尬的提問，只有專業的傾聽...' 
         }),
+
+        doctorWord: fields.text({ 
+            label: '醫師的話 (Doctor\'s Word)', 
+            multiline: true,
+            description: '顯示於首頁的醫師短語或理念闡述。',
+            defaultValue: '' 
+        }),
+      
         sidebarIntro: fields.text({ 
             label: '側邊欄簡介 (Sidebar)', 
             multiline: true,
@@ -63,10 +71,8 @@ export default config({
         phone: fields.text({ label: '預約電話' }),
         address: fields.text({ label: '診所地址' }),
         bookingLink: fields.url({ label: '線上掛號連結' }),
-        announcement: fields.text({ 
-            label: '頂部公告欄 (選填)', 
-            description: '例如：颱風天休診公告，留空則不顯示' 
-        }),
+        googleMapEmbedLink: fields.url({ label: 'Google 地圖嵌入連結' }),
+
 
         // 👇👇👇 新增這個墊高用欄位 👇👇👇
         z_layout_spacer: fields.text({
@@ -89,6 +95,14 @@ export default config({
         }),
         lastUpdated: fields.date({ label: '更新日期', defaultValue: { kind: 'today' } }),
         note: fields.text({ label: '備註文字', description: '例如：國定假日看診異動說明' }),
+
+        // 👇👇👇 墊高用欄位 👇👇👇
+        z_layout_spacer: fields.text({
+          label: '--------- ⬇️ 頁面底部墊高區 (請忽略) ⬇️ ---------',
+          description: '此欄位僅用於解決無法捲動到底部的問題，請勿填寫。',
+          multiline: true,
+        }),
+
       },
     }),
   },
@@ -99,25 +113,18 @@ export default config({
       slugField: 'title',
       path: 'src/content/blog/*',// 每個文章一個資料夾 (包含圖片)
       format: { contentField: 'content' },
+      columns: ['title', 'date'], 
+      // 🟢 新增這一行：預覽網址設定
+      // 這樣在編輯文章時，頂部會出現一個「眼睛」或「連結」圖示，點擊直接跳到該文章
+      previewUrl: '/blog/{slug}',
       schema: {
         title: fields.slug({ 
-          name: { 
-            label: '文章標題 (Title)', 
-            description: '顯示在網站上的大標題'
-          },
-          slug: {
-            label: '網址代稱 (Slug)',
-            description: '網址的最後一部分 (建議使用英文，例如: prostate-treatment)，這會影響 SEO 且發布後不建議修改。'
-          }
+          name: { label: '文章標題 (Title)', description: '顯示在網站上的大標題'},
+          slug: { label: '網址代稱 (Slug)', description: '網址的最後一部分 (建議使用英文，例如: prostate-treatment)，這會影響 SEO 且發布後不建議修改。' }
         }),
         
         date: fields.date({ label: '發布日期' }),      
-        author: fields.text({ 
-            label: '作者',
-            defaultValue: '周孟翰 醫師', // 可以設一個預設值省時間
-            description: '顯示於文章開頭，提升 E-A-T 權威性'
-        }),
-
+        author: fields.text({ label: '作者', defaultValue: '周孟翰 醫師', }),
         tags: fields.array(
           fields.text({ label: '標籤' }),
           { label: '文章標籤 (Tags)', itemLabel: props => props.value }
@@ -131,7 +138,12 @@ export default config({
 
         content: fields.document({
           label: '文章內文',
-          formatting: true,
+          formatting: {
+            headingLevels: [2, 3, 4, 5, 6], // 限制只能用 H2 ~ H6
+            blockTypes: true, // 開啟引用 (Blockquote) 等功能
+            alignment: true,  // 開啟置左/置中/置右
+            listTypes: true,  // 開啟列表 (ul/ol)
+          },
           dividers: true,
           links: true,
           images: {
@@ -141,31 +153,144 @@ export default config({
         }),
 
         // SEO 設定：給 Google 看
-        seoTitle: fields.text({ 
-            label: 'SEO 標題 (Meta Title)', 
-            description: '若留空則預設使用文章標題' 
-        }),
-        seoDescription: fields.text({ 
-            label: 'SEO 描述 (Meta Description)', 
-            description: '建議 60-100 字，若留空則自動抓取內文前段' 
-        }),
-  
-        // 列表專用：給網站訪客看
-        excerpt: fields.text({ 
-            label: '列表摘要', 
-            multiline: true,
-            description: '顯示於首頁卡片，若留空，程式端可設定回退使用 SEO 描述。'
-        }),
+        advanced: fields.conditional(
+          // 1. 控制開關 (預設 false = 縮起來)
+          fields.checkbox({ 
+            label: '自訂 SEO 與摘要 (進階選項)', 
+            description: '若不勾選，系統將自動抓取文章標題與內文前段作為 SEO 設定。'
+          }),
+          {
+            // 2. 當勾選 (true) 時顯示的欄位
+            true: fields.object({
+              excerpt: fields.text({ 
+                label: '列表摘要', 
+                multiline: true,
+                description: '顯示於首頁卡片。' 
+              }),
+              seoTitle: fields.text({ 
+                label: 'SEO 標題', 
+                description: '覆蓋預設的網頁標題。' 
+              }),
+              seoDescription: fields.text({ 
+                label: 'SEO 描述', 
+                description: '建議 60-100 字。' 
+              }),
+            }),
+            // 3. 當沒勾選 (false) 時，裡面是空的 (保持乾淨)
+            false: fields.empty(),
+          }
+        ),
 
         // 👇👇👇 新增這個墊高用欄位 👇👇👇
         z_layout_spacer: fields.text({
           label: '--------- ⬇️ 頁面底部墊高區 (請忽略) ⬇️ ---------',
           description: '此欄位僅用於解決無法捲動到底部的問題，請勿填寫。',
           multiline: true, // 開啟多行模式，讓它佔據更多高度
+        }),        
+      },
+    }),
+
+    // --- 2. 最新消息 (News) ---
+    news: collection({
+      label: '最新消息管理',
+      slugField: 'title',
+      path: 'src/content/news/*',
+      format: { contentField: 'content' },
+      schema: {
+        title: fields.slug({ 
+          name: { label: '公告標題' },
+          slug: { label: '網址代稱 (Slug)', description: '建議使用日期開頭，如 2026-02-04-holiday' }
+        }),
+        date: fields.date({ label: '發布日期', defaultValue: { kind: 'today' } }),
+        
+        isPinned: fields.checkbox({ 
+            label: '置頂公告 (Pinned)', 
+            description: '勾選後，此消息將優先顯示於首頁跑馬燈或列表最上方。' 
         }),
 
+        category: fields.select({
+            label: '公告類別',
+            defaultValue: 'announcement',
+            options: [
+                { label: '診所公告 (Announcement)', value: 'announcement' },
+                { label: '停診通知 (Closed)', value: 'closed' },
+                { label: '活動快訊 (Activity)', value: 'activity' },
+            ],
+        }),
 
+        coverImage: fields.image({
+            label: '公告封面圖 (選填)',
+            directory: 'src/content/news',
+            publicPath: './',
+        }),
+
+        content: fields.document({
+            label: '公告內容',
+            formatting: true,
+            links: true,
+            images: { directory: 'src/content/news', publicPath: './' },
+        }),
+
+        // 👇👇👇 墊高用欄位 👇👇👇
+        z_layout_spacer: fields.text({
+          label: '--------- ⬇️ 頁面底部墊高區 (請忽略) ⬇️ ---------',
+          description: '此欄位僅用於解決無法捲動到底部的問題，請勿填寫。',
+          multiline: true,
+        }),
+      },
+    }),
+
+    // --- 3. 影音專區 (Videos) ---
+    videos: collection({
+      label: '影音專區管理',
+      slugField: 'title',
+      path: 'src/content/videos/*',
+      schema: {
+        title: fields.slug({ name: { label: '影片標題' } }),
+        date: fields.date({ label: '發布日期', defaultValue: { kind: 'today' } }),
         
+        platform: fields.select({
+            label: '影片平台',
+            defaultValue: 'youtube',
+            options: [
+                { label: 'YouTube (長影片/Shorts)', value: 'youtube' },
+                { label: 'Instagram (Reels)', value: 'instagram' },
+            ],
+        }),
+
+        videoUrl: fields.url({
+            label: '影片連結 (URL)',
+            description: '請直接貼上 YouTube 或 Instagram 的完整網址。系統會自動抓取 ID。',
+        }),
+
+        category: fields.select({
+            label: '影片分類',
+            defaultValue: 'education',
+            options: [
+                { label: '衛教解說 (Education)', value: 'education' },
+                { label: '診間花絮 (Vlog)', value: 'vlog' },
+                { label: '媒體採訪 (Media)', value: 'media' },
+            ],
+        }),
+
+        customThumbnail: fields.image({
+            label: '自訂封面圖 (選填)',
+            description: '若留空，將嘗試自動抓取 YouTube 縮圖。IG 影片建議手動上傳。',
+            directory: 'src/content/videos',
+            publicPath: './',
+        }),
+
+        description: fields.text({
+            label: '影片簡介',
+            multiline: true,
+        }),
+
+        // 👇👇👇 墊高用欄位 👇👇👇
+        z_layout_spacer: fields.text({
+          label: '--------- ⬇️ 頁面底部墊高區 (請忽略) ⬇️ ---------',
+          description: '此欄位僅用於解決無法捲動到底部的問題，請勿填寫。',
+          multiline: true,
+        }),
       },
     }),
   },

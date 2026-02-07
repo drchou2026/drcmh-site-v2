@@ -1,45 +1,69 @@
 ---
-// src/components/blog/BlogCard.astro
-import { Calendar, Tag, ArrowRight, FileText } from 'lucide-react';
+import { Calendar, Tag, ArrowRight } from 'lucide-react';
 import { Image } from 'astro:assets';
-import type { CollectionEntry } from 'astro:content'; // 1. 引入這個
+import type { CollectionEntry } from 'astro:content';
 
 interface Props {
-  // 2. 直接使用 'blog' 集合的自動型別，不用自己手寫 interface
-  // 這樣 excerpt 是選填或必填，都會自動同步 config.ts
   post: CollectionEntry<'blog'>; 
 }
 
 const { post } = Astro.props;
 
+// 🟢 1. 修復連結：處理 Astro v5 glob loader 的 ID
+const slug = post.id.replace(/\.(mdoc|md|yaml|json)$/, '');
+
+// 🟢 2. 新增：一個簡單的函式來清除 Markdown 符號 (轉成純文字)
+function stripMarkdown(markdown: string | undefined) {
+  if (!markdown) return '';
+  return markdown
+    .replace(/^#+\s+/gm, '')       // 移除標題 (## Title)
+    .replace(/!\[.*?\]\(.*?\)/g, '') // 移除圖片 (![alt](url))
+    .replace(/\[(.*?)\]\(.*?\)/g, '$1') // 移除連結但保留文字 ([text](url))
+    .replace(/(\*\*|__)(.*?)\1/g, '$2') // 移除粗體 (**text**)
+    .replace(/(\*|_)(.*?)\1/g, '$2')    // 移除斜體 (*text*)
+    .replace(/^>\s+/gm, '')        // 移除引用 (> text)
+    .replace(/`{1,3}.*?`{1,3}/g, '') // 移除程式碼區塊
+    .replace(/\n/g, ' ')           // 把換行變成空白
+    .trim();
+}
+
+// 🟢 3. 邏輯升級：
+// 優先順序：手動摘要 > SEO 描述 > 自動抓前 60 字 > 預設文字
+const advancedData = post.data.advanced?.discriminant ? post.data.advanced.value : null;
+
+// 自動產生摘要 (從 body 抓取，如果 body 是空的就給空字串)
+const autoExcerpt = stripMarkdown(post.body).substring(0, 50) + (post.body && post.body.length > 60 ? '...' : '');
+
+const excerpt = advancedData?.excerpt || advancedData?.seoDescription || autoExcerpt || '點擊閱讀全文...';
 // 格式化日期
 const formattedDate = post.data.date.toISOString().split('T')[0].replace(/-/g, '.');
 ---
 
 <article 
-  class="group flex flex-col h-full bg-surface rounded-2xl overflow-hidden border border-transparent hover:border-accent/20 hover:shadow-xl transition-all duration-300 cursor-pointer blog-card"
-  data-tags={post.data.tags.join(',')}
+  class="group flex flex-col h-full bg-surface rounded-2xl overflow-hidden border border-transparent hover:border-accent/20 hover:shadow-xl transition-all duration-300 cursor-pointer"
 >
-  <a href={`/blog/${post.slug}`} class="flex flex-col h-full">
+  <a href={`/blog/${slug}`} class="flex flex-col h-full">
     
-    {/* 封面圖區域 */}
+    {/* 封面圖區域 (固定比例 16:9) */}
     <div class="relative aspect-video overflow-hidden bg-gray-200">
       {post.data.coverImage ? (
-        // 3. 修正圖片顯示：使用 Astro <Image /> 元件來處理 ImageMetadata 物件
         <Image 
           src={post.data.coverImage} 
           alt={post.data.title}
           class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
         />
       ) : (
-        <div class="absolute inset-0 flex items-center justify-center text-primary/10 bg-highlight/30 group-hover:scale-105 transition-transform duration-700">
-          <FileText size={48} />
+        // 🟢 3. 無圖時的優化：使用漸層標題字卡 (取代原本單調的 icon)
+        <div class="w-full h-full flex items-center justify-center p-6 bg-gradient-to-br from-primary/5 via-bg to-accent/10 group-hover:from-primary/10 group-hover:to-accent/20 transition-colors">
+           <h3 class="text-xl font-serif font-bold text-primary/80 text-center leading-tight line-clamp-3 group-hover:text-primary">
+             {post.data.title}
+           </h3>
         </div>
       )}
       
-      {/* 第一個標籤作為分類顯示 */}
-      {post.data.tags.length > 0 && (
-        <span class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 text-xs font-bold text-primary rounded-full shadow-sm">
+      {/* 第一個標籤 (Badge) - 顯示在圖片右上角 */}
+      {post.data.tags && post.data.tags.length > 0 && (
+        <span class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 text-xs font-bold text-primary rounded-full shadow-sm z-10 border border-gray-100">
           {post.data.tags[0]}
         </span>
       )}
@@ -48,34 +72,39 @@ const formattedDate = post.data.date.toISOString().split('T')[0].replace(/-/g, '
     {/* 內容區域 */}
     <div class="p-6 flex flex-col flex-grow">
       
+      {/* Meta 資訊 (日期 + 第二個標籤) */}
       <div class="flex items-center gap-3 mb-3 text-xs text-text/60">
         <div class="flex items-center gap-1">
           <Calendar size={12} />
           <span>{formattedDate}</span>
         </div>
-        {post.data.tags.length > 1 && (
+        
+        {/* 如果有第二個標籤，顯示在這裡 */}
+        {post.data.tags && post.data.tags.length > 1 && (
           <>
             <span class="w-1 h-1 rounded-full bg-accent"></span>
             <div class="flex items-center gap-1">
               <Tag size={12} />
-              <span>{post.data.tags[1]}</span>
+              <span class="truncate max-w-[80px]">{post.data.tags[1]}</span>
             </div>
           </>
         )}
       </div>
 
-      <h3 class="text-lg font-serif font-bold text-primary mb-3 leading-snug line-clamp-2 group-hover:text-accent transition-colors">
+      {/* 標題 */}
+      <h3 class="text-xl font-serif font-bold text-primary mb-3 leading-snug line-clamp-2 group-hover:text-accent transition-colors">
         {post.data.title}
       </h3>
 
-      {/* 4. 修正摘要顯示：加上安全防護，如果沒有摘要就顯示替代文字 */}
-      <p class="text-sm text-text leading-relaxed line-clamp-3 mb-6 flex-grow">
-        {post.data.excerpt || '點擊閱讀全文...'}
+      {/* 摘要 */}
+      <p class="text-sm text-text/80 leading-relaxed line-clamp-3 mb-6 flex-grow">
+        {excerpt}
       </p>
 
+      {/* 底部按鈕區 (Read More + Arrow) */}
       <div class="pt-4 border-t border-primary/5 flex items-center justify-between mt-auto">
         <span class="text-sm font-bold text-primary group-hover:text-accent transition-colors">閱讀全文</span>
-        <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-primary shadow-sm group-hover:bg-accent group-hover:text-white transition-all duration-300 transform group-hover:translate-x-1">
+        <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-primary shadow-sm border border-gray-100 group-hover:bg-accent group-hover:text-white group-hover:border-accent transition-all duration-300 transform group-hover:translate-x-1">
           <ArrowRight size={14} />
         </div>
       </div>

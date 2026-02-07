@@ -9,10 +9,15 @@ import cloudflare from '@astrojs/cloudflare';
 import mdx from '@astrojs/mdx';
 import markdoc from '@astrojs/markdoc';
 
+
+
 // https://astro.build/config
 export default defineConfig({
   // 上線前記得改
 
+  redirects: {
+    '/admin': '/keystatic',
+  },
 
   integrations: [// Astro 會自動讀取 tailwind.config.mjs
   react(), 
