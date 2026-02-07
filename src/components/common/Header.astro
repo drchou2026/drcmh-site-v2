@@ -1,19 +1,25 @@
 ---
 import MobileMenu from './MobileMenu.jsx';
+import SearchWidget from './SearchWidget.jsx'; // 🟢 改用新元件
 
 const menuItems = [
   { label: '關於醫師', href: '/#about' },
+  { label: '最新消息', href: '/news' },
   { label: '主治專長', href: '/#expertise' },
-  { label: '衛教專欄', href: '/blog' }, // 連結至獨立頁面
+  { label: '影音專區', href: '/video' },
+  { label: '衛教專欄', href: '/blog' },
   { label: '門診資訊', href: '/#clinic' },
 ];
 ---
 
-<header class="fixed top-0 w-full z-40 bg-bg/80 backdrop-blur-md border-b border-white/20 shadow-sm transition-all duration-300">
-  <div class="container mx-auto px-6 h-20 flex justify-between items-center">
+<link href="/pagefind/pagefind-ui.css" rel="stylesheet">
+<script src="/pagefind/pagefind-ui.js" is:inline></script>
+
+<header class="fixed top-0 w-full z-40 bg-bg/85 backdrop-blur-md border-b border-white/20 shadow-sm transition-all duration-300">
+  <div class="container mx-auto px-4 md:px-6 h-20 flex justify-between items-center relative">
     
-    <!-- Logo 區域 -->
-    <a href="/" class="group flex flex-col justify-center">
+    {/* 1. Logo 區域 */}
+    <a href="/" class="group flex flex-col justify-center items-start shrink-0">
       <span class="font-serif text-2xl font-bold text-primary tracking-wide leading-none group-hover:text-accent transition-colors">
         Dr. Chou
       </span>
@@ -22,32 +28,144 @@ const menuItems = [
       </span>
     </a>
 
-    <!-- 桌機版選單 (Desktop Nav) -->
-    <nav class="hidden md:flex items-center gap-8">
-      {menuItems.map(item => (
-        <a 
-          href={item.href} 
-          class="text-sm font-medium text-text hover:text-accent transition-colors relative group py-2"
-        >
-          {item.label}
-          <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-accent transition-all duration-300 group-hover:w-full"></span>
-        </a>
-      ))}
-      
-      <!-- CTA 按鈕 -->
+    {/* 2. 桌機版導覽列 + 搜尋 (Desktop Nav) */}
+    {/* 使用 lg:flex 隱藏中型平板以下的選單，避免太擠 */}
+    <div class="hidden lg:flex items-center gap-6 xl:gap-8 flex-1 justify-end">
+      <nav class="flex items-center gap-5 xl:gap-7">
+        {menuItems.map(item => (
+          <a 
+            href={item.href} 
+            class="text-sm font-medium text-text hover:text-primary transition-colors relative group py-2 whitespace-nowrap"
+          >
+            {item.label}
+            <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-accent transition-all duration-300 group-hover:w-full"></span>
+          </a>
+        ))}
+      </nav>
+
+      {/* 分隔線 */}
+      <div class="h-4 w-px bg-gray-300/50"></div>
+
+      {/* 搜尋 widget (桌機版會直接顯示 input) */}
+      <SearchWidget client:idle />
+
+      {/* CTA 按鈕 */}
       <a 
         href="/#clinic" 
-        class="ml-4 px-6 py-2.5 bg-primary text-white text-sm font-bold rounded-full hover:bg-accent hover:-translate-y-0.5 shadow-md transition-all duration-300"
+        class="px-5 py-2.5 bg-primary text-white text-sm font-bold rounded-full hover:bg-accent hover:-translate-y-0.5 shadow-md shadow-primary/20 transition-all duration-300 shrink-0"
       >
         預約掛號
       </a>
-    </nav>
+    </div>
 
-    <!-- 手機版選單 (Mobile Nav) -->
-    <!-- client:media 確保只有在寬度小於 768px (md) 時才載入 React 程式碼，優化效能 -->
-    <div class="md:hidden">
-      <MobileMenu client:media="(max-width: 768px)" />
+    {/* 3. 手機版/平板版 (Mobile/Tablet) */}
+    <div class="flex items-center gap-2 lg:hidden">
+      {/* 搜尋 widget (手機版會顯示放大鏡) */}
+      <SearchWidget client:idle />
+      
+      {/* 漢堡選單 */}
+      <MobileMenu client:media="(max-width: 1024px)" menuItems={menuItems} />
     </div>
 
   </div>
 </header>
+
+<style is:global>
+  /* === Pagefind UI 共用設定 === */
+  :root {
+    --pagefind-ui-scale: 0.8;
+    --pagefind-ui-primary: #2A8BC8;
+    --pagefind-ui-text: #334155;
+    --pagefind-ui-background: #ffffff;
+    --pagefind-ui-border: #cbd5e1; /* 加深邊框顏色 */
+    --pagefind-ui-border-radius: 9999px;
+  }
+
+  .pagefind-ui__result-thumb,
+  .pagefind-ui__search-clear {
+    display: none !important;
+  }
+
+  /* === 桌機版樣式修正 (#desktop-search) === */
+  /* 修正：強制給 Input 背景色與邊框，避免「消失」 */
+  #desktop-search .pagefind-ui__search-input {
+    background-color: #f8fafc !important; /* 淺灰背景 */
+    border: 1px solid #e2e8f0 !important;
+    padding-left: 2.5rem !important;
+    padding-right: 1rem !important;
+    height: 40px !important; /* 固定高度 */
+    font-size: 0.875rem !important;
+    border-radius: 9999px !important;
+    color: #334155 !important;
+    width: 100% !important;
+    opacity: 1 !important; /* 確保不透明 */
+    visibility: visible !important;
+  }
+  
+  #desktop-search .pagefind-ui__search-input:focus {
+    background-color: #ffffff !important;
+    border-color: var(--pagefind-ui-primary) !important;
+    box-shadow: 0 0 0 3px rgba(42, 139, 200, 0.1);
+    outline: none;
+  }
+
+  /* 搜尋 Icon 位置修正 */
+  #desktop-search .pagefind-ui__search-input::before {
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+  }
+
+  /* 搜尋結果選單 (Desktop) */
+  #desktop-search .pagefind-ui__drawer {
+    position: absolute;
+    top: 110%; /* 稍微往下推 */
+    right: 0;
+    width: 320px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.15);
+    border: 1px solid #e2e8f0;
+    padding: 0;
+    max-height: 400px;
+    overflow-y: auto;
+    z-index: 60;
+  }
+
+  /* === 手機版樣式修正 (#mobile-search) === */
+  #mobile-search .pagefind-ui__search-input {
+    border: 1px solid #cbd5e1 !important;
+    padding: 1rem 1rem 1rem 3rem !important;
+    font-size: 1rem !important;
+    border-radius: 12px !important;
+    width: 100% !important;
+    background-color: #ffffff !important;
+  }
+
+  #mobile-search .pagefind-ui__drawer {
+    border-top: 1px solid #f1f5f9;
+    margin-top: 1rem;
+  }
+
+  /* 結果列表優化 */
+  .pagefind-ui__result {
+    padding: 12px 16px !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+  }
+  
+  .pagefind-ui__result:last-child {
+    border-bottom: none !important;
+  }
+
+  .pagefind-ui__result-title {
+    font-family: 'Noto Serif TC', serif !important;
+    font-weight: 700 !important;
+    font-size: 0.95rem !important;
+    color: var(--pagefind-ui-primary) !important;
+  }
+  
+  .pagefind-ui__message {
+    padding: 1rem !important;
+    color: #64748b !important;
+    text-align: center;
+  }
+</style>

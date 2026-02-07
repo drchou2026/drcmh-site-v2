@@ -1,41 +1,43 @@
 import React, { useState, useEffect } from 'react';
-import { createPortal } from 'react-dom'; // 1. 引入 createPortal
+import { createPortal } from 'react-dom';
 import { Menu, X, Calendar } from 'lucide-react';
 
-const MobileMenu = () => {
+// 🟢 1. 修改這裡：接收 menuItems prop
+const MobileMenu = ({ menuItems }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-  // 確保只在客戶端渲染 (因為 Portal 需要 document 物件)
+  // 🟢 2. 設定預設選單 (Fallback)
+  // 包含了最新的架構：最新消息、影音專區
+  const items = menuItems || [
+    { label: '關於醫師', href: '/#about' },
+    { label: '最新消息', href: '/news' },
+    { label: '主治專長', href: '/#expertise' },
+    { label: '影音專區', href: '/video' },
+    { label: '衛教專欄', href: '/blog' },
+    { label: '門診資訊', href: '/#clinic' },
+  ];
+
+  // 確保只在客戶端渲染
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // 2. 鎖定背景捲動 (回歸標準寫法，不用 important)
+  // 鎖定背景捲動
   useEffect(() => {
     if (isOpen) {
-      // 既然你的全域 CSS 是乾淨的，標準寫法就能生效
       document.body.style.overflow = 'hidden';
     } else {
-      document.body.style.overflow = ''; // 清除設定，回復原狀
+      document.body.style.overflow = '';
     }
-    
-    // Cleanup: 元件卸載時恢復捲動
     return () => {
       document.body.style.overflow = '';
     };
   }, [isOpen]);
 
-  const menuItems = [
-    { label: '關於醫師', href: '/#about' },
-    { label: '主治專長', href: '/#expertise' },
-    { label: '衛教專欄', href: '/blog' },
-    { label: '門診資訊', href: '/#clinic' },
-  ];
-
   return (
     <>
-      {/* 3. 漢堡按鈕 (留在 Header 裡) */}
+      {/* 漢堡按鈕 */}
       <button 
         onClick={() => setIsOpen(true)} 
         className="p-2 text-primary hover:bg-black/5 rounded-full transition-colors"
@@ -44,17 +46,16 @@ const MobileMenu = () => {
         <Menu size={28} />
       </button>
 
-      {/* 4. 選單內容 (透過 Portal 傳送到 body 最外層) */}
-      {/* 這樣就能無視 Header 的高度限制，遮罩可以蓋滿全螢幕 */}
+      {/* 選單內容 (Portal) */}
       {mounted && createPortal(
         <div 
           className={`fixed inset-0 z-[9999] transition-all duration-300 ${
             isOpen ? 'visible opacity-100' : 'invisible opacity-0'
           }`}
         >
-          {/* 黑色遮罩背景 */}
+          {/* 黑色遮罩 */}
           <div 
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity"
             onClick={() => setIsOpen(false)}
           />
 
@@ -64,36 +65,38 @@ const MobileMenu = () => {
               isOpen ? 'translate-x-0' : 'translate-x-full'
             }`}
           >
-            {/* Drawer Header */}
-            <div className="flex justify-between items-center p-6 border-b border-gray-200">
+            {/* Header */}
+            <div className="flex justify-between items-center p-6 border-b border-gray-200 bg-white">
               <span className="font-serif text-xl font-bold text-primary">Dr. Chou</span>
               <button 
                 onClick={() => setIsOpen(false)}
-                className="p-2 text-gray-500 hover:text-primary transition-colors"
+                className="p-2 text-gray-500 hover:text-primary transition-colors rounded-full hover:bg-gray-100"
                 aria-label="關閉選單"
               >
                 <X size={28} />
               </button>
             </div>
 
-            {/* Drawer Body */}
-            <nav className="flex-1 overflow-y-auto py-6 px-6 flex flex-col gap-6">
-              {menuItems.map((item) => (
+            {/* Body */}
+            <nav className="flex-1 overflow-y-auto py-6 px-6 flex flex-col gap-4">
+              {/* 🟢 3. 使用 items 進行渲染 */}
+              {items.map((item) => (
                 <a 
                   key={item.label}
                   href={item.href}
-                  className="text-2xl font-serif text-primary hover:text-accent transition-colors border-b border-gray-100 pb-2"
+                  className="text-xl font-serif font-medium text-text hover:text-primary hover:pl-2 transition-all border-b border-gray-100 pb-3 block"
                   onClick={() => setIsOpen(false)}
                 >
                   {item.label}
                 </a>
               ))}
               
+              {/* CTA Button */}
               <div className="mt-8">
                  <a 
                   href="/#clinic" 
                   onClick={() => setIsOpen(false)}
-                  className="flex items-center justify-center gap-2 w-full py-4 bg-accent text-white font-bold rounded-xl shadow-lg hover:brightness-110 transition-all active:scale-95"
+                  className="flex items-center justify-center gap-2 w-full py-4 bg-primary text-white font-bold rounded-xl shadow-lg hover:bg-accent transition-all active:scale-95"
                 >
                   <Calendar size={20} />
                   立即預約掛號
@@ -101,13 +104,13 @@ const MobileMenu = () => {
               </div>
             </nav>
 
-            {/* Drawer Footer */}
-            <div className="p-6 text-center text-xs text-gray-400 border-t border-gray-200">
+            {/* Footer */}
+            <div className="p-6 text-center text-xs text-gray-400 border-t border-gray-200 bg-gray-50">
               &copy; {new Date().getFullYear()} Dr. Chou Urology Clinic
             </div>
           </div>
         </div>,
-        document.body // 指定傳送目的地為 body
+        document.body
       )}
     </>
   );

@@ -57,11 +57,11 @@ export default config({
             label: '醫師的話 (Doctor\'s Word)', 
             multiline: true,
             description: '顯示於首頁的醫師短語或理念闡述。',
-            defaultValue: '' 
+            defaultValue: '致力於透過細膩的溝通與精準的治療，協助您卸下心理負擔，重拾自信生活。' 
         }),
       
         sidebarIntro: fields.text({ 
-            label: '側邊欄簡介 (Sidebar)', 
+            label: '側邊欄及頁尾簡介 (Sidebar+Footer Intro)', 
             multiline: true,
             description: '顯示於文章側邊欄的短介紹',
             defaultValue: '致力於透過細膩的溝通與精準的治療，協助您卸下心理負擔，重拾自信生活。' 
@@ -125,10 +125,11 @@ export default config({
         
         date: fields.date({ label: '發布日期' }),      
         author: fields.text({ label: '作者', defaultValue: '周孟翰 醫師', }),
-        tags: fields.array(
-          fields.text({ label: '標籤' }),
-          { label: '文章標籤 (Tags)', itemLabel: props => props.value }
-        ),        
+        // 🟢 改成這樣：
+        tags: fields.text({
+            label: '文章標籤 (Tags)',
+            description: '請用「半形逗號」分隔多個標籤。例如：攝護腺, 頻尿, 雷射手術',
+        }),        
         coverImage: fields.image({
             label: '文章封面圖',
             directory: 'src/content/blog', // 放在文章同級目錄，便於 Astro Image 優化

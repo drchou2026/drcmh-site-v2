@@ -8,11 +8,23 @@ interface Props {
 }
 
 const { frontmatter } = Astro.props;
+
+// 🟢 1. 定義 advancedData 的型別結構，避免 TS 報錯找不到屬性
+let advancedData: { excerpt?: string; seoTitle?: string; seoDescription?: string } = {};
+
+// 🟢 2. 使用 if 判斷：只有當 discriminant 為 true 時，才去讀取 value
+if (frontmatter.advanced?.discriminant) {
+  advancedData = frontmatter.advanced.value;
+}
+
+// 🟢 3. 設定 SEO 變數 (優先使用進階設定 > 預設值)
+const seoTitle = advancedData.seoTitle || frontmatter.title;
+const seoDescription = advancedData.seoDescription || advancedData.excerpt;
 ---
 
 <Layout 
-  title={`${frontmatter.seoTitle || frontmatter.title} | 周孟翰醫師`}
-  description={frontmatter.seoDescription || frontmatter.excerpt}
+  title={`${seoTitle} | 周孟翰醫師`}
+  description={seoDescription}
 >
   <article class="py-24 bg-surface min-h-screen">
     {/* 文章 Header */}
@@ -36,6 +48,7 @@ const { frontmatter } = Astro.props;
       </div>
     </header>
 
+
     {/* 封面圖 (若有) */}
     {/* {frontmatter.coverImage && (
       <div class="container mx-auto px-4 max-w-5xl mb-16">
@@ -46,10 +59,6 @@ const { frontmatter } = Astro.props;
 
     {/* 文章內容 (Prose) */}
     <div class="container mx-auto px-4 max-w-3xl">
-      {/* 這裡使用了 Tailwind Typography 插件 
-         prose-headings:font-serif -> 標題改用襯線體
-         prose-a:text-accent -> 連結改為金棕色
-      */}
       <div class="prose prose-lg prose-slate mx-auto
         prose-headings:font-serif prose-headings:text-primary 
         prose-p:text-text prose-p:leading-loose
@@ -62,10 +71,10 @@ const { frontmatter } = Astro.props;
       </div>
 
       {/* 文末 CTA */}
-      <div class="mt-16 p-8 bg-highlight/30 rounded-2xl border border-accent/20 text-center">
+      <div class="mt-16 p-8 bg-highlight-gold/30 rounded-2xl border border-accent/20 text-center">
         <h3 class="text-xl font-serif font-bold text-primary mb-3">有相關困擾嗎？</h3>
         <p class="text-text mb-6">每個人的狀況不盡相同，建議實際到診間進行評估。</p>
-        <a href="/#clinic" class="inline-block bg-primary text-white px-8 py-3 rounded-full hover:bg-accent transition-colors shadow-lg">
+        <a href="/#clinic" class="inline-block bg-primary text-white px-8 py-3 rounded-full hover:bg-accent transition-colors shadow-lg hover:-translate-y-1">
           預約門診諮詢
         </a>
       </div>

@@ -93,53 +93,68 @@ const allTags = [...new Set(allPosts.flatMap(post => post.data.tags))];
 </Layout>
 
 <script>
-  // 客戶端篩選邏輯 (Client-side Filtering)
-  const buttons = document.querySelectorAll('.filter-btn');
-  const cards = document.querySelectorAll('.blog-card');
-  const noResults = document.getElementById('no-results');
+  // 為了確保頁面切換 (View Transitions) 後也能運作，建議包在事件內
+  // 如果沒用 View Transitions，直接寫也可以，但這樣寫最保險
+  document.addEventListener('astro:page-load', () => {
+    initFilter();
+  }, { once: true }); // 如果沒有用 View Transitions，這行可以確保只執行一次
+  
+  // 若沒使用 View Transitions，這行會直接觸發
+  initFilter();
 
-  buttons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      // 1. 更新按鈕樣式 (Active State)
-      buttons.forEach(b => {
-        b.classList.remove('bg-primary', 'text-white', 'shadow-md');
-        b.classList.add('bg-white', 'text-text', 'border-highlight');
-      });
-      btn.classList.remove('bg-white', 'text-text', 'border-highlight');
-      btn.classList.add('bg-primary', 'text-white', 'shadow-md');
+  function initFilter() {
+    const buttons = document.querySelectorAll('.filter-btn');
+    const cards = document.querySelectorAll('.blog-card');
+    const noResults = document.getElementById('no-results');
 
-      // 2. 篩選文章
-      const filter = btn.getAttribute('data-filter');
-      let visibleCount = 0;
+    // 避免重複綁定 (以防萬一)
+    if (buttons.length === 0 || cards.length === 0) return;
 
-      cards.forEach(card => {
-        const cardTags = (card.getAttribute('data-tags') || '').split(',');
-        
-        // 判斷是否顯示
-        if (filter === 'all' || (filter && cardTags.includes(filter))) {
-          const el = card as HTMLElement;
-          el.style.display = 'flex';
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // 1. 視覺狀態重置：先把所有按鈕變回「未選中」樣式
+        buttons.forEach(b => {
+          b.classList.remove('bg-primary', 'text-white', 'shadow-md', 'border-transparent');
+          b.classList.add('bg-white', 'text-text', 'border-highlight');
+        });
+
+        // 2. 設定當前按鈕為「選中」樣式
+        btn.classList.remove('bg-white', 'text-text', 'border-highlight');
+        btn.classList.add('bg-primary', 'text-white', 'shadow-md', 'border-transparent');
+
+        // 3. 執行篩選
+        const filter = btn.getAttribute('data-filter');
+        let visibleCount = 0;
+
+        cards.forEach(card => {
+          const cardElement = card as HTMLElement;
+          const cardTags = (cardElement.getAttribute('data-tags') || '').split(',');
           
-          // 簡單的淡入動畫
-          el.animate([
-            { opacity: 0, transform: 'translateY(10px)' },
-            { opacity: 1, transform: 'translateY(0)' }
-          ], {
-            duration: 300,
-            easing: 'ease-out',
-            fill: 'forwards'
-          });
-          
-          visibleCount++;
-        } else {
-          (card as HTMLElement).style.display = 'none';
+          // 判斷是否符合條件
+          const isMatch = filter === 'all' || (filter && cardTags.includes(filter));
+
+          if (isMatch) {
+            cardElement.style.display = 'flex'; // 恢復顯示
+            // 加入淡入動畫
+            cardElement.animate([
+              { opacity: 0, transform: 'translateY(10px)' },
+              { opacity: 1, transform: 'translateY(0)' }
+            ], {
+              duration: 300,
+              easing: 'ease-out',
+              fill: 'forwards'
+            });
+            visibleCount++;
+          } else {
+            cardElement.style.display = 'none'; // 隱藏
+          }
+        });
+
+        // 4. 處理「查無資料」的顯示
+        if (noResults) {
+          noResults.style.display = visibleCount === 0 ? 'block' : 'none';
         }
       });
-
-      // 3. 處理無結果狀態
-      if (noResults) {
-        noResults.style.display = visibleCount === 0 ? 'block' : 'none';
-      }
     });
-  });
+  }
 </script>

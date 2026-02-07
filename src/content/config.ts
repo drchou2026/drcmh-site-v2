@@ -9,7 +9,10 @@ const blog = defineCollection({
     title: z.string(),
     date: z.date(), // 或是 z.string().transform((str) => new Date(str)), 視情況而定
     author: z.string().default('周孟翰 醫師'),
-    tags: z.array(z.string()).default([]),
+    tags: z.string().optional().transform((str) => {
+      if (!str) return [];
+      return str.split(',').map((s) => s.trim()).filter(Boolean);
+    }),
     coverImage: image().optional(),
     
     // 🟢 對應 Keystatic 的 Conditional 欄位 (advanced)
