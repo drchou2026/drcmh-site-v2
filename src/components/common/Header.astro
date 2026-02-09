@@ -72,100 +72,86 @@ const menuItems = [
 
 <style is:global>
   /* === Pagefind UI 共用設定 === */
+  /* 這裡使用 theme() 函數直接抓取 tailwind.config.mjs 的設定 */
   :root {
     --pagefind-ui-scale: 0.8;
-    --pagefind-ui-primary: #2A8BC8;
-    --pagefind-ui-text: #334155;
-    --pagefind-ui-background: #ffffff;
-    --pagefind-ui-border: #cbd5e1; /* 加深邊框顏色 */
+    --pagefind-ui-primary: theme('colors.primary'); /* 自動對應 #2A8BC8 */
+    --pagefind-ui-text: theme('colors.text');       /* 自動對應 #334155 */
+    --pagefind-ui-background: theme('colors.surface'); /* 自動對應 #FFFFFF */
+    --pagefind-ui-border: theme('colors.gray.300');    /* 對應預設 Tailwind Gray */
     --pagefind-ui-border-radius: 9999px;
   }
 
+  /* 隱藏縮圖與清除按鈕 */
   .pagefind-ui__result-thumb,
   .pagefind-ui__search-clear {
-    display: none !important;
+    @apply hidden !important;
   }
 
   /* === 桌機版樣式修正 (#desktop-search) === */
-  /* 修正：強制給 Input 背景色與邊框，避免「消失」 */
+  
+  /* 搜尋框本體 */
   #desktop-search .pagefind-ui__search-input {
-    background-color: #f8fafc !important; /* 淺灰背景 */
-    border: 1px solid #e2e8f0 !important;
+    @apply bg-gray-50 border border-gray-300 text-sm text-text rounded-full w-full !important;
+    /* Tailwind 的 opacity-100 與 visible */
+    @apply opacity-100 visible !important; 
+    
+    height: 40px !important;
     padding-left: 2.5rem !important;
     padding-right: 1rem !important;
-    height: 40px !important; /* 固定高度 */
-    font-size: 0.875rem !important;
-    border-radius: 9999px !important;
-    color: #334155 !important;
-    width: 100% !important;
-    opacity: 1 !important; /* 確保不透明 */
-    visibility: visible !important;
   }
   
+  /* 搜尋框 Focus 狀態 */
   #desktop-search .pagefind-ui__search-input:focus {
-    background-color: #ffffff !important;
-    border-color: var(--pagefind-ui-primary) !important;
-    box-shadow: 0 0 0 3px rgba(42, 139, 200, 0.1);
-    outline: none;
+    @apply bg-surface border-primary outline-none !important;
+    /* 這裡使用 rgba 手動設定陰影，因為要配合主色透明度 */
+    box-shadow: 0 0 0 3px color-mix(in srgb, theme('colors.primary'), transparent 90%) !important;
   }
 
-  /* 搜尋 Icon 位置修正 */
+  /* 搜尋 Icon 位置 */
   #desktop-search .pagefind-ui__search-input::before {
-    top: 50% !important;
-    transform: translateY(-50%) !important;
+    @apply top-1/2 -translate-y-1/2 !important;
   }
 
-  /* 搜尋結果選單 (Desktop) */
+  /* 搜尋結果下拉選單 (Desktop) */
   #desktop-search .pagefind-ui__drawer {
-    position: absolute;
-    top: 110%; /* 稍微往下推 */
-    right: 0;
-    width: 320px;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.15);
-    border: 1px solid #e2e8f0;
-    padding: 0;
+    @apply absolute right-0 w-[320px] bg-surface rounded-xl border border-gray-200 shadow-xl overflow-y-auto !important;
+    top: 110%;
     max-height: 400px;
-    overflow-y: auto;
     z-index: 60;
+    padding: 0;
   }
 
   /* === 手機版樣式修正 (#mobile-search) === */
   #mobile-search .pagefind-ui__search-input {
-    border: 1px solid #cbd5e1 !important;
+    @apply border border-gray-300 text-base rounded-xl w-full bg-surface !important;
     padding: 1rem 1rem 1rem 3rem !important;
-    font-size: 1rem !important;
-    border-radius: 12px !important;
-    width: 100% !important;
-    background-color: #ffffff !important;
   }
 
   #mobile-search .pagefind-ui__drawer {
-    border-top: 1px solid #f1f5f9;
-    margin-top: 1rem;
+    @apply border-t border-gray-100 mt-4;
   }
 
-  /* 結果列表優化 */
+  /* === 結果列表通用優化 === */
   .pagefind-ui__result {
+    @apply border-b border-gray-100 !important;
     padding: 12px 16px !important;
-    border-bottom: 1px solid #f1f5f9 !important;
   }
   
   .pagefind-ui__result:last-child {
-    border-bottom: none !important;
+    @apply border-none !important;
   }
 
   .pagefind-ui__result-title {
-    font-family: 'Noto Serif TC', serif !important;
-    font-weight: 700 !important;
-    font-size: 0.95rem !important;
-    color: var(--pagefind-ui-primary) !important;
+    @apply font-serif font-bold text-[0.95rem] text-primary !important;
+  }
+  
+  /* 修正連結樣式，去除預設底線 */
+  .pagefind-ui__result-link {
+    @apply no-underline hover:text-accent transition-colors !important;
   }
   
   .pagefind-ui__message {
-    padding: 1rem !important;
-    color: #64748b !important;
-    text-align: center;
+    @apply p-4 text-gray-500 text-center !important;
   }
 </style>
