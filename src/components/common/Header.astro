@@ -18,7 +18,7 @@ const menuItems = [
 <script src="/pagefind/pagefind-ui.js" is:inline async></script>
 
 
-<header class="sticky top-0 w-full z-40 bg-white/95 backdrop-blur-md border-b border-white/20 shadow-sm transition-all duration-300" data-pagefind-ignore>
+<header class="sticky top-0 w-full z-[100] bg-white/95 backdrop-blur-md border-b border-white/20 shadow-sm transition-all duration-300" data-pagefind-ignore>
   <div class="container mx-auto px-4 md:px-6 h-20 flex justify-between items-center relative">
     
     {/* 1. Logo 區域 */}
@@ -51,6 +51,17 @@ const menuItems = [
 
       {/* 搜尋 widget (桌機版會直接顯示 input) */}
       <SearchWidget client:idle />
+
+      {/* Instagram 連結 */}
+      <a 
+        href="#" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        class="text-text/60 hover:text-[#E4405F] transition-colors p-1"
+        title="Instagram"
+      >
+        <i class="fa-brands fa-instagram text-xl"></i>
+      </a>
 
       {/* CTA 按鈕 */}
       <a 
