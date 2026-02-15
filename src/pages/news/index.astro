@@ -25,7 +25,7 @@ const categories = [
 
 // 分類樣式對照表
 const categoryStyle: Record<string, string> = {
-  announcement: 'bg-blue-50 text-blue-600 border-blue-100',
+  announcement: 'bg-green-50 text-green-600 border-green-100',
   closed: 'bg-red-50 text-red-600 border-red-100',
   activity: 'bg-amber-50 text-amber-600 border-amber-100',
 };
@@ -78,7 +78,7 @@ function getExcerpt(body: string) {
             class={`filter-btn px-5 py-2 rounded-full text-sm font-bold transition-all border 
               ${cat.id === 'all' 
                 ? 'bg-primary text-white border-transparent shadow-md active' 
-                : 'bg-white text-text border-highlight hover:border-accent hover:text-accent hover:-translate-y-0.5'
+                : 'bg-white text-text border-highlight shadow-sm'
               }`}
             data-filter={cat.id}
           >
@@ -152,6 +152,18 @@ function getExcerpt(body: string) {
 
 </Layout>
 
+<style>
+  /* 篩選按鈕懸停效果 (比照影片頁) */
+  .filter-btn:not(.active):hover {
+    @apply border-accent text-accent -translate-y-0.5 shadow-lg;
+  }
+  
+  /* 選中狀態 hover 時不顯示 accent 色，也不位移 */
+  .filter-btn.active:hover {
+    @apply transform-none text-white border-transparent cursor-default shadow-md;
+  }
+</style>
+
 <script>
   // 前端篩選邏輯 (與 Blog 類似，但簡化過)
   document.addEventListener('astro:page-load', () => {
@@ -163,14 +175,16 @@ function getExcerpt(body: string) {
 
     buttons.forEach(btn => {
       btn.addEventListener('click', (e) => {
+        const target = e.currentTarget as HTMLElement;
+        if (target.classList.contains('active')) return;
+
         // 1. 按鈕樣式切換
         buttons.forEach(b => {
           b.classList.remove('bg-primary', 'text-white', 'shadow-md', 'border-transparent', 'active');
-          b.classList.add('bg-white', 'text-text', 'border-highlight');
+          b.classList.add('bg-white', 'text-text', 'border-highlight', 'shadow-sm');
         });
         
-        const target = e.currentTarget as HTMLElement;
-        target.classList.remove('bg-white', 'text-text', 'border-highlight');
+        target.classList.remove('bg-white', 'text-text', 'border-highlight', 'shadow-sm');
         target.classList.add('bg-primary', 'text-white', 'shadow-md', 'border-transparent', 'active');
 
         // 2. 篩選內容

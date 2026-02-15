@@ -220,6 +220,15 @@ export default config({
               validation: { isRequired: true }
             }),
             date: fields.date({ label: '發布日期', defaultValue: { kind: 'today' } }),
+            category: fields.select({
+              label: '分類 (選填)',
+              defaultValue: 'highlight',
+              options: [
+                { label: '精華片段 (Highlight)', value: 'highlight' },
+                { label: '衛教短片 (Education)', value: 'education' },
+                { label: '生活分享 (Life)', value: 'life' },
+              ],
+            }),
           }),
           {
             label: '短影音列表',
