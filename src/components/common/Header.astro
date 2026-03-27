@@ -23,7 +23,7 @@ const socialLinks = { facebook, instagram, line };
 <script src="/pagefind/pagefind-ui.js" is:inline async></script>
 
 
-<header class="sticky top-0 w-full z-[100] bg-white/95 backdrop-blur-md border-b border-white/20 shadow-sm transition-all duration-300" data-pagefind-ignore>
+<header class="sticky top-0 w-full z-[90] bg-white/95 backdrop-blur-md border-b border-white/20 shadow-sm transition-all duration-300" data-pagefind-ignore>
   <div class="container mx-auto px-4 md:px-6 h-20 flex justify-between items-center relative">
     
     {/* 1. Logo 區域 */}
@@ -31,7 +31,7 @@ const socialLinks = { facebook, instagram, line };
       <span class="font-serif text-2xl font-bold text-primary tracking-wide leading-none group-hover:text-accent transition-colors">
         Dr. Chou
       </span>
-      <span class="text-[0.6rem] font-bold text-accent tracking-[0.2em] uppercase mt-1">
+      <span class="text-[11px] font-bold text-accent tracking-[0.2em] uppercase mt-1">
         Urology Clinic
       </span>
     </a>
@@ -100,7 +100,7 @@ const socialLinks = { facebook, instagram, line };
   /* === Pagefind UI 共用設定 === */
   /* 這裡使用 theme() 函數直接抓取 tailwind.config.mjs 的設定 */
   :root {
-    --pagefind-ui-scale: 0.8;
+    --pagefind-ui-scale: 0.85;
     --pagefind-ui-primary: theme('colors.primary'); /* 自動對應 #2A8BC8 */
     --pagefind-ui-text: theme('colors.text');       /* 自動對應 #334155 */
     --pagefind-ui-background: theme('colors.surface'); /* 自動對應 #FFFFFF */

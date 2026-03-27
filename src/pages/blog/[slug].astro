@@ -104,13 +104,13 @@ const readTime = Math.ceil((post.body?.length || 0) / 500);
   <article class="pt-8 md:pt-8 pb-16 bg-bg min-h-screen">
     {/* 1. 文章 Header (Hero) */}
     <header class="container mx-auto px-6 mb-6 max-w-5xl">
-      <div class="flex items-center gap-2 text-sm text-text/60 mb-6 flex-wrap">
+      <div class="flex items-center gap-2 text-xs text-text/60 mb-6 whitespace-nowrap overflow-hidden">
         <a href="/" class="hover:text-primary transition-colors">首頁</a>
         <span>/</span>
         <a href="/blog" class="hover:text-primary transition-colors">衛教專欄</a
         >
         <span>/</span>
-        <span class="text-accent truncate max-w-[200px]">{post.data.title}</span
+        <span class="text-accent truncate min-w-0 max-w-[170px] sm:max-w-[260px]">{post.data.title}</span
         >
       </div>
 
@@ -163,10 +163,10 @@ const readTime = Math.ceil((post.body?.length || 0) / 500);
       </div>
     </header>
 
-    <div class="container mx-auto px-6 max-w-6xl">
+    <div class="container mx-auto px-4 max-w-6xl">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
         {/* 主要內容區 */}
-        <div class="lg:col-span-8">
+        <div class="lg:col-span-9">
           <TableOfContents headings={headings} isMobile={true} className="lg:hidden mb-8 p-4 bg-surface" />
 
           <div
@@ -174,10 +174,10 @@ const readTime = Math.ceil((post.body?.length || 0) / 500);
               prose-headings:font-serif prose-headings:text-primary prose-headings:font-bold prose-headings:scroll-mt-24
               prose-p:text-text prose-p:leading-loose
               prose-a:text-accent prose-a:no-underline hover:prose-a:underline
-              prose-blockquote:border-accent prose-blockquote:bg-surface prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:not-italic prose-blockquote:rounded-r-lg
+              prose-blockquote:border-accent prose-blockquote:bg-surface prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:not-italic prose-blockquote:rounded-r-lg
               prose-li:marker:text-accent
               prose-img:rounded-xl prose-img:shadow-md
-              bg-white p-6 md:p-10 rounded-3xl shadow-sm border border-transparent"
+              bg-white p-4 md:p-6 rounded-3xl shadow-sm border border-transparent"
           >
             <Content />
           </div>
@@ -212,7 +212,7 @@ const readTime = Math.ceil((post.body?.length || 0) / 500);
         </div>
 
         {/* 側邊欄 */}
-        <aside class="hidden lg:block lg:col-span-4 space-y-8">
+          <aside class="hidden lg:block lg:col-span-3 space-y-8">
           <div class="sticky top-32">
               <TableOfContents headings={headings} className="bg-white p-6 mb-8" />
             <Sidebar />

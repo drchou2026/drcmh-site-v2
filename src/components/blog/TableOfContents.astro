@@ -26,7 +26,7 @@ const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
 
     {/* 目錄內容 */}
     <div class={`toc-content overflow-hidden transition-all duration-300 ${isMobile ? 'max-h-0' : 'max-h-[2000px]'}`}>
-      <ul class={`space-y-2 text-sm ${isMobile ? 'pt-4' : 'pt-4'}`}>
+      <ul class={`space-y-2 text-sm leading-relaxed ${isMobile ? 'pt-4' : 'pt-4'}`}>
         {toc.map((heading) => (
           <li class={`${heading.depth === 3 ? 'pl-4' : ''}`}>
             <a 
