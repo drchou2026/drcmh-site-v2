@@ -5,10 +5,11 @@ import Header from '../../components/common/Header.astro';
 import Footer from '../../components/common/Footer.astro';
 import BlogCard from '../../components/blog/BlogCard.astro';
 import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
 
 // 1. 從 Content Collection 獲取所有文章
 // 注意：這裡使用 'blog' 是因為 src/content/config.ts 定義的名稱是 blog
-const allPosts = await getCollection('blog');
+const allPosts: CollectionEntry<'blog'>[] = await getCollection('blog');
 
 // 2. 依照日期排序 (新 -> 舊)
 const sortedPosts = allPosts.sort(
@@ -16,7 +17,7 @@ const sortedPosts = allPosts.sort(
 );
 
 // 3. 提取所有標籤 (用於篩選器)
-const allTags = [...new Set(allPosts.flatMap(post => post.data.tags))];
+const allTags = [...new Set(allPosts.flatMap((post) => post.data.tags ?? []))];
 ---
 
 <Layout 

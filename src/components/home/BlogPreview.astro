@@ -1,11 +1,12 @@
 ---
 import { ArrowRight } from 'lucide-react';
 import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
 // 🟢 1. 引入我們剛剛修復完美的 BlogCard 元件
 import BlogCard from '../blog/BlogCard.astro';
 
 // 2. 從 'blog' collection 讀取所有文章
-const allPosts = await getCollection('blog');
+const allPosts: CollectionEntry<'blog'>[] = await getCollection('blog');
 
 // 3. 排序 (日期新 -> 舊) 並只取前 3 篇
 const recentPosts = allPosts
