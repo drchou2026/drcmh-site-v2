@@ -13,7 +13,7 @@ import markdoc from '@astrojs/markdoc';
 
 // https://astro.build/config
 export default defineConfig({
-  // 上線前記得改
+  // 正式站網址
 
   redirects: {
     '/admin': '/keystatic',
@@ -35,7 +35,7 @@ export default defineConfig({
     markdoc()],
 
 
-  site: 'https://drcmh-site-v2.pages.dev',
+  site: 'https://drcmh.com',
   output: 'server',
   adapter: cloudflare({
     // ✅ 最佳解：部署時壓縮圖片 (免費且高效)

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://drcmh-site-v2.pages.dev/sitemap-index.xml
+Sitemap: https://drcmh.com/sitemap-index.xml
