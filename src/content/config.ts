@@ -9,6 +9,7 @@ const blog = defineCollection({
     title: z.string(),
     date: z.date(), // 或是 z.string().transform((str) => new Date(str)), 視情況而定
     author: z.string().default('周孟翰 醫師'),
+    category: z.array(z.enum(['排尿困擾與攝護腺', '私密健康與性傳染病', '微創治療與手術', '男性性功能與荷爾蒙', '一般泌尿疾病'])).default(['一般泌尿疾病']),
     tags: z.string().optional().transform((str) => {
       if (!str) return [];
       return str.split(',').map((s) => s.trim()).filter(Boolean);

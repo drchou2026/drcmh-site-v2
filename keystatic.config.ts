@@ -267,6 +267,17 @@ export default config({
 
         date: fields.date({ label: '發布日期', defaultValue: { kind: 'today' } }),
         author: fields.text({ label: '作者', defaultValue: '周孟翰 醫師', }),
+        category: fields.multiselect({
+          label: '文章分類 (可複選)',
+          options: [
+            { label: '排尿困擾與攝護腺', value: '排尿困擾與攝護腺' },
+            { label: '私密健康與性傳染病', value: '私密健康與性傳染病' },
+            { label: '微創治療與手術', value: '微創治療與手術' },
+            { label: '男性性功能與荷爾蒙', value: '男性性功能與荷爾蒙' },
+            { label: '一般泌尿疾病', value: '一般泌尿疾病' },
+          ],
+          defaultValue: ['一般泌尿疾病'],
+        }),
         // 🟢 改成這樣：
         tags: fields.text({
           label: '文章標籤 (Tags)',
