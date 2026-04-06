@@ -1,85 +1,103 @@
 ---
 // src/components/blog/Sidebar.astro
-import { Calendar, MapPin, ArrowRight } from 'lucide-react';
-import { Image } from 'astro:assets';
-import { getEntry } from 'astro:content';
+import { Calendar, MapPin, ArrowRight } from "lucide-react";
+import { Image } from "astro:assets";
+import { getEntry } from "astro:content";
 
 // 1. 讀取 Keystatic Singleton 資料
-const settingsEntry = await getEntry('settings', 'global');
+const settingsEntry = await getEntry("settings", "global");
 // 🟢 新增這段防呆檢查
 if (!settingsEntry) {
   // 如果找不到設定檔，為了不讓網頁掛掉，我們可以選擇拋出錯誤提示開發者
-  throw new Error('無法讀取全站設定 (src/content/settings/global.yaml)。請確認 Keystatic 後台是否已儲存過「全站資訊」。');
+  throw new Error(
+    "無法讀取全站設定 (src/content/settings/global.yaml)。請確認 Keystatic 後台是否已儲存過「全站資訊」。",
+  );
 }
 const settings = settingsEntry.data;
 
 // 2. 處理預設圖片 (防呆機制：如果學長沒上傳照片，給一張預設圖)
 // 這裡可以先 import 一張本地的預設圖，以防萬一
-import defaultAvatar from '../../assets/drchou-profile-2.png' 
+import defaultAvatar from "../../assets/drchou-profile-2.png";
 ---
 
-
 <aside class="space-y-8 sticky top-24">
-  
   {/* 1. 醫師簡介卡片 */}
-  <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm text-center">
-    <div class="w-24 h-24 mx-auto rounded-full bg-highlight overflow-hidden mb-4 border-4 border-white shadow-md relative group">
-      {settings.avatar ? (
-        <Image 
-          src={settings.avatar}
-          alt={`${settings.doctorName}醫師`} 
-          class="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-110"
-          width={200} 
-          height={200}
-        />
-      ) : (
-        /* 如果沒上傳圖片顯示的佔位符 */
-        <div class="w-full h-full flex items-center justify-center text-accent text-2xl font-bold bg-bg">
-           {settings.doctorName[0]}
-        </div>
-      )}
+  <div
+    class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm text-center"
+  >
+    <div
+      class="w-24 h-24 mx-auto rounded-full bg-highlight overflow-hidden mb-4 border-4 border-white shadow-md relative group"
+    >
+      {
+        settings.avatar ? (
+          <Image
+            src={settings.avatar}
+            alt={`${settings.doctorName}醫師`}
+            class="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-110"
+            width={200}
+            height={200}
+          />
+        ) : (
+          /* 如果沒上傳圖片顯示的佔位符 */
+          <div class="w-full h-full flex items-center justify-center text-accent text-2xl font-bold bg-bg">
+            {settings.doctorName[0]}
+          </div>
+        )
+      }
     </div>
-    
-{/* 姓名與職稱 */}
+
+    {/* 姓名與職稱 */}
     <h3 class="text-xl font-serif font-bold text-primary mb-1">
-      {settings.doctorName} <span class="text-sm font-sans font-normal text-text">{settings.doctorTitle}</span>
+      {settings.doctorName}
+      <span class="text-sm font-sans font-normal text-text"
+        >{settings.doctorTitle}</span
+      >
     </h3>
-    
+
     {/* 診所名稱 */}
     <p class="text-xs font-bold text-accent tracking-wider uppercase mb-4">
       {settings.clinicName}
     </p>
-    
+
     {/* 側邊欄簡介 */}
     <p class="text-sm text-text/80 leading-relaxed mb-6 text-justify">
       {settings.sidebarIntro}
     </p>
-    
+
     {/* 連結到關於我的按鈕 */}
-    <a 
-      href="/#about" 
+    <a
+      href="/#about"
       class="text-sm font-bold text-primary hover:text-accent transition-colors flex items-center justify-center gap-1 group"
     >
-      完整學經歷 <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform"/>
+      完整學經歷 <ArrowRight
+        size={14}
+        className="group-hover:translate-x-1 transition-transform"
+      />
     </a>
   </div>
 
   {/* 2. 預約 CTA 卡片 */}
-  <div class="bg-primary rounded-2xl p-6 text-white text-center shadow-lg relative overflow-hidden group">
+  <div
+    class="bg-primary rounded-2xl p-6 text-white text-center shadow-lg relative overflow-hidden group"
+  >
     {/* 裝飾背景 */}
-    <div class="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full blur-xl -translate-y-1/2 translate-x-1/2"></div>
-    
-    <h3 class="text-lg  text-white font-bold mb-2 relative z-10">受夠了頻尿困擾？</h3>
+    <div
+      class="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full blur-xl -translate-y-1/2 translate-x-1/2"
+    >
+    </div>
+
+    <h3 class="text-lg text-white font-bold mb-2 relative z-10">
+      受夠了頻尿困擾？
+    </h3>
     <p class="text-sm text-gray-300 mb-6 relative z-10">
       別讓症狀影響生活品質，立即預約諮詢。
     </p>
-    
-    <a 
-      href="/#clinic" 
+
+    <a
+      href="/booking"
       class="block w-full py-3 bg-accent hover:bg-white hover:text-primary text-white font-bold rounded-xl transition-all shadow-md active:scale-95 relative z-10"
     >
       預約門診
     </a>
   </div>
-
 </aside>

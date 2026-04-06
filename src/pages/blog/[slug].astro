@@ -50,7 +50,7 @@ const seoDescription =
 
 // 獲取相關文章邏輯
 const allPosts = await getCollection("blog");
-const relatedPosts = allPosts
+let relatedPosts = allPosts
   .filter((p) => p.id !== post.id)
   .map((p) => {
     // 確保 tags 存在才 filter (防呆)
@@ -75,6 +75,24 @@ const relatedPosts = allPosts
       b.score - a.score || b.data.date.valueOf() - a.data.date.valueOf(),
   )
   .slice(0, 3);
+
+// 若相關聯的數量不到 3 篇，隨機補滿到 3 篇
+if (relatedPosts.length < 3) {
+  const currentRelatedIds = relatedPosts.map((p) => p.id);
+  const remainingPosts = allPosts.filter(
+    (p) => p.id !== post.id && !currentRelatedIds.includes(p.id)
+  );
+
+  // 隨機打亂 remainingPosts (在 SSG 建置時產生隨機性)
+  for (let i = remainingPosts.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [remainingPosts[i], remainingPosts[j]] = [remainingPosts[j], remainingPosts[i]];
+  }
+
+  const needed = 3 - relatedPosts.length;
+  const randomFill = remainingPosts.slice(0, needed).map((p) => ({ ...p, score: 0 }));
+  relatedPosts = [...relatedPosts, ...randomFill];
+}
 
 const formattedDate = post.data.date
   .toISOString()
@@ -104,45 +122,35 @@ const readTime = Math.ceil((post.body?.length || 0) / 500);
   <article class="pt-8 md:pt-8 pb-16 bg-bg min-h-screen">
     {/* 1. 文章 Header (Hero) */}
     <header class="container mx-auto px-6 mb-6 max-w-5xl">
-      <div class="flex items-center gap-2 text-xs text-text/60 mb-6 whitespace-nowrap overflow-hidden">
+      <div
+        class="flex items-center gap-2 text-xs text-text/60 mb-6 whitespace-nowrap overflow-hidden"
+      >
         <a href="/" class="hover:text-primary transition-colors">首頁</a>
         <span>/</span>
         <a href="/blog" class="hover:text-primary transition-colors">衛教專欄</a
         >
         <span>/</span>
-        <span class="text-accent truncate min-w-0 max-w-[170px] sm:max-w-[260px]">{post.data.title}</span
+        <span
+          class="text-accent truncate min-w-0 max-w-[170px] sm:max-w-[260px]"
+          >{post.data.title}</span
         >
       </div>
 
       <div class="flex flex-col gap-6">
-        {
-          post.data.tags && (
-            <div class="flex flex-wrap gap-2">
-              {(Array.isArray(post.data.tags)
-                ? post.data.tags
-                : typeof post.data.tags === "string"
-                  ? (post.data.tags as string)
-                      .split(",")
-                      .map((t: string) => t.trim())
-                  : []
-              ).map((tag: string) => (
-                <a
-                  href={`/blog?tag=${tag}`}
-                  class="bg-white px-3 py-1 rounded-full text-xs font-bold text-accent shadow-sm border border-accent/20 hover:bg-accent hover:text-white transition-colors"
-                >
-                  #{tag}
-                </a>
-              ))}
-            </div>
-          )
-        }
-
         <h1
           class="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-primary leading-tight"
           data-pagefind-weight="10"
         >
           {post.data.title}
         </h1>
+
+        {
+          advancedData.excerpt && (
+            <p class="text-lg text-text/80 leading-relaxed border-l-4 border-highlight pl-4 py-1 mt-2 mb-2">
+              {advancedData.excerpt}
+            </p>
+          )
+        }
 
         <div
           class="flex items-center gap-6 text-sm text-text/70 border-b border-primary/10 pb-6 flex-wrap"
@@ -167,7 +175,11 @@ const readTime = Math.ceil((post.body?.length || 0) / 500);
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
         {/* 主要內容區 */}
         <div class="lg:col-span-9">
-          <TableOfContents headings={headings} isMobile={true} className="lg:hidden mb-8 p-4 bg-surface" />
+          <TableOfContents
+            headings={headings}
+            isMobile={true}
+            className="lg:hidden mb-8 p-4 bg-surface"
+          />
 
           <div
             class="prose prose-slate max-w-none
@@ -180,6 +192,27 @@ const readTime = Math.ceil((post.body?.length || 0) / 500);
               bg-white p-4 md:p-6 rounded-3xl shadow-sm border border-transparent"
           >
             <Content />
+
+            {/* 文章底部的淡化標籤 (保留 SEO 關鍵字，無連結功能) */}
+            {
+              post.data.tags && (
+                <div class="flex flex-wrap gap-3 mt-12 pt-6 border-t border-gray-100/50 not-prose">
+                  <span class="text-text/40 text-sm font-medium mr-1" />
+                  {(Array.isArray(post.data.tags)
+                    ? post.data.tags
+                    : typeof post.data.tags === "string"
+                      ? (post.data.tags as string)
+                          .split(",")
+                          .map((t: string) => t.trim())
+                      : []
+                  ).map((tag: string) => (
+                    <span class="text-text/40 text-sm tracking-wide">
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+              )
+            }
           </div>
 
           <div
@@ -192,7 +225,7 @@ const readTime = Math.ceil((post.body?.length || 0) / 500);
               每個人的狀況都不盡相同，歡迎來到診間，讓我為您做詳細的檢查與評估。
             </p>
             <a
-              href="/#clinic"
+              href="/booking"
               class="inline-flex items-center gap-2 px-8 py-3 bg-primary text-white font-bold rounded-full hover:bg-accent transition-colors shadow-lg hover:-translate-y-1"
             >
               立即預約掛號
@@ -212,9 +245,12 @@ const readTime = Math.ceil((post.body?.length || 0) / 500);
         </div>
 
         {/* 側邊欄 */}
-          <aside class="hidden lg:block lg:col-span-3 space-y-8">
+        <aside class="hidden lg:block lg:col-span-3 space-y-8">
           <div class="sticky top-32">
-              <TableOfContents headings={headings} className="bg-white p-6 mb-8" />
+            <TableOfContents
+              headings={headings}
+              className="bg-white p-6 mb-8"
+            />
             <Sidebar />
           </div>
         </aside>

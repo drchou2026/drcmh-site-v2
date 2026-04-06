@@ -15,8 +15,11 @@ const sortedPosts = allPosts.sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
 );
 
-// 3. 提取所有標籤 (用於篩選器)
-const allTags = [...new Set(allPosts.flatMap(post => post.data.tags))];
+// 3. 提取所有分類 (用於篩選器)，並保持預設順序
+const ORDERED_CATEGORIES = ['排尿困擾與攝護腺', '私密健康與性傳染病', '微創治療與手術', '男性性功能與荷爾蒙', '一般泌尿疾病'];
+const allCategories = ORDERED_CATEGORIES.filter(cat => 
+  allPosts.some(post => post.data.category?.includes(cat))
+);
 ---
 
 <Layout 
@@ -44,7 +47,7 @@ const allTags = [...new Set(allPosts.flatMap(post => post.data.tags))];
   <section class="py-12 bg-surface min-h-screen">
     <div class="container mx-auto px-6">
       
-      {/* 標籤篩選器 (Filter Bar) */}
+      {/* 分類篩選器 (Filter Bar) */}
       <div class="flex flex-wrap justify-center gap-3 mb-12" id="filter-container">
         <button 
           class="filter-btn active px-5 py-2 rounded-full text-sm font-bold transition-all border border-transparent bg-primary text-white shadow-md"
@@ -52,12 +55,12 @@ const allTags = [...new Set(allPosts.flatMap(post => post.data.tags))];
         >
           全部文章
         </button>
-        {allTags.map(tag => (
+        {allCategories.map(cat => (
           <button 
             class="filter-btn px-5 py-2 rounded-full text-sm font-bold transition-all border border-highlight bg-white text-text shadow-sm"
-            data-filter={tag}
+            data-filter={cat}
           >
-            #{tag}
+            {cat}
           </button>
         ))}
       </div>
@@ -77,7 +80,7 @@ const allTags = [...new Set(allPosts.flatMap(post => post.data.tags))];
 
       {/* 無搜尋結果提示 (預設隱藏) */}
       <div id="no-results" class="hidden text-center py-20">
-        <p class="text-text/50 text-lg">沒有找到符合該標籤的文章。</p>
+        <p class="text-text/50 text-lg">沒有找到符合該分類的文章。</p>
         <button 
           class="mt-4 text-accent font-bold hover:underline"
           onclick="document.querySelector('[data-filter=all]').click()"
@@ -140,10 +143,10 @@ const allTags = [...new Set(allPosts.flatMap(post => post.data.tags))];
 
         cards.forEach(card => {
           const cardElement = card as HTMLElement;
-          const cardTags = (cardElement.getAttribute('data-tags') || '').split(',');
+          const cardCategories = (cardElement.getAttribute('data-categories') || '').split(',');
           
           // 判斷是否符合條件
-          const isMatch = filter === 'all' || (filter && cardTags.includes(filter));
+          const isMatch = filter === 'all' || (filter && cardCategories.includes(filter));
 
           if (isMatch) {
             cardElement.style.display = 'flex'; // 恢復顯示

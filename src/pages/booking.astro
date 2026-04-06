@@ -1,0 +1,73 @@
+---
+export const prerender = true;
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/common/Header.astro';
+import Footer from '../components/common/Footer.astro';
+import { getEntry } from 'astro:content';
+import { Phone, Construction, ArrowRight } from 'lucide-react';
+
+const settings = await getEntry('settings', 'global');
+const phone = settings?.data?.phone || '(02) 2671-8910';
+const callLink = `tel:${phone.replace(/[\s\-()]/g, '')}`;
+---
+
+<Layout
+  title="預約掛號 | 周孟翰醫師"
+  description="周孟翰醫師線上預約掛號系統建置中，歡迎來電諮詢。"
+>
+  <Header slot="header" />
+
+  <main class="min-h-[70vh] flex items-center justify-center bg-bg py-20 px-6">
+    <div class="max-w-lg w-full text-center space-y-8">
+
+      {/* 圖示 */}
+      <div class="mx-auto w-24 h-24 rounded-full bg-highlight/60 border-2 border-accent/20 flex items-center justify-center animate-pulse-slow">
+        <Construction size={44} className="text-accent" />
+      </div>
+
+      {/* 標題 */}
+      <h1 class="text-3xl md:text-4xl font-serif font-bold text-primary leading-tight">
+        線上預約掛號系統<br/>建置中
+      </h1>
+
+      {/* 說明文字 */}
+      <p class="text-text/70 text-lg leading-relaxed">
+        造成不便，敬請見諒。<br/>
+        目前歡迎直接來電諮詢或預約。
+      </p>
+
+      {/* 電話按鈕 */}
+      <a
+        href={callLink}
+        class="inline-flex items-center gap-3 px-8 py-4 bg-primary text-white text-lg font-bold rounded-full shadow-lg hover:bg-accent hover:-translate-y-1 transition-all duration-300"
+      >
+        <Phone size={22} />
+        {phone}
+      </a>
+
+      {/* 門診資訊連結 */}
+      <div>
+        <a
+          href="/#clinic"
+          class="inline-flex items-center gap-2 text-sm font-bold text-accent hover:text-primary transition-colors group"
+        >
+          查看門診與交通資訊
+          <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <Footer slot="footer" />
+</Layout>
+
+<style>
+  @keyframes pulse-slow {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.05); }
+  }
+  .animate-pulse-slow {
+    animation: pulse-slow 3s ease-in-out infinite;
+  }
+</style>

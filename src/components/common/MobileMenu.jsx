@@ -92,7 +92,7 @@ const MobileMenu = ({ menuItems, socialLinks }) => {
               {/* CTA Button */}
               <div className="mt-8">
                 <a
-                  href="/#clinic"
+                  href="/booking"
                   onClick={() => setIsOpen(false)}
                   className="flex items-center justify-center gap-2 w-full py-4 bg-primary text-white font-bold rounded-xl shadow-lg hover:bg-accent transition-all active:scale-95"
                 >
