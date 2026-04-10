@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 # Cloudflare Wrangler
 .wrangler/
+
+# Claude AI
+.claude/

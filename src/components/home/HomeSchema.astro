@@ -1,0 +1,72 @@
+---
+import { getEntry } from 'astro:content';
+
+const settings = await getEntry('settings', 'global');
+const {
+  doctorName,
+  doctorTitle,
+  clinicName,
+  phone,
+  email,
+  address,
+  facebook,
+  instagram,
+} = settings.data;
+
+const sameAs = [facebook, instagram].filter(Boolean);
+
+// Parse Taiwan address: e.g. "新北市新店區二十張路5號1樓"
+// addressRegion = first 3 chars (新北市), addressLocality = next 3 chars (新店區), rest = streetAddress
+const addressRegion = address?.slice(0, 3) ?? '';
+const addressLocality = address?.slice(3, 6) ?? '';
+const streetAddress = address?.slice(6) ?? address ?? '';
+
+const postalAddress = {
+  '@type': 'PostalAddress',
+  streetAddress,
+  addressLocality,
+  addressRegion,
+  addressCountry: 'TW',
+};
+
+const physicianSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Physician',
+  name: doctorName,
+  url: 'https://drcmh.com',
+  image: 'https://drcmh.com/images/og-default.jpg',
+  telephone: phone,
+  email,
+  medicalSpecialty: 'Urology',
+  jobTitle: doctorTitle,
+  description: `${clinicName}${doctorTitle}，專精攝護腺肥大微創手術、泌尿道結石、性功能障礙。`,
+  address: postalAddress,
+  worksFor: {
+    '@type': 'MedicalClinic',
+    name: clinicName,
+    url: 'https://drcmh.com',
+  },
+  sameAs,
+};
+
+const clinicSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'MedicalClinic',
+  name: clinicName,
+  url: 'https://drcmh.com',
+  telephone: phone,
+  email,
+  address: postalAddress,
+  medicalSpecialty: 'Urology',
+  availableService: [
+    { '@type': 'MedicalTherapy', name: '攝護腺肥大微創手術' },
+    { '@type': 'MedicalTherapy', name: '泌尿道結石治療' },
+    { '@type': 'MedicalTherapy', name: '性功能障礙治療' },
+    { '@type': 'MedicalTherapy', name: '男性私密健康' },
+  ],
+  sameAs,
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(physicianSchema)} />
+<script type="application/ld+json" set:html={JSON.stringify(clinicSchema)} />
