@@ -16,7 +16,11 @@ import HomeSchema from "../components/home/HomeSchema.astro";
 import doctorProfileImage from "../assets/drchou-profile-2.png";
 ---
 
-<Layout preloadImage={doctorProfileImage.src}>
+<Layout
+  title="周孟翰醫師｜新店泌尿科｜大坪林站泌尿專科"
+  description="周孟翰醫師於新店高美泌尿科診所提供泌尿專科診療，診所位於新北市新店區、大坪林站旁，服務新店、七張、景美、文山區、中和與永和周邊民眾。"
+  preloadImage={doctorProfileImage.src}
+>
   <Header slot="header" />
 
   <NewsTicker />

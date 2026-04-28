@@ -29,6 +29,17 @@ const postalAddress = {
   addressCountry: 'TW',
 };
 
+const areaServed = [
+  { '@type': 'City', name: '新北市' },
+  { '@type': 'AdministrativeArea', name: '新店區' },
+  { '@type': 'Place', name: '大坪林' },
+  { '@type': 'Place', name: '七張' },
+  { '@type': 'Place', name: '景美' },
+  { '@type': 'AdministrativeArea', name: '文山區' },
+  { '@type': 'AdministrativeArea', name: '中和區' },
+  { '@type': 'AdministrativeArea', name: '永和區' },
+];
+
 const physicianSchema = {
   '@context': 'https://schema.org',
   '@type': 'Physician',
@@ -67,7 +78,7 @@ const clinicSchema = {
     longitude: 121.5398723,
   },
   hasMap: 'https://maps.app.goo.gl/3nWLC5dPaP5KpDHM9',
-  areaServed: { '@type': 'City', name: '新北市' },
+  areaServed,
   openingHoursSpecification: [
     { '@type': 'OpeningHoursSpecification', dayOfWeek: 'Monday', opens: '09:00', closes: '12:00' },
     { '@type': 'OpeningHoursSpecification', dayOfWeek: 'Monday', opens: '18:30', closes: '20:30' },
