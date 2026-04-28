@@ -41,9 +41,11 @@ const categoryStyles: Record<string, { label: string; class: string }> = {
 };
 
 const currentCat = categoryStyles[post.data.category] || { label: '公告', class: 'bg-blue-50 text-blue-600 border-blue-100' };
+
+const newsDescription = `【${currentCat.label}】${post.data.title}｜新店高美泌尿科診所最新消息，點此查看完整資訊。`;
 ---
 
-<Layout title={`${post.data.title} | 最新消息`}>
+<Layout title={`${post.data.title} | 最新消息`} description={newsDescription}>
   
   <article class="min-h-screen bg-white">
     {/* Page Header / Hero Section */}

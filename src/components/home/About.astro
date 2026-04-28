@@ -25,6 +25,7 @@ const doctorNoteParagraphs = (doctorWord || '')
 const physicianStructuredData = {
   '@context': 'https://schema.org',
   '@type': 'Physician',
+  '@id': 'https://drcmh.com/#physician',
   name: doctorName,
   medicalSpecialty: 'Urology',
   alumniOf: educations,
@@ -138,7 +139,7 @@ const physicianStructuredData = {
       </article>
     )}
 
-    <script type="application/ld+json" set:html={JSON.stringify(physicianStructuredData)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(physicianStructuredData)} />
 
   </div>
 </section>

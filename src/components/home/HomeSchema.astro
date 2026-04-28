@@ -13,7 +13,7 @@ const {
   instagram,
 } = settings.data;
 
-const sameAs = [facebook, instagram].filter(Boolean);
+const sameAs = [facebook, instagram, 'https://share.google/MeNh0em1bdgo88Tdm'].filter(Boolean);
 
 // Parse Taiwan address: e.g. "新北市新店區二十張路5號1樓"
 // addressRegion = first 3 chars (新北市), addressLocality = next 3 chars (新店區), rest = streetAddress
@@ -32,6 +32,7 @@ const postalAddress = {
 const physicianSchema = {
   '@context': 'https://schema.org',
   '@type': 'Physician',
+  '@id': 'https://drcmh.com/#physician',
   name: doctorName,
   url: 'https://drcmh.com',
   image: 'https://drcmh.com/images/og-default.jpg',
@@ -43,6 +44,7 @@ const physicianSchema = {
   address: postalAddress,
   worksFor: {
     '@type': 'MedicalClinic',
+    '@id': 'https://drcmh.com/#clinic',
     name: clinicName,
     url: 'https://drcmh.com',
   },
@@ -52,12 +54,35 @@ const physicianSchema = {
 const clinicSchema = {
   '@context': 'https://schema.org',
   '@type': 'MedicalClinic',
+  '@id': 'https://drcmh.com/#clinic',
   name: clinicName,
   url: 'https://drcmh.com',
   telephone: phone,
   email,
   address: postalAddress,
   medicalSpecialty: 'Urology',
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: 24.9825728,
+    longitude: 121.5398723,
+  },
+  hasMap: 'https://maps.app.goo.gl/3nWLC5dPaP5KpDHM9',
+  areaServed: { '@type': 'City', name: '新北市' },
+  openingHoursSpecification: [
+    { '@type': 'OpeningHoursSpecification', dayOfWeek: 'Monday', opens: '09:00', closes: '12:00' },
+    { '@type': 'OpeningHoursSpecification', dayOfWeek: 'Monday', opens: '18:30', closes: '20:30' },
+    { '@type': 'OpeningHoursSpecification', dayOfWeek: 'Tuesday', opens: '09:00', closes: '12:00' },
+    { '@type': 'OpeningHoursSpecification', dayOfWeek: 'Tuesday', opens: '18:30', closes: '20:30' },
+    { '@type': 'OpeningHoursSpecification', dayOfWeek: 'Wednesday', opens: '09:00', closes: '12:00' },
+    { '@type': 'OpeningHoursSpecification', dayOfWeek: 'Wednesday', opens: '14:30', closes: '17:30' },
+    { '@type': 'OpeningHoursSpecification', dayOfWeek: 'Wednesday', opens: '18:30', closes: '20:30' },
+    { '@type': 'OpeningHoursSpecification', dayOfWeek: 'Thursday', opens: '09:00', closes: '12:00' },
+    { '@type': 'OpeningHoursSpecification', dayOfWeek: 'Thursday', opens: '14:30', closes: '17:30' },
+    { '@type': 'OpeningHoursSpecification', dayOfWeek: 'Friday', opens: '09:00', closes: '12:00' },
+    { '@type': 'OpeningHoursSpecification', dayOfWeek: 'Friday', opens: '14:30', closes: '17:30' },
+    { '@type': 'OpeningHoursSpecification', dayOfWeek: 'Friday', opens: '18:30', closes: '20:30' },
+    { '@type': 'OpeningHoursSpecification', dayOfWeek: 'Saturday', opens: '09:00', closes: '12:00' },
+  ],
   availableService: [
     { '@type': 'MedicalTherapy', name: '攝護腺肥大微創手術' },
     { '@type': 'MedicalTherapy', name: '泌尿道結石治療' },
@@ -66,7 +91,22 @@ const clinicSchema = {
   ],
   sameAs,
 };
+
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': 'https://drcmh.com/#website',
+  url: 'https://drcmh.com',
+  name: '周孟翰醫師｜泌尿專科',
+  inLanguage: 'zh-TW',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: 'https://drcmh.com/blog?q={search_term_string}',
+    'query-input': 'required name=search_term_string',
+  },
+};
 ---
 
-<script type="application/ld+json" set:html={JSON.stringify(physicianSchema)} />
-<script type="application/ld+json" set:html={JSON.stringify(clinicSchema)} />
+<script is:inline type="application/ld+json" set:html={JSON.stringify(physicianSchema)} />
+<script is:inline type="application/ld+json" set:html={JSON.stringify(clinicSchema)} />
+<script is:inline type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
