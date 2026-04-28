@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>網站交接文件 — 周孟翰醫師個人網站</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* ── Site color tokens ── */
+    :root {
+      --primary:   #2A8BC8;
+      --accent:    #D99A46;
+      --bg:        #F0F4F8;
+      --text:      #21272f;
+      --surface:   #FFFFFF;
+      --hblue:     #E0F2FE;
+      --hgold:     #FFFBEB;
+      --border:    #D1DCE8;
+    }
+
+    /* ── Base typography ── */
+    body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.7; }
+    h1,h2,h3,h4 { font-family: 'Noto Serif TC', serif; }
+    code,.mono  { font-family: 'SF Mono','Fira Code','Consolas',monospace; font-size: 0.875em; }
+
+    /* ── Color utility overrides (guarantee rendering regardless of CDN config) ── */
+    .c-primary   { color: var(--primary) !important; }
+    .c-accent    { color: var(--accent)  !important; }
+    .bg-primary  { background: var(--primary) !important; }
+    .bg-accent   { background: var(--accent)  !important; }
+    .bg-sitebg   { background: var(--bg)      !important; }
+    .bg-surface  { background: var(--surface) !important; }
+    .bg-hblue    { background: var(--hblue)   !important; }
+    .bg-hgold    { background: var(--hgold)   !important; }
+    .border-primary { border-color: var(--primary) !important; }
+    .border-accent  { border-color: var(--accent)  !important; }
+
+    /* ── Card ── */
+    .card { background: var(--surface); border-radius: 16px; box-shadow: 0 1px 4px rgba(42,139,200,.07), 0 0 0 1px var(--border); }
+
+    /* ── Section header bar ── */
+    .section-num { font-family: 'Noto Serif TC', serif; font-size: 11px; font-weight: 600; letter-spacing: .15em; text-transform: uppercase; color: var(--primary); }
+
+    /* ── Back-to-TOC link ── */
+    .back-link { display: flex; justify-content: flex-end; margin-top: 28px; padding-top: 16px; border-top: 1px solid var(--border); }
+    .back-link a { font-size: 13px; color: var(--primary); text-decoration: none; display: flex; align-items: center; gap: 4px; }
+    .back-link a:hover { text-decoration: underline; }
+
+    /* ── Browser mockup ── */
+    .browser { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .browser-bar { background: #f1f5f9; padding: 9px 14px; display: flex; align-items: center; gap: 6px; border-bottom: 1px solid var(--border); }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .browser-url { flex: 1; background: white; border-radius: 4px; padding: 2px 10px; font-family: monospace; font-size: 11px; color: #94a3b8; margin-left: 6px; }
+    .screenshot-body { background: #f8fafc; padding: 36px 20px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; min-height: 140px; }
+
+    /* ── Site-map tree ── */
+    .sitemap-root { border: 2px solid var(--primary); border-radius: 12px; padding: 12px 18px; text-align: center; background: var(--primary); color: white; }
+    .sitemap-page { border: 1.5px solid var(--border); border-radius: 10px; padding: 10px 14px; background: var(--surface); font-size: 13px; }
+    .sitemap-sub  { border: 1.5px dashed var(--border); border-radius: 8px; padding: 8px 12px; background: var(--bg); font-size: 12px; color: #64748b; }
+    .sitemap-admin{ border: 1.5px solid var(--accent); border-radius: 10px; padding: 10px 14px; background: var(--hgold); font-size: 13px; }
+    .tree-line { width: 1px; background: var(--border); margin: 0 auto; }
+    .tree-h { height: 1px; background: var(--border); flex: 1; }
+
+    /* ── Status badge ── */
+    .badge-green { display:inline-flex; align-items:center; gap:5px; font-size:12px; background:#ecfdf5; color:#065f46; padding:3px 10px; border-radius:99px; }
+    .badge-blue  { display:inline-flex; align-items:center; gap:5px; font-size:12px; background:var(--hblue); color:var(--primary); padding:3px 10px; border-radius:99px; }
+    .badge-gold  { display:inline-flex; align-items:center; gap:5px; font-size:12px; background:var(--hgold); color:#92400e; padding:3px 10px; border-radius:99px; }
+    .badge-dark  { display:inline-flex; align-items:center; gap:5px; font-size:12px; background:var(--text); color:white; padding:3px 10px; border-radius:99px; }
+
+    /* ── Table responsive wrapper ── */
+    .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    table { min-width: 500px; width: 100%; border-collapse: collapse; }
+    th, td { padding: 10px 14px; text-align: left; font-size: 14px; }
+    thead tr { border-bottom: 2px solid var(--border); }
+    thead th { font-weight: 500; color: #64748b; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; }
+    tbody tr { border-bottom: 1px solid #f1f5f9; }
+
+    /* ── Code block ── */
+    pre.codeblock { background: #0f172a; color: #e2e8f0; padding: 20px; border-radius: 12px; overflow-x: auto; font-size: 12.5px; line-height: 1.8; -webkit-overflow-scrolling: touch; }
+
+    /* ── Info / warning boxes ── */
+    .info-box { background: var(--hblue); border-left: 4px solid var(--primary); border-radius: 0 10px 10px 0; padding: 14px 18px; font-size: 14px; }
+    .warn-box  { background: var(--hgold); border-left: 4px solid var(--accent); border-radius: 0 10px 10px 0; padding: 14px 18px; font-size: 14px; }
+    .danger-box{ background: #fff1f2; border-left: 4px solid #f43f5e; border-radius: 0 10px 10px 0; padding: 14px 18px; font-size: 14px; }
+
+    /* ── Dev/build compare card ── */
+    .cmp-card { border-radius: 12px; overflow: hidden; border: 1.5px solid var(--border); }
+    .cmp-card.highlight { border-color: var(--primary); }
+
+    /* ── Step indicator ── */
+    .step-num { width: 28px; height: 28px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+
+    @media print {
+      .no-print { display: none !important; }
+      body { background: white !important; }
+      .card { box-shadow: none !important; border: 1px solid var(--border) !important; }
+    }
+
+    /* ── Mobile typography ── */
+    @media (max-width: 640px) {
+      pre.codeblock { font-size: 11px; }
+      table { min-width: 400px; }
+      th, td { padding: 8px 10px; font-size: 13px; }
+    }
+  </style>
+</head>
+
+<body>
+
+
+  <div style="max-width:780px;margin:0 auto;padding:24px 16px 48px;" class="space-y-5">
+
+    <!-- ══════════════════════════════════
+         HEADER
+    ══════════════════════════════════ -->
+    <div class="card overflow-hidden">
+      <div class="bg-primary" style="padding:12px 24px;display:flex;align-items:center;justify-content:space-between">
+        <span style="color:rgba(255,255,255,.75);font-size:11px;letter-spacing:.18em;text-transform:uppercase">Website Handover Document</span>
+        <span class="mono" style="color:rgba(255,255,255,.5);font-size:11px">v2.0</span>
+      </div>
+      <div style="padding:28px 24px 24px">
+        <p class="c-primary" style="font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px">周孟翰醫師個人官方網站</p>
+        <h1 style="font-size:clamp(24px,5vw,36px);font-weight:600;color:var(--text);margin:0 0 4px">建置完工交接文件</h1>
+        <p class="mono" style="color:#94a3b8;font-size:13px;margin:0 0 24px">drcmh.com</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;padding-top:20px;border-top:1px solid var(--border)">
+          <div>
+            <div style="font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">交接日期</div>
+            <div style="font-weight:600">2026-04-28</div>
+          </div>
+          <div>
+            <div style="font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">開發者</div>
+            <div style="font-weight:600">謝士博 Shih-Po Hsieh</div>
+          </div>
+          <div>
+            <div style="font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">版本</div>
+            <div class="mono" style="font-weight:600">v2.0 · Production</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════
+         TABLE OF CONTENTS
+    ══════════════════════════════════ -->
+    <div class="card" id="toc" style="padding:24px">
+      <h2 style="font-size:16px;color:var(--text);margin:0 0 16px">目錄 Contents</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:4px">
+        <a href="#s0" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;text-decoration:none;color:var(--text);font-size:14px;transition:background .15s" onmouseover="this.style.background='var(--hblue)'" onmouseout="this.style.background='transparent'">
+          <span class="c-primary mono" style="font-size:11px;font-weight:700;width:22px">00</span>網站架構總覽
+        </a>
+        <a href="#s1" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;text-decoration:none;color:var(--text);font-size:14px;transition:background .15s" onmouseover="this.style.background='var(--hblue)'" onmouseout="this.style.background='transparent'">
+          <span class="c-primary mono" style="font-size:11px;font-weight:700;width:22px">01</span>基礎建設 Infrastructure
+        </a>
+        <a href="#s2" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;text-decoration:none;color:var(--text);font-size:14px;transition:background .15s" onmouseover="this.style.background='var(--hblue)'" onmouseout="this.style.background='transparent'">
+          <span class="c-primary mono" style="font-size:11px;font-weight:700;width:22px">02</span>內容管理系統 CMS
+        </a>
+        <a href="#s3" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;text-decoration:none;color:var(--text);font-size:14px;transition:background .15s" onmouseover="this.style.background='var(--hblue)'" onmouseout="this.style.background='transparent'">
+          <span class="c-primary mono" style="font-size:11px;font-weight:700;width:22px">03</span>技術架構 Tech Stack
+        </a>
+        <a href="#s4" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;text-decoration:none;color:var(--text);font-size:14px;transition:background .15s" onmouseover="this.style.background='var(--hblue)'" onmouseout="this.style.background='transparent'">
+          <span class="c-primary mono" style="font-size:11px;font-weight:700;width:22px">04</span>SEO &amp; GEO 優化策略
+        </a>
+        <a href="#s5" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;text-decoration:none;color:var(--text);font-size:14px;transition:background .15s" onmouseover="this.style.background='var(--hblue)'" onmouseout="this.style.background='transparent'">
+          <span class="c-primary mono" style="font-size:11px;font-weight:700;width:22px">05</span>衛教文章建議結構
+        </a>
+        <a href="#s6" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;text-decoration:none;color:var(--text);font-size:14px;transition:background .15s" onmouseover="this.style.background='var(--hblue)'" onmouseout="this.style.background='transparent'">
+          <span class="c-primary mono" style="font-size:11px;font-weight:700;width:22px">06</span>Google 商家檔案 GBP
+        </a>
+        <a href="#s7" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;text-decoration:none;color:var(--text);font-size:14px;transition:background .15s" onmouseover="this.style.background='var(--hblue)'" onmouseout="this.style.background='transparent'">
+          <span class="c-primary mono" style="font-size:11px;font-weight:700;width:22px">07</span>未來優化建議
+        </a>
+        <a href="#s8" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;text-decoration:none;color:var(--text);font-size:14px;transition:background .15s" onmouseover="this.style.background='var(--hblue)'" onmouseout="this.style.background='transparent'">
+          <span class="c-primary mono" style="font-size:11px;font-weight:700;width:22px">08</span>如何與AI 協作來改網站
+        </a>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════
+         S0 — 網站架構總覽
+    ══════════════════════════════════ -->
+    <div class="card" id="s0" style="padding:28px 24px">
+      <p class="section-num">00</p>
+      <h2 style="font-size:22px;color:var(--text);margin:4px 0 6px">網站架構總覽</h2>
+      <p style="color:#64748b;font-size:13px;margin:0 0 24px">所有公開頁面與後台路徑一覽</p>
+
+      <!-- Root -->
+      <div style="text-align:center;margin-bottom:0">
+        <div class="sitemap-root" style="display:inline-block;min-width:200px">
+          <div style="font-size:11px;opacity:.8;letter-spacing:.1em;text-transform:uppercase;margin-bottom:2px">首頁</div>
+          <div style="font-weight:700;font-size:15px;font-family:'Noto Serif TC',serif">drcmh.com</div>
+          <div style="font-size:11px;opacity:.7;margin-top:4px">醫師介紹 · 專長 · 時刻表 · FAQ · 影音</div>
+        </div>
+      </div>
+
+      <!-- Connector from root down -->
+      <div style="display:flex;justify-content:center"><div class="tree-line" style="height:24px"></div></div>
+
+      <!-- Level 1: main sections -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-bottom:0">
+        <div class="sitemap-page">
+          <div style="font-size:10px;color:var(--primary);font-weight:600;margin-bottom:2px">/blog</div>
+          <div style="font-weight:600">衛教文章</div>
+          <div style="font-size:11px;color:#94a3b8;margin-top:2px">文章列表頁</div>
+        </div>
+        <div class="sitemap-page">
+          <div style="font-size:10px;color:var(--primary);font-weight:600;margin-bottom:2px">/news</div>
+          <div style="font-weight:600">最新消息</div>
+          <div style="font-size:11px;color:#94a3b8;margin-top:2px">公告列表頁</div>
+        </div>
+        <div class="sitemap-page">
+          <div style="font-size:10px;color:var(--primary);font-weight:600;margin-bottom:2px">/video</div>
+          <div style="font-weight:600">影音專區</div>
+          <div style="font-size:11px;color:#94a3b8;margin-top:2px">YouTube 嵌入</div>
+        </div>
+        <div class="sitemap-page" style="border-color:var(--accent)">
+          <div style="font-size:10px;color:var(--accent);font-weight:600;margin-bottom:2px">/booking</div>
+          <div style="font-weight:600">網路掛號</div>
+          <div style="font-size:11px;color:var(--accent);margin-top:2px">⚠ 待建置</div>
+        </div>
+        <div class="sitemap-page">
+          <div style="font-size:10px;color:var(--primary);font-weight:600;margin-bottom:2px">/privacy</div>
+          <div style="font-weight:600">隱私政策</div>
+          <div style="font-size:11px;color:#94a3b8;margin-top:2px">法規聲明</div>
+        </div>
+        <div class="sitemap-admin">
+          <div style="font-size:10px;color:var(--accent);font-weight:600;margin-bottom:2px">/admin</div>
+          <div style="font-weight:600">管理後台</div>
+          <div style="font-size:11px;color:#92400e;margin-top:2px">→ Keystatic</div>
+        </div>
+      </div>
+
+      <!-- Level 2: sub-pages -->
+      <div style="display:flex;justify-content:center"><div class="tree-line" style="height:20px"></div></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:20px">
+        <div class="sitemap-sub">
+          <span class="mono" style="color:var(--primary);font-size:10px">/blog/[slug]</span>
+          <div style="font-weight:500;margin-top:2px">文章詳頁</div>
+          <div style="font-size:11px;color:#94a3b8;margin-top:2px">標題·目錄·Share·免責聲明</div>
+        </div>
+        <div class="sitemap-sub">
+          <span class="mono" style="color:var(--primary);font-size:10px">/news/[slug]</span>
+          <div style="font-weight:500;margin-top:2px">消息詳頁</div>
+          <div style="font-size:11px;color:#94a3b8;margin-top:2px">MDX 格式完整消息</div>
+        </div>
+        <div class="sitemap-sub" style="opacity:.6">
+          <span class="mono" style="font-size:10px">/404</span>
+          <div style="font-weight:500;margin-top:2px">找不到頁面</div>
+          <div style="font-size:11px;color:#94a3b8;margin-top:2px">自訂錯誤頁</div>
+        </div>
+        <div class="sitemap-sub" style="opacity:.6">
+          <span class="mono" style="font-size:10px">/api/*</span>
+          <div style="font-weight:500;margin-top:2px">休診公告 API</div>
+          <div style="font-size:11px;color:#94a3b8;margin-top:2px">動態資料端點</div>
+        </div>
+      </div>
+
+      <!-- /booking 說明 -->
+      <div class="warn-box" style="margin-bottom:16px">
+        <strong style="color:var(--accent)">/booking — 網路掛號（待建置）：</strong>目前此頁面尚未完成，預計連結至外部掛號系統（如健保掛號或第三方預約平台）。待確認掛號系統後，請告知開發者補上對應外部連結。
+      </div>
+
+      <!-- 首頁模組breakdown -->
+      <div class="info-box" style="margin-top:4px">
+        <p style="font-weight:600;color:var(--primary);margin:0 0 8px">首頁 (/) 包含以下模組</p>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          <span style="background:white;border:1px solid var(--border);border-radius:6px;padding:3px 10px;font-size:12px">Hero 橫幅</span>
+          <span style="background:white;border:1px solid var(--border);border-radius:6px;padding:3px 10px;font-size:12px">醫師介紹 &amp; 履歷</span>
+          <span style="background:white;border:1px solid var(--border);border-radius:6px;padding:3px 10px;font-size:12px">主治專長</span>
+          <span style="background:white;border:1px solid var(--border);border-radius:6px;padding:3px 10px;font-size:12px">門診時刻表</span>
+          <span style="background:white;border:1px solid var(--border);border-radius:6px;padding:3px 10px;font-size:12px">休診公告 Banner</span>
+          <span style="background:white;border:1px solid var(--border);border-radius:6px;padding:3px 10px;font-size:12px">最新消息跑馬燈</span>
+          <span style="background:white;border:1px solid var(--border);border-radius:6px;padding:3px 10px;font-size:12px">衛教文章預覽</span>
+          <span style="background:white;border:1px solid var(--border);border-radius:6px;padding:3px 10px;font-size:12px">FAQ 常見問答</span>
+          <span style="background:white;border:1px solid var(--border);border-radius:6px;padding:3px 10px;font-size:12px">影音精選</span>
+          <span style="background:white;border:1px solid var(--border);border-radius:6px;padding:3px 10px;font-size:12px">Facebook 動態</span>
+        </div>
+      </div>
+
+      <div class="back-link"><a href="#toc">↑ 回到目錄</a></div>
+    </div>
+
+    <!-- ══════════════════════════════════
+         S1 — INFRASTRUCTURE
+    ══════════════════════════════════ -->
+    <div class="card" id="s1" style="padding:28px 24px">
+      <p class="section-num">01</p>
+      <h2 style="font-size:22px;color:var(--text);margin:4px 0 24px">基礎建設 Infrastructure</h2>
+
+      <h3 style="font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#94a3b8;margin:0 0 12px;font-family:'Noto Sans TC',sans-serif">網域 Domain</h3>
+      <div class="table-wrap" style="margin-bottom:28px">
+        <table>
+          <thead><tr><th>項目</th><th>內容</th><th>備註</th></tr></thead>
+          <tbody>
+            <tr><td style="color:#64748b">主網域</td><td><strong class="mono">drcmh.com</strong></td><td style="color:#94a3b8">主要對外網址</td></tr>
+            <tr><td style="color:#64748b">到期日</td><td><strong>2027 年 1 月 25 日</strong></td><td style="color:#94a3b8">到期前約 30 天自動扣款</td></tr>
+            <tr><td style="color:#64748b">自動續費</td><td><strong><span class="badge-green">✓ 已開啟</span></strong></td><td style="color:#94a3b8">費用約 US$10+ / 年（金額可能異動）</td></tr>
+            <tr><td style="color:#64748b">DNS 管理</td><td><strong>Cloudflare</strong></td><td style="color:#94a3b8">如需變更設定請登入 Cloudflare</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 style="font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#94a3b8;margin:0 0 12px;font-family:'Noto Sans TC',sans-serif">主機 Hosting</h3>
+      <div class="table-wrap" style="margin-bottom:28px">
+        <table>
+          <thead><tr><th>平台</th><th>方案</th><th>狀態</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Cloudflare Pages</strong></td><td style="color:#64748b">Free Plan</td><td><span class="badge-green">✓ 正常運作</span></td></tr>
+            <tr><td style="color:#64748b">登入方式</td><td><strong>Google 帳號 OAuth</strong></td><td style="color:#94a3b8;font-size:13px">直接以 Google 登入</td></tr>
+            <tr><td style="color:#64748b">管理帳號</td><td><strong class="mono">drchou2026@gmail.com</strong></td><td style="color:#94a3b8;font-size:13px">診所 Google 帳號</td></tr>
+            <tr><td style="color:#64748b">部署方式</td><td><strong>GitHub 自動部署</strong></td><td style="color:#94a3b8;font-size:13px">Push main → 約 2 分鐘上線</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 style="font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#94a3b8;margin:0 0 12px;font-family:'Noto Sans TC',sans-serif">SSL 憑證</h3>
+      <div class="info-box" style="display:flex;align-items:flex-start;gap:12px">
+        <svg style="width:20px;height:20px;color:var(--primary);flex-shrink:0;margin-top:2px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        <div>
+          <p style="font-weight:600;color:var(--primary);margin:0 0 4px">Cloudflare Universal SSL — 全程加密啟用中</p>
+          <p style="color:#475569;margin:0;font-size:13px">由 Cloudflare 自動申請與續期（模式：Full Strict），無需手動操作，永久免費。</p>
+        </div>
+      </div>
+
+      <!-- 網站架構優勢 -->
+      <h3 style="font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#94a3b8;margin:28px 0 12px;font-family:'Noto Sans TC',sans-serif">這個網站的架構優勢</h3>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:4px">
+        <div class="bg-sitebg" style="border-radius:10px;padding:14px 16px;display:flex;gap:14px;align-items:flex-start">
+          <span style="font-size:20px;flex-shrink:0">💰</span>
+          <div style="font-size:13px"><strong>維護成本極低</strong><div style="color:#475569;margin-top:3px">日常維護費用<strong>僅需網域費用</strong>（約 US$10+ / 年），沒有月費資料庫、沒有主機租金。Cloudflare Pages 靜態網站託管永久免費，省去傳統 WordPress 動輒數千元台幣的主機開銷。</div></div>
+        </div>
+        <div class="bg-sitebg" style="border-radius:10px;padding:14px 16px;display:flex;gap:14px;align-items:flex-start">
+          <span style="font-size:20px;flex-shrink:0">⚡</span>
+          <div style="font-size:13px"><strong>Astro 靜態框架 — 專為效能與 SEO 設計</strong><div style="color:#475569;margin-top:3px">本站採用 <strong>Astro</strong> 框架，頁面在建置時預先渲染成純 HTML，沒有資料庫查詢、沒有伺服器運算，瀏覽器直接拿到靜態檔案。載入速度快、Core Web Vitals 高分，Google 排名友善。</div></div>
+        </div>
+        <div class="bg-sitebg" style="border-radius:10px;padding:14px 16px;display:flex;gap:14px;align-items:flex-start">
+          <span style="font-size:20px;flex-shrink:0">🔒</span>
+          <div style="font-size:13px"><strong>無資料庫 = 無資安風險</strong><div style="color:#475569;margin-top:3px">靜態網站沒有後端資料庫，駭客無法透過 SQL Injection 等常見手法入侵。內容全部存在 GitHub，版本有歷史紀錄，不怕誤刪。</div></div>
+        </div>
+      </div>
+
+      <div class="back-link"><a href="#toc">↑ 回到目錄</a></div>
+    </div>
+
+    <!-- ══════════════════════════════════
+         S2 — CMS
+    ══════════════════════════════════ -->
+    <div class="card" id="s2" style="padding:28px 24px">
+      <p class="section-num">02</p>
+      <h2 style="font-size:22px;color:var(--text);margin:4px 0 24px">內容管理系統 CMS</h2>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:24px">
+        <div class="bg-sitebg" style="border-radius:12px;padding:16px">
+          <div style="font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">系統名稱</div>
+          <div style="font-weight:700;font-size:15px">Keystatic CMS</div>
+          <div style="color:#94a3b8;font-size:12px;margin-top:4px">開源 Headless CMS，資料存於 GitHub</div>
+        </div>
+        <div class="bg-sitebg" style="border-radius:12px;padding:16px">
+          <div style="font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">後台入口</div>
+          <div class="mono" style="font-weight:700;font-size:13px">https://drcmh.com/admin</div>
+          <div style="color:#94a3b8;font-size:12px;margin-top:4px">自動導向 /keystatic 後台介面</div>
+        </div>
+      </div>
+
+      <h3 style="font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#94a3b8;margin:0 0 12px;font-family:'Noto Sans TC',sans-serif">登入資訊</h3>
+      <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:20px">
+        <div style="display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border)">
+          <span style="color:#94a3b8;font-size:13px;width:110px;flex-shrink:0">登入方式</span>
+          <span style="font-weight:600">GitHub OAuth（使用 GitHub 帳號授權）</span>
+        </div>
+        <div style="display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border)">
+          <span style="color:#94a3b8;font-size:13px;width:110px;flex-shrink:0">GitHub 登入</span>
+          <span style="font-weight:600">使用 Google 帳號登入 GitHub</span>
+        </div>
+        <div style="display:flex;align-items:center;padding:12px 16px">
+          <span style="color:#94a3b8;font-size:13px;width:110px;flex-shrink:0">Google 帳號</span>
+          <span class="mono" style="font-weight:700;color:var(--primary)">drchou2026@gmail.com</span>
+        </div>
+      </div>
+
+      <!-- Login flow -->
+      <div class="bg-sitebg" style="border-radius:12px;padding:18px;margin-bottom:20px">
+        <div style="font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:.1em;text-align:center;margin-bottom:16px">後台登入流程</div>
+        <div style="display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px">
+          <div style="background:white;border:1px solid var(--border);border-radius:10px;padding:10px 14px;text-align:center;font-size:13px">
+            <div style="color:#94a3b8;font-size:10px;margin-bottom:2px">開啟</div>
+            <strong class="mono" style="font-size:12px">drcmh.com/admin</strong>
+          </div>
+          <span class="c-primary" style="font-size:18px">→</span>
+          <div style="background:white;border:1px solid var(--border);border-radius:10px;padding:10px 14px;text-align:center;font-size:13px">
+            <div style="color:#94a3b8;font-size:10px;margin-bottom:2px">點擊</div>
+            <strong>Sign in with GitHub</strong>
+          </div>
+          <span class="c-primary" style="font-size:18px">→</span>
+          <div style="background:white;border:1px solid var(--border);border-radius:10px;padding:10px 14px;text-align:center;font-size:13px">
+            <div style="color:#94a3b8;font-size:10px;margin-bottom:2px">選擇</div>
+            <strong>Continue with Google</strong>
+          </div>
+          <span class="c-primary" style="font-size:18px">→</span>
+          <div class="bg-primary" style="border-radius:10px;padding:10px 14px;text-align:center;font-size:13px;color:white">
+            <div style="opacity:.7;font-size:10px;margin-bottom:2px">完成</div>
+            <strong>進入後台</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Screenshot: Keystatic -->
+      <div class="browser" style="margin-bottom:20px;display:none">
+        <div class="browser-bar">
+          <div class="dot" style="background:#fc8181"></div>
+          <div class="dot" style="background:#f6c94e"></div>
+          <div class="dot" style="background:#68d391"></div>
+          <div class="browser-url">drcmh.com/keystatic</div>
+        </div>
+        <div class="screenshot-body">
+          <svg style="width:36px;height:36px;color:#cbd5e1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          <div style="font-size:13px;font-weight:600;color:#94a3b8">截圖預留位置</div>
+          <div style="font-size:12px;color:#94a3b8;max-width:360px">建議截圖：Keystatic 後台主畫面，顯示左側選單（衛教文章、最新消息、全站設定、門診時刻表等）與中央內容列表</div>
+        </div>
+      </div>
+
+      <div class="warn-box" style="margin-bottom:24px">
+        <strong style="color:var(--accent)">存檔即部署：</strong>後台存檔後，Keystatic 自動提交至 GitHub → Cloudflare Pages 觸發重新建置 → 約 1–2 分鐘後網站更新上線，無需任何手動操作。
+      </div>
+
+      <h3 style="font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#94a3b8;margin:0 0 12px;font-family:'Noto Sans TC',sans-serif">可管理的內容類型</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px">
+        <div class="bg-sitebg" style="border-radius:10px;padding:12px 14px;display:flex;gap:10px">
+          <span class="c-primary" style="font-size:16px;flex-shrink:0">→</span>
+          <div><div style="font-weight:600;font-size:14px">衛教文章 (Blog)</div><div style="color:#94a3b8;font-size:12px">MDX 格式，支援圖文混排</div></div>
+        </div>
+        <div class="bg-sitebg" style="border-radius:10px;padding:12px 14px;display:flex;gap:10px">
+          <span class="c-primary" style="font-size:16px;flex-shrink:0">→</span>
+          <div><div style="font-weight:600;font-size:14px">最新消息 (News)</div><div style="color:#94a3b8;font-size:12px">休診公告、活動資訊</div></div>
+        </div>
+        <div class="bg-sitebg" style="border-radius:10px;padding:12px 14px;display:flex;gap:10px">
+          <span class="c-primary" style="font-size:16px;flex-shrink:0">→</span>
+          <div><div style="font-weight:600;font-size:14px">門診時刻表</div><div style="color:#94a3b8;font-size:12px">直接更新即時反映</div></div>
+        </div>
+        <div class="bg-sitebg" style="border-radius:10px;padding:12px 14px;display:flex;gap:10px">
+          <span class="c-primary" style="font-size:16px;flex-shrink:0">→</span>
+          <div><div style="font-weight:600;font-size:14px">影音 / 短影音</div><div style="color:#94a3b8;font-size:12px">嵌入 YouTube 連結管理</div></div>
+        </div>
+        <div class="bg-sitebg" style="border-radius:10px;padding:12px 14px;display:flex;gap:10px">
+          <span class="c-primary" style="font-size:16px;flex-shrink:0">→</span>
+          <div><div style="font-weight:600;font-size:14px">全站設定</div><div style="color:#94a3b8;font-size:12px">診所資訊、醫師履歷</div></div>
+        </div>
+        <div class="bg-sitebg" style="border-radius:10px;padding:12px 14px;display:flex;gap:10px">
+          <span class="c-primary" style="font-size:16px;flex-shrink:0">→</span>
+          <div><div style="font-weight:600;font-size:14px">常見問答 (FAQ)</div><div style="color:#94a3b8;font-size:12px">影響 Google 搜尋呈現</div></div>
+        </div>
+      </div>
+
+      <!-- 休診公告 API -->
+      <h3 style="font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#94a3b8;margin:28px 0 12px;font-family:'Noto Sans TC',sans-serif">休診公告自動系統</h3>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
+        <div class="bg-sitebg" style="border-radius:10px;padding:14px 16px">
+          <div style="font-weight:700;font-size:14px;margin-bottom:6px">運作方式</div>
+          <div style="font-size:13px;color:#475569;line-height:1.7">在 Google 試算表中填入「發布日」與「結束日」，網站最上方的橫幅公告就會在該時段<strong>自動出現</strong>，結束後自動消失，完全不需要動到網站程式碼。</div>
+        </div>
+        <div class="bg-sitebg" style="border-radius:10px;padding:14px 16px;display:flex;gap:14px;flex-wrap:wrap">
+          <div style="min-width:120px">
+            <div style="font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">切換時間點</div>
+            <div style="font-weight:700;font-size:14px">晚上 22:00</div>
+            <div style="font-size:12px;color:#64748b;margin-top:2px">超過晚上 10 點即算隔日</div>
+          </div>
+          <div style="flex:1;min-width:200px">
+            <div style="font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">Google 試算表</div>
+            <a href="https://docs.google.com/spreadsheets/d/1UQtGe-5nIB5VlXmU0ly2Vw6KDdYbA7WSI-HZwVO0Slo/edit?usp=drivesdk" target="_blank" class="no-print" style="display:inline-block;background:var(--primary);color:white;text-decoration:none;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:500;margin-top:2px">開啟試算表 →</a>
+            <div style="font-size:12px;color:#64748b;margin-top:6px">使用 drchou2026@gmail.com 帳號開啟</div>
+          </div>
+        </div>
+      </div>
+      <div class="info-box" style="margin-bottom:0">
+        <strong style="color:var(--primary)">操作步驟：</strong>開啟試算表 → 填入公告標題 / 發布日 / 結束日 → 儲存。網站每次開啟頁面時會自動抓取最新資料，無需重新部署。
+      </div>
+
+      <!-- 圖片上傳建議 -->
+      <h3 style="font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#94a3b8;margin:28px 0 12px;font-family:'Noto Sans TC',sans-serif">圖片上傳建議</h3>
+      <div class="info-box" style="margin-bottom:12px">
+        <strong style="color:var(--primary)">上傳前請先壓縮！</strong> 建議使用 <strong>Squash</strong>（Mac App Store 免費下載）或 <a href="https://squoosh.app" target="_blank" style="color:var(--primary)">squoosh.app</a>（瀏覽器版）將圖片壓縮後再上傳，可大幅縮短網頁載入時間，對 SEO 也有正面影響。
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;margin-bottom:8px">
+        <div class="bg-sitebg" style="border-radius:10px;padding:12px 14px">
+          <div style="font-weight:600;font-size:13px;margin-bottom:4px">建議格式</div>
+          <div style="font-size:12px;color:#475569">一般照片用 <strong>JPEG</strong>，有透明背景的圖用 <strong>PNG</strong>，可的話優先選 <strong>WebP</strong>（更小更快）</div>
+        </div>
+        <div class="bg-sitebg" style="border-radius:10px;padding:12px 14px">
+          <div style="font-weight:600;font-size:13px;margin-bottom:4px">建議大小</div>
+          <div style="font-size:12px;color:#475569">單張圖片壓縮後盡量控制在 <strong>200 KB 以內</strong>，OG 封面圖建議 1200×630 px</div>
+        </div>
+      </div>
+
+      <div class="back-link"><a href="#toc">↑ 回到目錄</a></div>
+    </div>
+
+    <!-- ══════════════════════════════════
+         S3 — TECH STACK
+    ══════════════════════════════════ -->
+    <div class="card" id="s3" style="padding:28px 24px">
+      <p class="section-num">03</p>
+      <h2 style="font-size:22px;color:var(--text);margin:4px 0 24px">技術架構 Tech Stack</h2>
+
+      <pre class="codeblock"><span style="color:#94a3b8"># drcmh-site-v2 · 技術清單</span>
+
+<span style="color:#93c5fd">Framework</span>      <span style="color:#f1f5f9">Astro 5.17</span>           <span style="color:#475569">— 靜態網站框架（SSG + SSR）</span>
+<span style="color:#93c5fd">UI Library</span>     <span style="color:#f1f5f9">React 19</span>             <span style="color:#475569">— 互動元件（搜尋、行動選單）</span>
+<span style="color:#93c5fd">Styling</span>        <span style="color:#f1f5f9">Tailwind CSS 3.4</span>     <span style="color:#475569">— Utility-first CSS</span>
+<span style="color:#93c5fd">Language</span>       <span style="color:#f1f5f9">TypeScript 5.9</span>       <span style="color:#475569">— 型別安全</span>
+<span style="color:#475569">─────────────────────────────────────────────────</span>
+<span style="color:#86efac">CMS</span>            <span style="color:#f1f5f9">Keystatic Cloud</span>      <span style="color:#475569">— Headless CMS，資料存於 GitHub</span>
+<span style="color:#86efac">Content Fmt</span>    <span style="color:#f1f5f9">MDX + Markdoc</span>        <span style="color:#475569">— 富文字內容格式</span>
+<span style="color:#86efac">Search</span>         <span style="color:#f1f5f9">Pagefind 1.4</span>         <span style="color:#475569">— 靜態全文搜尋（繁中支援）</span>
+<span style="color:#475569">─────────────────────────────────────────────────</span>
+<span style="color:#fde68a">Hosting</span>        <span style="color:#f1f5f9">Cloudflare Pages</span>     <span style="color:#475569">— 全球 CDN，免費方案</span>
+<span style="color:#fde68a">Version Ctrl</span>   <span style="color:#f1f5f9">Git + GitHub</span>         <span style="color:#475569">— 程式碼版本控制與自動部署</span>
+<span style="color:#fde68a">Image Opt</span>      <span style="color:#f1f5f9">Sharp + Astro</span>        <span style="color:#475569">— 自動壓縮與 WebP 轉換</span>
+<span style="color:#fde68a">Analytics</span>      <span style="color:#f1f5f9">Partytown + GA4</span>      <span style="color:#475569">— 分析腳本隔離，保護網站效能</span>
+<span style="color:#fde68a">SEO</span>            <span style="color:#f1f5f9">@astrojs/sitemap</span>     <span style="color:#475569">— 自動生成 sitemap.xml</span>
+<span style="color:#475569">─────────────────────────────────────────────────</span>
+<span style="color:#c4b5fd">Automation</span>     <span style="color:#f1f5f9">休診公告 API</span>         <span style="color:#475569">— 動態抓取休診資料，Banner 自動更新</span>
+<span style="color:#c4b5fd">Adapter</span>        <span style="color:#f1f5f9">@astrojs/cloudflare</span>  <span style="color:#475569">— Edge Runtime 支援</span></pre>
+
+      <!-- Deploy flow -->
+      <h3 style="font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#94a3b8;margin:24px 0 12px;font-family:'Noto Sans TC',sans-serif">部署流程</h3>
+      <div class="bg-sitebg" style="border-radius:12px;padding:20px;margin-bottom:24px">
+        <div style="display:flex;align-items:stretch;gap:0;flex-wrap:wrap;justify-content:center">
+          <div style="flex:1;min-width:100px;background:white;border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center">
+            <div style="font-size:22px;margin-bottom:6px">✏️</div>
+            <div style="font-weight:600;font-size:13px">編輯後台</div>
+            <div style="font-size:11px;color:#94a3b8;margin-top:3px">Keystatic CMS</div>
+          </div>
+          <div style="display:flex;align-items:center;padding:0 8px;color:var(--primary);font-size:20px;min-width:30px;justify-content:center">→</div>
+          <div style="flex:1;min-width:100px;background:white;border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center">
+            <div style="font-size:22px;margin-bottom:6px">📦</div>
+            <div style="font-weight:600;font-size:13px">GitHub</div>
+            <div style="font-size:11px;color:#94a3b8;margin-top:3px">版本控制</div>
+          </div>
+          <div style="display:flex;align-items:center;padding:0 8px;color:var(--primary);font-size:20px;min-width:30px;justify-content:center">→</div>
+          <div style="flex:1;min-width:100px;background:white;border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center">
+            <div style="font-size:22px;margin-bottom:6px">⚙️</div>
+            <div style="font-weight:600;font-size:13px">Cloudflare Build</div>
+            <div style="font-size:11px;color:#94a3b8;margin-top:3px">約 1–2 分鐘</div>
+          </div>
+          <div style="display:flex;align-items:center;padding:0 8px;color:var(--primary);font-size:20px;min-width:30px;justify-content:center">→</div>
+          <div class="bg-primary" style="flex:1;min-width:100px;border-radius:10px;padding:14px;text-align:center;color:white">
+            <div style="font-size:22px;margin-bottom:6px">🌐</div>
+            <div style="font-weight:600;font-size:13px">drcmh.com</div>
+            <div style="font-size:11px;opacity:.8;margin-top:3px">更新完成</div>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="warn-box">
+        <strong style="color:var(--accent)">日常操作不需要執行任何指令。</strong>透過 Keystatic 後台存檔即可觸發自動部署。指令只有在開發者需要修改程式碼時才會用到。
+      </div>
+
+      <div class="back-link"><a href="#toc">↑ 回到目錄</a></div>
+    </div>
+
+    <!-- ══════════════════════════════════
+         S4 — SEO & GEO
+    ══════════════════════════════════ -->
+    <div class="card" id="s4" style="padding:28px 24px">
+      <p class="section-num">04</p>
+      <h2 style="font-size:22px;color:var(--text);margin:4px 0 4px">SEO &amp; GEO 優化策略</h2>
+      <p style="color:#64748b;font-size:13px;margin:0 0 24px">傳統搜尋引擎優化 (SEO) × AI 生成式搜尋優化 (GEO) 雙軌並行</p>
+
+      <h3 style="font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#94a3b8;margin:0 0 12px;font-family:'Noto Sans TC',sans-serif">分析工具狀態</h3>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:28px">
+        <div class="bg-sitebg" style="border-radius:10px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+          <div style="display:flex;align-items:center;gap:10px"><div style="width:10px;height:10px;background:#22c55e;border-radius:50%"></div><span style="font-weight:600">Google Search Console</span></div>
+          <span class="badge-green">已驗證 · 監控中</span>
+        </div>
+        <div class="bg-sitebg" style="border-radius:10px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+          <div style="display:flex;align-items:center;gap:10px"><div style="width:10px;height:10px;background:#22c55e;border-radius:50%"></div><span style="font-weight:600">Google Analytics 4 (GA4)</span></div>
+          <span class="badge-green">已串接 · 資料收集中</span>
+        </div>
+        <div class="bg-sitebg" style="border-radius:10px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+          <div style="display:flex;align-items:center;gap:10px"><div style="width:10px;height:10px;background:#22c55e;border-radius:50%"></div><span style="font-weight:600">sitemap.xml 自動生成</span></div>
+          <span class="badge-green mono" style="font-size:11px">drcmh.com/sitemap-index.xml</span>
+        </div>
+        <div class="bg-sitebg" style="border-radius:10px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+          <div style="display:flex;align-items:center;gap:10px"><div style="width:10px;height:10px;background:#22c55e;border-radius:50%"></div><span style="font-weight:600">robots.txt</span></div>
+          <span class="badge-green">已設定（後台已排除）</span>
+        </div>
+      </div>
+
+      <!-- SEO 名詞白話解釋 -->
+      <h3 style="font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#94a3b8;margin:0 0 12px;font-family:'Noto Sans TC',sans-serif">這些工具是什麼？</h3>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:28px">
+        <div class="bg-sitebg" style="border-radius:10px;padding:14px 16px;display:flex;gap:14px;align-items:flex-start">
+          <div style="min-width:110px;font-size:13px;font-weight:700;color:var(--primary);font-family:'Noto Serif TC',serif">GA4</div>
+          <div style="font-size:13px;color:#475569"><strong>Google Analytics 4</strong>：記錄「誰來看了你的網站」的工具。可以看到每天有多少人造訪、從哪裡來（Google 搜尋 / 社群 / 直接輸入網址）、看了哪些頁面、停留多久。類似診所的「訪客簽到簿」，但是數位版、自動記錄。</div>
+        </div>
+        <div class="bg-sitebg" style="border-radius:10px;padding:14px 16px;display:flex;gap:14px;align-items:flex-start">
+          <div style="min-width:110px;font-size:13px;font-weight:700;color:var(--primary);font-family:'Noto Serif TC',serif">sitemap.xml</div>
+          <div style="font-size:13px;color:#475569"><strong>網站地圖</strong>：一份給 Google 機器人看的「目錄清單」，列出網站所有頁面的網址。Google 的爬蟲會先讀這份清單，再依序去每頁收錄。有 sitemap，Google 就不容易漏掉你的新文章。本站已自動生成，無需手動維護。</div>
+        </div>
+        <div class="bg-sitebg" style="border-radius:10px;padding:14px 16px;display:flex;gap:14px;align-items:flex-start">
+          <div style="min-width:110px;font-size:13px;font-weight:700;color:var(--primary);font-family:'Noto Serif TC',serif">robots.txt</div>
+          <div style="font-size:13px;color:#475569"><strong>爬蟲規則檔</strong>：告訴 Google「哪些頁面可以收錄，哪些不行」的設定檔。例如後台管理介面不應該被 Google 索引，robots.txt 就負責把它擋掉。本站已設定後台 <span class="mono">/keystatic</span> 排除在外。</div>
+        </div>
+        <div class="bg-sitebg" style="border-radius:10px;padding:14px 16px;display:flex;gap:14px;align-items:flex-start">
+          <div style="min-width:110px;font-size:13px;font-weight:700;color:var(--primary);font-family:'Noto Serif TC',serif">OG Image</div>
+          <div style="font-size:13px;color:#475569"><strong>社群分享預覽圖</strong>：當網址被貼到 LINE、Facebook、Twitter 時，自動出現的那張大圖。本站每個主要頁面都已設定專屬 OG Image（1200×630 px），分享時不會只顯示空白或小圖。封面圖存放於 <span class="mono">/public/images/og-*.jpg</span>。</div>
+        </div>
+      </div>
+
+      <!-- GSC Guide -->
+      <h3 style="font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#94a3b8;margin:0 0 12px;font-family:'Noto Sans TC',sans-serif">Google Search Console 使用指南</h3>
+      <div class="info-box" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px">
+        <div>
+          <div style="font-weight:700;color:var(--primary)">進入 Search Console</div>
+          <div class="mono" style="font-size:12px;color:#475569;margin-top:2px">search.google.com/search-console</div>
+          <div style="font-size:12px;color:#64748b;margin-top:2px">使用 drchou2026@gmail.com 登入</div>
+        </div>
+        <a href="https://search.google.com/search-console" target="_blank" class="no-print"
+          style="background:var(--primary);color:white;text-decoration:none;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:500;white-space:nowrap">前往 →</a>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
+        <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden">
+          <div class="bg-sitebg" style="padding:10px 16px;display:flex;align-items:center;gap:10px">
+            <div class="step-num">1</div>
+            <span style="font-weight:600">成效報告 — 查看搜尋流量</span>
+          </div>
+          <div style="padding:12px 16px;font-size:13px;color:#475569">左側點「成效」→ 查看過去 3 個月哪些關鍵字帶來點擊、哪些頁面排名最好。<br><span style="color:#94a3b8;font-size:12px;margin-top:4px;display:block">點擊次數 = 實際進入訪客 ／ 曝光次數 = 出現在搜尋結果的次數 ／ 平均排名 = 第幾名</span></div>
+        </div>
+        <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden">
+          <div class="bg-sitebg" style="padding:10px 16px;display:flex;align-items:center;gap:10px">
+            <div class="step-num">2</div>
+            <span style="font-weight:600">網址檢查 — 新文章申請索引（非必要 主動申請可加快索引）</span>
+          </div>
+          <div style="padding:12px 16px;font-size:13px;color:#475569">新文章發布後：左側點「網址檢查」→ 貼上文章完整網址 → 點「要求建立索引」，加速 Google 收錄（通常 1–3 天內生效）。<br><div class="warn-box" style="margin-top:8px;font-size:12px">每篇新文章發布後都建議執行一次，可大幅縮短被 Google 收錄的時間。</div></div>
+        </div>
+        <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden">
+          <div class="bg-sitebg" style="padding:10px 16px;display:flex;align-items:center;gap:10px">
+            <div class="step-num">3</div>
+            <span style="font-weight:600">索引涵蓋範圍 — 哪些頁面已收錄</span>
+          </div>
+          <div style="padding:12px 16px;font-size:13px;color:#475569">左側點「索引」→「涵蓋範圍」，查看哪些頁面已被 Google 收錄，哪些有錯誤需要修正。有錯誤的頁面不會出現在搜尋結果中。</div>
+        </div>
+        <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden">
+          <div class="bg-sitebg" style="padding:10px 16px;display:flex;align-items:center;gap:10px">
+            <div class="step-num">4</div>
+            <span style="font-weight:600">Core Web Vitals — 網站速度健康度</span>
+          </div>
+          <div style="padding:12px 16px;font-size:13px;color:#475569">
+            左側點「Core Web Vitals」查看網站載入速度評分（LCP / INP / CLS 三項指標）。分數影響 Google 排名，目前本站已針對效能優化。
+            <div class="info-box" style="margin-top:10px;font-size:12px"><strong style="color:var(--primary)">目前狀態：</strong>網站上線未滿 90 天，Search Console 尚無足夠數據顯示分析圖表，屬正常情況。待資料累積後（約上線 3 個月後）才會出現評分，屆時建議確認維持「良好」狀態。</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Screenshot: GSC -->
+      <div class="browser" style="margin-bottom:28px;display:none">
+        <div class="browser-bar">
+          <div class="dot" style="background:#fc8181"></div><div class="dot" style="background:#f6c94e"></div><div class="dot" style="background:#68d391"></div>
+          <div class="browser-url">search.google.com/search-console/performance/search-analytics</div>
+        </div>
+        <div class="screenshot-body">
+          <svg style="width:36px;height:36px;color:#cbd5e1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+          <div style="font-size:13px;font-weight:600;color:#94a3b8">截圖預留位置</div>
+          <div style="font-size:12px;color:#94a3b8;max-width:380px">建議截圖：Search Console「成效」報告頁，顯示點擊次數、曝光次數折線圖，以及下方關鍵字與頁面排名列表</div>
+        </div>
+      </div>
+
+      <!-- Structured Data -->
+      <h3 style="font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#94a3b8;margin:0 0 12px;font-family:'Noto Sans TC',sans-serif">結構化資料 JSON-LD</h3>
+      <p style="font-size:13px;color:#475569;margin:0 0 12px;line-height:1.7">結構化資料是「寫給 Google 和 AI 搜尋引擎看的補充說明」。把診所資訊以機器讀得懂的格式寫進網頁 code 裡，讓 Google、ChatGPT 等 AI 在回答搜尋者問題時，能更正確地呈現你的<strong>地址、電話、專科、營業時間</strong>等資訊。</p>
+      <div class="bg-sitebg" style="border-radius:12px;padding:16px;margin-bottom:12px">
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:13px">
+          <div style="display:flex;gap:10px"><span class="c-primary">→</span><span><strong>MedicalClinic</strong> — 診所完整資訊（地址、電話、科別、地圖）</span></div>
+          <div style="display:flex;gap:10px"><span class="c-primary">→</span><span><strong>Physician</strong> — 醫師資歷、專長、執照認證</span></div>
+          <div style="display:flex;gap:10px"><span class="c-primary">→</span><span><strong>FAQPage</strong> — 首頁 FAQ 觸發 Google 折疊式富有結果</span></div>
+          <div style="display:flex;gap:10px"><span class="c-primary">→</span><span><strong>Article / MedicalWebPage</strong> — 每篇衛教文章頁面</span></div>
+          <div style="display:flex;gap:10px"><span class="c-primary">→</span><span><strong>BreadcrumbList</strong> — 網站導航結構</span></div>
+          <div style="display:flex;gap:10px"><span class="c-primary">→</span><span><strong>LocalBusiness</strong> — 在地商家搜尋補充訊號</span></div>
+        </div>
+      </div>
+      <div class="warn-box" style="margin-bottom:24px">
+        <strong style="color:var(--accent)">⚠️ 營業時間寫在 code 裡：</strong>目前診所營業時間已直接寫入網頁結構化資料中（非透過後台設定）。<strong>未來若門診時間有任何異動，除了更新後台時刻表外，也必須請開發者同步修改程式碼</strong>，否則 Google 及 AI 搜尋引擎顯示的時間會有誤。
+      </div>
+
+      <!-- GEO -->
+      <h3 style="font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#94a3b8;margin:0 0 12px;font-family:'Noto Sans TC',sans-serif">GEO — AI 生成式搜尋優化</h3>
+      <div style="background:var(--hblue);border-radius:12px;padding:20px;margin-bottom:24px;border:1px solid var(--border)">
+        <div style="font-size:11px;color:var(--primary);text-transform:uppercase;letter-spacing:.15em;margin-bottom:12px;font-weight:600">Generative Engine Optimization</div>
+        <p style="color:#334155;font-size:13px;margin:0 0 16px;line-height:1.6">隨著 ChatGPT、Google AI Overviews、Perplexity 等 AI 搜尋引擎崛起，網頁必須同時被人與 AI「讀懂」才能獲得引用曝光：</p>
+        <div style="display:flex;flex-direction:column;gap:10px;font-size:13px">
+          <div style="display:flex;gap:10px"><span style="color:var(--accent);flex-shrink:0;font-weight:700">✓</span><div><strong style="color:var(--text)">醫師署名 + E-E-A-T 架構</strong><span style="color:#475569;margin-left:8px">每篇由周孟翰醫師署名，建立 Experience / Expertise / Authority / Trust 信任層</span></div></div>
+          <div style="display:flex;gap:10px"><span style="color:var(--accent);flex-shrink:0;font-weight:700">✓</span><div><strong style="color:var(--text)">結構化摘要 Callout</strong><span style="color:#475569;margin-left:8px">文章首段設有「摘要」區塊，AI 引用時優先擷取</span></div></div>
+          <div style="display:flex;gap:10px"><span style="color:var(--accent);flex-shrink:0;font-weight:700">✓</span><div><strong style="color:var(--text)">FAQ 格式寫作</strong><span style="color:#475569;margin-left:8px">符合 AI 搜尋偏好的問答結構</span></div></div>
+          <div style="display:flex;gap:10px"><span style="color:var(--accent);flex-shrink:0;font-weight:700">✓</span><div><strong style="color:var(--text)">醫療免責聲明標準化</strong><span style="color:#475569;margin-left:8px">每篇附免責聲明，提升 AI 引用意願</span></div></div>
+          <div style="display:flex;gap:10px"><span style="color:var(--accent);flex-shrink:0;font-weight:700">✓</span><div><strong style="color:var(--text)">長尾問題型關鍵字佈局</strong><span style="color:#475569;margin-left:8px">針對「夜尿怎麼辦」「攝護腺肥大如何治療」等對話式搜尋詞優化</span></div></div>
+        </div>
+      </div>
+
+      <h3 style="font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#94a3b8;margin:0 0 12px;font-family:'Noto Sans TC',sans-serif">持續維護建議</h3>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div class="bg-sitebg" style="border-radius:10px;padding:12px 16px;display:flex;gap:12px;font-size:13px"><span class="mono c-primary" style="font-weight:700;flex-shrink:0">01</span><div>新文章發布後，至 Search Console 申請「網址索引」，加速 Google 收錄</div></div>
+        <div class="bg-sitebg" style="border-radius:10px;padding:12px 16px;display:flex;gap:12px;font-size:13px"><span class="mono c-primary" style="font-weight:700;flex-shrink:0">02</span><div>每季更新舊文章日期與內容（即使小幅修改），維持「內容新鮮度」訊號</div></div>
+        <div class="bg-sitebg" style="border-radius:10px;padding:12px 16px;display:flex;gap:12px;font-size:13px"><span class="mono c-primary" style="font-weight:700;flex-shrink:0">03</span><div>優先撰寫「比較型」文章（藥物 vs 手術、UroLift vs Rezum），AI Overview 引用率最高</div></div>
+        <div class="bg-sitebg" style="border-radius:10px;padding:12px 16px;display:flex;gap:12px;font-size:13px"><span class="mono c-primary" style="font-weight:700;flex-shrink:0">04</span><div>定期查看 GA4「流量獲取」，觀察哪些文章帶來最多有機搜尋，複製成功寫作模式</div></div>
+      </div>
+
+      <div class="back-link"><a href="#toc">↑ 回到目錄</a></div>
+    </div>
+
+    <!-- ══════════════════════════════════
+         S5 — BLOG STRUCTURE
+    ══════════════════════════════════ -->
+    <div class="card" id="s5" style="padding:28px 24px">
+      <p class="section-num">05</p>
+      <h2 style="font-size:22px;color:var(--text);margin:4px 0 4px">衛教文章建議結構</h2>
+      <p style="color:#64748b;font-size:13px;margin:0 0 24px">每篇文章都是長期 SEO 資產，以下結構同時服務讀者、Google 與 AI 搜尋引擎</p>
+
+      <h3 style="font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#94a3b8;margin:0 0 12px;font-family:'Noto Sans TC',sans-serif">後台必填欄位</h3>
+      <div class="table-wrap" style="margin-bottom:24px">
+        <table>
+          <thead><tr><th>欄位名稱</th><th>說明</th><th>重要性</th></tr></thead>
+          <tbody>
+            <tr><td class="mono c-primary" style="font-size:12px">title</td><td>文章標題</td><td><span style="color:#f43f5e;font-size:12px;font-weight:600">必填 ★</span></td></tr>
+            <tr><td class="mono c-primary" style="font-size:12px">date</td><td>發布日期</td><td><span style="color:#f43f5e;font-size:12px;font-weight:600">必填 ★</span></td></tr>
+            <tr><td class="mono c-primary" style="font-size:12px">author</td><td>作者（固定：周孟翰 醫師）</td><td><span style="color:#f43f5e;font-size:12px;font-weight:600">必填 ★</span></td></tr>
+            <tr><td class="mono c-primary" style="font-size:12px">category</td><td>
+              分類（可複選）：<br>
+              <span class="mono" style="font-size:11px;color:#475569;line-height:2">
+                排尿困擾與攝護腺 · 私密健康與性傳染病 · 微創治療與手術<br>
+                男性性功能與荷爾蒙 · 一般泌尿疾病
+              </span><br>
+              <span style="font-size:11px;color:#94a3b8">預設值：一般泌尿疾病</span>
+            </td><td><span style="color:#f43f5e;font-size:12px;font-weight:600">必填 ★</span></td></tr>
+            <tr><td class="mono c-primary" style="font-size:12px">tags</td><td>關鍵字標籤 3–6 個</td><td><span style="color:var(--accent);font-size:12px;font-weight:600">強烈建議</span></td></tr>
+            <tr><td class="mono c-primary" style="font-size:12px">excerpt</td><td>文章摘要（80–120 字）</td><td><span style="color:var(--accent);font-size:12px;font-weight:600">強烈建議</span></td></tr>
+            <tr><td class="mono c-primary" style="font-size:12px">seoTitle</td><td>SEO 標題（≤ 60 字元）</td><td><span style="color:var(--accent);font-size:12px;font-weight:600">強烈建議</span></td></tr>
+            <tr><td class="mono c-primary" style="font-size:12px">seoDescription</td><td>SEO 描述（≤ 160 字元）</td><td><span style="color:var(--accent);font-size:12px;font-weight:600">強烈建議</span></td></tr>
+            <tr><td class="mono c-primary" style="font-size:12px">coverImage</td><td>封面圖（1200×628 px，JPG ≤300KB）</td><td style="color:#94a3b8;font-size:12px">選填</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Cover 優先順序 -->
+      <h3 style="font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#94a3b8;margin:0 0 12px;font-family:'Noto Sans TC',sans-serif">文章封面圖呈現優先順序</h3>
+      <div style="display:flex;align-items:center;gap:0;margin-bottom:8px;flex-wrap:wrap">
+        <div class="bg-primary" style="border-radius:10px;padding:10px 14px;color:white;font-size:13px;text-align:center">
+          <div style="font-size:10px;opacity:.75;margin-bottom:2px">① 優先</div>
+          <strong>coverImage</strong>
+          <div style="font-size:11px;opacity:.8;margin-top:2px">手動設定的封面圖</div>
+        </div>
+        <div style="padding:0 8px;color:#94a3b8;font-size:18px">→</div>
+        <div class="bg-sitebg" style="border-radius:10px;padding:10px 14px;font-size:13px;text-align:center;border:1px solid var(--border)">
+          <div style="font-size:10px;color:#94a3b8;margin-bottom:2px">② 次選</div>
+          <strong>文章第一張圖片</strong>
+          <div style="font-size:11px;color:#64748b;margin-top:2px">內文中最先出現的圖</div>
+        </div>
+        <div style="padding:0 8px;color:#94a3b8;font-size:18px">→</div>
+        <div class="bg-sitebg" style="border-radius:10px;padding:10px 14px;font-size:13px;text-align:center;border:1px solid var(--border)">
+          <div style="font-size:10px;color:#94a3b8;margin-bottom:2px">③ 備用</div>
+          <strong>文字大字報</strong>
+          <div style="font-size:11px;color:#64748b;margin-top:2px">系統自動生成</div>
+        </div>
+      </div>
+      <p style="font-size:12px;color:#64748b;margin:0 0 24px">若文章沒有設定 coverImage 且內文也沒有圖片，系統會自動以文章標題產生文字大字報作為封面，不會出現空白。</p>
+
+      <!-- 圖片加入建議流程 -->
+      <h3 style="font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#94a3b8;margin:0 0 12px;font-family:'Noto Sans TC',sans-serif">文章加入圖片的建議方式</h3>
+      <div class="info-box" style="margin-bottom:12px">
+        <strong style="color:var(--primary)">建議順序：先儲存文章，再回來加圖。</strong>不論是用 AI 協作撰寫後貼入，還是直接在後台編輯，都建議先把文字內容存好，再透過 Keystatic 後台的圖片上傳功能插入照片，避免因切換畫面遺失未存稿。
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px">
+        <div class="bg-sitebg" style="border-radius:10px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start">
+          <div class="step-num" style="flex-shrink:0">1</div>
+          <div style="font-size:13px"><strong>撰寫 / 貼入文字內容</strong><div style="color:#64748b;margin-top:2px">用 AI 生成或自行撰寫，貼入 Keystatic 後台編輯器</div></div>
+        </div>
+        <div class="bg-sitebg" style="border-radius:10px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start">
+          <div class="step-num" style="flex-shrink:0">2</div>
+          <div style="font-size:13px"><strong>先儲存文章</strong><div style="color:#64748b;margin-top:2px">點「Save」或「Create」，確保文字內容不遺失</div></div>
+        </div>
+        <div class="bg-sitebg" style="border-radius:10px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start">
+          <div class="step-num" style="flex-shrink:0">3</div>
+          <div style="font-size:13px"><strong>回到文章，插入圖片</strong><div style="color:#64748b;margin-top:2px">使用後台的圖片欄位上傳 coverImage，或在內文中點「+」插入圖片。上傳前請先用 Squash 壓縮。</div></div>
+        </div>
+        <div class="bg-sitebg" style="border-radius:10px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start">
+          <div class="step-num" style="flex-shrink:0">4</div>
+          <div style="font-size:13px"><strong>再次儲存</strong><div style="color:#64748b;margin-top:2px">圖片加入後再存一次，系統會自動部署，約 2 分鐘上線</div></div>
+        </div>
+      </div>
+
+      <h3 style="font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#94a3b8;margin:0 0 12px;font-family:'Noto Sans TC',sans-serif">文章內文架構範本</h3>
+      <pre class="codeblock" style="margin-bottom:24px"><span style="color:#94a3b8"># 衛教文章建議架構（MDX 格式）</span>
+
+<span style="color:#fde68a">&gt; **摘要：** 一句話點出核心（AI 搜尋引擎最優先擷取此段）</span>
+
+<span style="color:#93c5fd">## 【開場：引起共鳴的場景或症狀描述】</span>
+<span style="color:#94a3b8">用病患最常說的話開場，製造共鳴...</span>
+
+<span style="color:#93c5fd">## 為什麼會這樣？（成因解釋）</span>
+<span style="color:#94a3b8">清楚說明成因，使用生活化比喻...</span>
+
+<span style="color:#93c5fd">## 什麼情況需要就醫？</span>
+<span style="color:#94a3b8">列出 3–5 個就醫警示信號（清單格式）...</span>
+
+<span style="color:#93c5fd">## 治療選項比較（建議用表格）</span>
+<span style="color:#94a3b8">| 方式 | 適合族群 | 優點 | 缺點 |</span>
+
+<span style="color:#93c5fd">## 常見問題 Q&amp;A</span>
+<span style="color:#94a3b8">**Q: ...**  A: ...</span>
+
+<span style="color:#86efac">--- 醫療免責聲明（系統自動加入）---</span></pre>
+
+      <h3 style="font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#94a3b8;margin:0 0 12px;font-family:'Noto Sans TC',sans-serif">內容策略建議</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:12px">
+        <div class="bg-sitebg" style="border-radius:10px;padding:14px">
+          <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:#94a3b8;margin-bottom:6px">標題公式</div>
+          <div style="font-size:13px;color:#475569">「症狀 + 解法 + 完整說明」<br>例：「明明才上過，怎麼又想去？攝護腺肥大排尿阻塞完整解析」</div>
+        </div>
+        <div class="bg-sitebg" style="border-radius:10px;padding:14px">
+          <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:#94a3b8;margin-bottom:6px">理想字數</div>
+          <div style="font-size:13px;color:#475569">每篇 1,200–2,500 字<br>AI Overview 偏好引用超過 1,500 字的完整說明型文章</div>
+        </div>
+        <div class="bg-sitebg" style="border-radius:10px;padding:14px">
+          <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:#94a3b8;margin-bottom:6px">圖片命名</div>
+          <div style="font-size:13px;color:#475569">使用英文描述命名<br><code class="mono" style="font-size:11px">bph-urethra-diagram.jpg</code></div>
+        </div>
+        <div class="bg-sitebg" style="border-radius:10px;padding:14px">
+          <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:#94a3b8;margin-bottom:6px">內部連結</div>
+          <div style="font-size:13px;color:#475569">每篇引用 2–3 篇相關文章，建立「主題群集 Topic Cluster」</div>
+        </div>
+      </div>
+      <div class="danger-box">
+        <strong style="color:#f43f5e">⚠ Slug 黃金規則：</strong>發布後<strong>絕對不要更改 Slug（網址代稱）</strong>。舊連結變 404 會讓 Google 排名歸零、社群分享連結全部失效。若確需更改，必須同步設定 301 轉址。
+      </div>
+
+      <div class="back-link"><a href="#toc">↑ 回到目錄</a></div>
+    </div>
+
+    <!-- ══════════════════════════════════
+         S6 — GBP
+    ══════════════════════════════════ -->
+    <div class="card" id="s6" style="padding:28px 24px">
+      <p class="section-num">06</p>
+      <h2 style="font-size:22px;color:var(--text);margin:4px 0 4px">Google 商家檔案 (Google Business Profile, GBP)</h2>
+      <p style="color:#64748b;font-size:13px;margin:0 0 24px">在地搜尋 (Local SEO) 最重要的資產，直接影響 Google Maps 排名與品牌曝光</p>
+
+      <div class="info-box" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px">
+        <div>
+          <div style="font-weight:700;color:var(--primary)">Google 商家檔案管理入口</div>
+          <div class="mono" style="font-size:12px;color:#475569;margin-top:2px">business.google.com</div>
+          <div style="font-size:12px;color:#64748b;margin-top:2px">新店高美泌尿科診所的 GBP 管理頁面</div>
+        </div>
+        <a href="https://business.google.com" target="_blank" class="no-print"
+          style="background:var(--primary);color:white;text-decoration:none;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:500;white-space:nowrap">前往 →</a>
+      </div>
+
+      <!-- Screenshot: GBP -->
+      <div class="browser" style="margin-bottom:20px;display:none">
+        <div class="browser-bar">
+          <div class="dot" style="background:#fc8181"></div><div class="dot" style="background:#f6c94e"></div><div class="dot" style="background:#68d391"></div>
+          <div class="browser-url">business.google.com</div>
+        </div>
+        <div class="screenshot-body">
+          <svg style="width:36px;height:36px;color:#cbd5e1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0zM15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          <div style="font-size:13px;font-weight:600;color:#94a3b8">截圖預留位置</div>
+          <div style="font-size:12px;color:#94a3b8;max-width:360px">建議截圖：GBP 管理主頁，顯示診所名稱、評星、近期貼文、洞察數據（搜尋次數、點擊次數、電話撥打次數）</div>
+        </div>
+      </div>
+
+      <h3 style="font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#94a3b8;margin:0 0 12px;font-family:'Noto Sans TC',sans-serif">定期維護清單</h3>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
+        <div class="bg-sitebg" style="border-radius:10px;padding:14px 16px;display:flex;gap:14px">
+          <div class="mono c-primary" style="font-weight:700;font-size:13px;flex-shrink:0;width:36px">每週</div>
+          <div style="font-size:13px"><strong>發布 GBP 貼文</strong><div style="color:#64748b;margin-top:4px">分享最新消息、衛教知識。每則效期約 7 天，需持續更新。建議 150–300 字搭配清晰圖片。</div></div>
+        </div>
+        <div class="bg-sitebg" style="border-radius:10px;padding:14px 16px;display:flex;gap:14px">
+          <div class="mono c-primary" style="font-weight:700;font-size:13px;flex-shrink:0;width:36px">每月</div>
+          <div style="font-size:13px"><strong>更新診所照片</strong><div style="color:#64748b;margin-top:4px">上傳診所環境、醫療設備、醫師照片。相冊新鮮度可提升地圖排名。建議分類：外觀、室內、設備、團隊。</div></div>
+        </div>
+        <div class="bg-sitebg" style="border-radius:10px;padding:14px 16px;display:flex;gap:14px">
+          <div class="mono c-primary" style="font-weight:700;font-size:13px;flex-shrink:0;width:36px">即時</div>
+          <div style="font-size:13px"><strong>回覆所有評論</strong><div style="color:#64748b;margin-top:4px">正面評論：1–2 句感謝。負面評論：24 小時內回應，展現專業態度。高回覆率是地圖排名重要訊號。</div></div>
+        </div>
+        <div class="bg-sitebg" style="border-radius:10px;padding:14px 16px;display:flex;gap:14px">
+          <div class="mono c-primary" style="font-weight:700;font-size:13px;flex-shrink:0;width:36px">每季</div>
+          <div style="font-size:13px"><strong>審視並更新商家資訊</strong><div style="color:#64748b;margin-top:4px">確認地址、電話、營業時間（特別是節日）正確。NAP 一致性（名稱/地址/電話）是 Local SEO 核心指標。</div></div>
+        </div>
+      </div>
+
+      <h3 style="font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#94a3b8;margin:0 0 12px;font-family:'Noto Sans TC',sans-serif">進階優化建議</h3>
+      <div class="bg-sitebg" style="border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px;font-size:13px;color:#475569">
+        <div style="display:flex;gap:10px"><span class="c-primary">→</span><div><strong>Q&amp;A 主動設定</strong>：在「問答」區塊自行提問並回覆常見問題（如「有性傳染病防治門診嗎？」），搶先控制問答內容</div></div>
+        <div style="display:flex;gap:10px"><span class="c-primary">→</span><div><strong>服務項目完整填寫</strong>：在「服務」區塊列出所有診療項目，每項加上簡短描述</div></div>
+        <div style="display:flex;gap:10px"><span class="c-primary">→</span><div><strong>五星評論引導</strong>：看診後提供短連結請患者留下評論，評論數量與評分是地圖排名核心因子</div></div>
+        <div style="display:flex;gap:10px"><span class="c-primary">→</span><div><strong>網站連結一致性</strong>：確認 GBP 內的網站連結指向 <code class="mono">https://drcmh.com</code>，與結構化資料中的 URL 完全一致</div></div>
+      </div>
+
+      <div class="back-link"><a href="#toc">↑ 回到目錄</a></div>
+    </div>
+
+    <!-- ══════════════════════════════════
+         S7 — 未來優化建議
+    ══════════════════════════════════ -->
+    <div class="card" id="s7" style="padding:28px 24px">
+      <p class="section-num">07</p>
+      <h2 style="font-size:22px;color:var(--text);margin:4px 0 4px">未來優化建議</h2>
+      <p style="color:#64748b;font-size:13px;margin:0 0 24px">以下為可持續強化網站效益的方向建議，可依需求與新開發者評估排程</p>
+
+      <div style="border:2px solid var(--text);border-radius:14px;padding:20px;margin-bottom:12px">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px">
+          <div>
+            <div style="font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">建議優先考慮</div>
+            <h4 style="font-size:18px;margin:0;font-family:'Noto Serif TC',serif">治療項目頁面 <span class="mono" style="font-size:13px;color:#94a3b8;font-family:'Noto Sans TC',sans-serif;font-weight:400">/treatments</span></h4>
+          </div>
+          <span class="badge-dark">高效益</span>
+        </div>
+        <p style="font-size:13px;color:#475569;margin:0 0 14px">建立「治療項目」總覽頁，列出所有診療服務，每項連結至獨立說明頁。這是目前網站最缺少、SEO 商業轉換價值最高的頁面類型。</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;font-size:12px">
+          <div class="bg-sitebg" style="border-radius:8px;padding:10px"><div style="font-weight:600;margin-bottom:4px">SEO 效益</div><div style="color:#64748b">「新店攝護腺手術」等高商業意圖關鍵字，可直接吸引有就診需求的訪客</div></div>
+          <div class="bg-sitebg" style="border-radius:8px;padding:10px"><div style="font-weight:600;margin-bottom:4px">GEO 效益</div><div style="color:#64748b">AI 搜尋詢問「新店哪裡看攝護腺肥大」時最容易被引用</div></div>
+          <div class="bg-sitebg" style="border-radius:8px;padding:10px"><div style="font-weight:600;margin-bottom:4px">建議子頁</div><div class="mono" style="color:#64748b;font-size:11px">/treatments/bph<br>/treatments/ed<br>/treatments/std</div></div>
+        </div>
+      </div>
+
+      <div style="border:1.5px solid var(--border);border-radius:14px;padding:20px;margin-bottom:12px">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px">
+          <div>
+            <div style="font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">持續經營</div>
+            <h4 style="font-size:18px;margin:0;font-family:'Noto Serif TC',serif">衛教文章擴展 <span class="mono" style="font-size:13px;color:#94a3b8;font-family:'Noto Sans TC',sans-serif;font-weight:400">/blog</span></h4>
+          </div>
+          <span class="badge-blue">長期累積</span>
+        </div>
+        <p style="font-size:13px;color:#475569;margin:0 0 14px">現有文章系統已完整建置。建議持續擴充：強化分類頁面、建立主題群集（Topic Cluster）、加入相關文章推薦。</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;font-size:12px">
+          <div class="bg-sitebg" style="border-radius:8px;padding:10px"><div style="font-weight:600;margin-bottom:4px">分類強化</div><div style="color:#64748b">各主題建立獨立分類頁：攝護腺、性健康、排尿、男性更年期</div></div>
+          <div class="bg-sitebg" style="border-radius:8px;padding:10px"><div style="font-weight:600;margin-bottom:4px">內容目標</div><div style="color:#64748b">年內累積 30–50 篇，建立泌尿科主題領域權威性</div></div>
+          <div class="bg-sitebg" style="border-radius:8px;padding:10px"><div style="font-weight:600;margin-bottom:4px">AI 輔助寫作</div><div style="color:#64748b">醫師提供大綱，AI 寫初稿，醫師審閱後發布，效率提升 3–5 倍</div></div>
+        </div>
+      </div>
+
+      <div style="border:1.5px solid var(--border);border-radius:14px;padding:20px;opacity:.65">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:10px">
+          <div>
+            <div style="font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">長期方向</div>
+            <h4 style="font-size:18px;margin:0;font-family:'Noto Serif TC',serif">診前衛教資源 <span class="mono" style="font-size:13px;color:#94a3b8;font-family:'Noto Sans TC',sans-serif;font-weight:400">/patient-guide</span></h4>
+          </div>
+          <span style="background:#f1f5f9;color:#94a3b8;font-size:12px;padding:3px 10px;border-radius:99px">可評估</span>
+        </div>
+        <p style="font-size:13px;color:#475569;margin:0">就診流程說明、各項檢查前準備、術後衛教下載 PDF。降低診前焦慮，提升看診效率，同時成為 AI 搜尋引用的專業資料來源。</p>
+      </div>
+
+      <div class="back-link"><a href="#toc">↑ 回到目錄</a></div>
+    </div>
+
+    <!-- ══════════════════════════════════
+         S8 — AI IDE
+    ══════════════════════════════════ -->
+    <div class="card" id="s8" style="padding:28px 24px">
+      <p class="section-num">08</p>
+      <h2 style="font-size:22px;color:var(--text);margin:4px 0 4px">如何與AI 協作來改網站</h2>
+      <p style="color:#64748b;font-size:13px;margin:0 0 24px">本專案採用 AI 輔助開發流程，未來功能迭代可透過以下方式高效推進</p>
+
+      <!-- 名詞解釋 -->
+      <h3 style="font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#94a3b8;margin:0 0 12px;font-family:'Noto Sans TC',sans-serif">名詞解釋</h3>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px">
+        <div class="bg-sitebg" style="border-radius:10px;padding:14px 16px;display:flex;gap:14px;align-items:flex-start">
+          <div style="min-width:80px;font-size:13px;font-weight:700;color:var(--primary);font-family:'Noto Serif TC',serif">GitHub</div>
+          <div style="font-size:13px;color:#475569">存放程式碼的地方，也負責版本控制。類似「程式碼專用的雲端硬碟」，每一次修改都有歷史紀錄可追溯，不怕改壞找不回來。</div>
+        </div>
+        <div class="bg-sitebg" style="border-radius:10px;padding:14px 16px;display:flex;gap:14px;align-items:flex-start">
+          <div style="min-width:80px;font-size:13px;font-weight:700;color:var(--primary);font-family:'Noto Serif TC',serif">IDE 是什麼</div>
+          <div style="font-size:13px;color:#475569">IDE（整合開發環境）就是「改程式碼的地方」，最常見的是 <strong>VS Code</strong>。可以想成 Word 之於文字、VS Code 之於程式碼。</div>
+        </div>
+        <div class="bg-sitebg" style="border-radius:10px;padding:14px 16px;display:flex;gap:14px;align-items:flex-start">
+          <div style="min-width:80px;font-size:13px;font-weight:700;color:var(--primary);font-family:'Noto Serif TC',serif">AI 在哪？</div>
+          <div style="font-size:13px;color:#475569">
+            AI 工具可以「插件」形式嵌入 VS Code，讓你直接在開發環境裡使用：
+            <ul style="margin:8px 0 0 16px;display:flex;flex-direction:column;gap:4px">
+              <li><strong>Claude Code</strong>（Anthropic）— 本專案主要工具，CLI 形式操作整個 codebase</li>
+              <li><strong>GitHub Copilot</strong>（Microsoft）— 直接內建在 VS Code 中，即時補全程式碼</li>
+              <li><strong>Codex / Cursor / Windsurf</strong> 等 — 同樣是 IDE 型 AI 輔助工具</li>
+            </ul>
+            <div style="margin-top:8px;color:#94a3b8;font-size:12px">⚠️ 以上工具皆需訂閱付費才能使用完整功能</div>
+          </div>
+        </div>
+        <div class="bg-sitebg" style="border-radius:10px;padding:14px 16px;display:flex;gap:14px;align-items:flex-start">
+          <div style="min-width:80px;font-size:13px;font-weight:700;color:var(--primary);font-family:'Noto Serif TC',serif">AI 模式</div>
+          <div style="font-size:13px;color:#475569">
+            在 IDE 中使用 AI 通常有三種模式：
+            <ul style="margin:8px 0 0 16px;display:flex;flex-direction:column;gap:4px">
+              <li><strong>Edit 模式</strong>：AI 直接修改你指定的程式碼</li>
+              <li><strong>Ask 模式</strong>：問 AI 問題、請它解釋程式碼，不會直接動檔案</li>
+              <li><strong>Plan 模式</strong>：請 AI 先規劃實作步驟再執行，適合較大的功能開發</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--bg);border-radius:12px;padding:20px;margin-bottom:24px;border:1px solid var(--border)">
+        <div style="font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:.15em;margin-bottom:16px;font-weight:600">開發工具鏈</div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div class="mono" style="color:#1d4ed8;font-size:13px;font-weight:600;min-width:260px">VS Code + Copilot / Claude Code / Codex</div>
+            <div style="color:#475569;font-size:12px;line-height:1.6">AI 插件嵌入 IDE，即時程式碼補全與修改。降低維護門檻，讓新接手的開發者快速上手。</div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div class="mono" style="color:#15803d;font-size:13px;font-weight:600;min-width:260px">Git + GitHub</div>
+            <div style="color:#475569;font-size:12px;line-height:1.6">版本控制核心。所有變更皆有歷史紀錄可追溯，Push 觸發自動部署，Pull Request 支援多人協作審查。</div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div class="mono" style="color:#7c3aed;font-size:13px;font-weight:600;min-width:260px">Keystatic Cloud（後台）</div>
+            <div style="color:#475569;font-size:12px;line-height:1.6">醫師／助理可直接在瀏覽器操作後台更新內容，完全不需接觸程式碼或開發工具。</div>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#94a3b8;margin:0 0 12px;font-family:'Noto Sans TC',sans-serif">標準協作流程</h3>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
+        <div class="bg-sitebg" style="border-radius:10px;padding:14px 16px;display:flex;gap:12px">
+          <div class="step-num">1</div>
+          <div style="font-size:13px"><strong>需求描述</strong><div style="color:#64748b;margin-top:4px">醫師／助理以自然語言描述需求（如：「我想在首頁加一個停車資訊區塊」）</div></div>
+        </div>
+        <div class="bg-sitebg" style="border-radius:10px;padding:14px 16px;display:flex;gap:12px">
+          <div class="step-num">2</div>
+          <div style="font-size:13px"><strong>AI 輔助開發</strong><div style="color:#64748b;margin-top:4px">開發者透過 Claude Code 快速完成實作，AI 負責撰寫程式碼，開發者確認與審查</div></div>
+        </div>
+        <div class="bg-sitebg" style="border-radius:10px;padding:14px 16px;display:flex;gap:12px">
+          <div class="step-num">3</div>
+          <div style="font-size:13px"><strong>GitHub 提交與自動部署</strong><div style="color:#64748b;margin-top:4px">確認後合併至 main 分支，Cloudflare Pages 自動觸發部署，約 2 分鐘上線</div></div>
+        </div>
+        <div class="bg-hblue" style="border-radius:10px;padding:14px 16px;display:flex;gap:12px">
+          <div class="step-num">4</div>
+          <div style="font-size:13px"><strong>日常內容維護（無需開發）</strong><div style="color:#475569;margin-top:4px">醫師／助理登入 drcmh.com/admin，透過視覺化後台更新文章、消息、時刻表，不需接觸任何程式碼</div></div>
+        </div>
+      </div>
+
+      <div class="warn-box">
+        <strong style="color:var(--accent)">AI 撰文協作建議：</strong>醫師提供衛教文章的醫學大綱（症狀、成因、治療選項），交由 AI（ChatGPT / Claude）撰寫初稿，醫師審閱修正後發布。提示詞建議加上：「台灣醫療情境、繁體中文、面向一般病患的白話文、字數 1500 字以上」。
+      </div>
+
+      <!-- 台灣醫療法合規提醒 -->
+      <div class="danger-box" style="margin-top:16px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+          <span style="font-size:18px">⚖️</span>
+          <strong style="color:#be123c;font-size:15px">台灣醫療法合規提醒</strong>
+        </div>
+        <p style="margin:0 0 10px;font-size:14px;color:#4c0519">無論是 AI 生成的網站內容、衛教文章或社群貼文，<strong>醫師在發布前必須親自審閱，確保符合台灣相關法規</strong>。常見應注意事項：</p>
+        <ul style="margin:0 0 10px 18px;font-size:13px;color:#4c0519;display:flex;flex-direction:column;gap:6px">
+          <li><strong>醫療法第 85 條</strong>：醫療廣告不得宣稱療效保證、比較競爭對手、誇大不實</li>
+          <li><strong>醫療法第 86 條</strong>：不得以優惠、折扣、贈品等方式招徠病患</li>
+          <li><strong>藥事法</strong>：不得對藥品、醫療器材進行不實廣告</li>
+          <li><strong>個資法</strong>：病患個人資料（含照片、案例）不得未經同意公開使用</li>
+        </ul>
+        <p style="margin:0;font-size:13px;color:#be123c;font-weight:600">→ 若有疑慮，請諮詢醫師公會或法律顧問後再發布。AI 不能取代醫師的專業判斷與法律責任。</p>
+      </div>
+
+      <!-- dev vs build -->
+      <h3 style="font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#94a3b8;margin:28px 0 12px;font-family:'Noto Sans TC',sans-serif">開發指令說明（在IDE中要預覽網站 在terminal中執行）</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-bottom:12px">
+        <div class="cmp-card">
+          <div style="background:#0f172a;padding:11px 16px;font-family:monospace;font-size:13px;color:#4ade80">$ npm run dev</div>
+          <div style="padding:14px 16px">
+            <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;color:#475569">
+              <div style="display:flex;gap:8px"><span class="c-primary">✓</span> 啟動本地開發伺服器</div>
+              <div style="display:flex;gap:8px"><span class="c-primary">✓</span> 修改程式碼即時反映（Hot Reload）</div>
+              <div style="display:flex;gap:8px"><span class="c-primary">✓</span> 預覽網址：<code class="mono">localhost:4321</code></div>
+              <div style="display:flex;gap:8px"><span style="color:#cbd5e1">✗</span> <span style="color:#94a3b8">不含 Pagefind 搜尋索引</span></div>
+              <div style="display:flex;gap:8px"><span style="color:#cbd5e1">✗</span> <span style="color:#94a3b8">僅供開發者本地使用</span></div>
+            </div>
+          </div>
+          <div class="bg-hblue" style="padding:8px 16px;font-size:12px;color:var(--primary);font-weight:600">開發者使用 · 不影響線上網站</div>
+        </div>
+        <div class="cmp-card highlight">
+          <div style="background:#0f172a;padding:11px 16px;font-family:monospace;font-size:13px;color:#fde68a">$ npm run build</div>
+          <div style="padding:14px 16px">
+            <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;color:#475569">
+              <div style="display:flex;gap:8px"><span class="c-primary">✓</span> 建置正式上線版本</div>
+              <div style="display:flex;gap:8px"><span class="c-primary">✓</span> 包含 Pagefind 搜尋索引建置</div>
+              <div style="display:flex;gap:8px"><span class="c-primary">✓</span> 圖片壓縮最佳化</div>
+              <div style="display:flex;gap:8px"><span class="c-primary">✓</span> 輸出至 <code class="mono">dist/</code> 資料夾</div>
+              <div style="display:flex;gap:8px"><span class="c-primary">✓</span> Cloudflare Pages 自動執行此指令</div>
+            </div>
+          </div>
+          <div class="bg-primary" style="padding:8px 16px;font-size:12px;color:white;font-weight:600">Cloudflare 自動執行 · 產生正式網站</div>
+        </div>
+      </div>
+
+      <div class="back-link"><a href="#toc">↑ 回到目錄</a></div>
+    </div>
+
+    <!-- ══════════════════════════════════
+         FOOTER
+    ══════════════════════════════════ -->
+    <div class="card" style="padding:28px 24px">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;margin-bottom:24px">
+        <div>
+          <div style="font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px">技術支援聯絡</div>
+          <div style="font-weight:700;font-size:16px;margin-bottom:4px">謝士博 Shih-Po Hsieh</div>
+          <div class="mono c-primary" style="font-size:13px">donald0124@gmail.com</div>
+        </div>
+        <div>
+          <div style="font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px">網站</div>
+          <div style="font-weight:700;font-size:16px;margin-bottom:4px">周孟翰醫師個人官方網站</div>
+          <div class="mono" style="font-size:13px;color:#64748b">drcmh.com</div>
+          <div style="font-size:12px;color:#94a3b8;margin-top:4px">新北市新店區二十張路 5 號 1 樓</div>
+        </div>
+      </div>
+      <div class="bg-sitebg" style="border-radius:12px;padding:24px;text-align:center">
+        <div style="font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:.15em;margin-bottom:12px">Final Delivery Sign-off</div>
+        <p style="font-size:13px;color:#475569;line-height:1.8;margin:0 0 16px;max-width:480px;margin-left:auto;margin-right:auto">本文件標誌網站建置專案正式完工交接。所有原始碼存放於 GitHub，相關帳號與授權如本文件所列。感謝信任與合作，期待網站持續為周醫師帶來長遠的數位品牌效益。</p>
+        <div style="display:flex;align-items:center;justify-content:center;gap:12px;font-size:12px;color:#94a3b8;flex-wrap:wrap">
+          <span>交接日期：2026-04-28</span>
+          <span style="color:var(--border)">—</span>
+          <span>謝士博 Shih-Po Hsieh</span>
+          <span style="color:var(--border)">—</span>
+          <span class="mono">v2.0 Production</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /container -->
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', e => {
+          e.preventDefault();
+          const target = document.querySelector(a.getAttribute('href'));
+          if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+    });
+  </script>
+</body>
+</html>
