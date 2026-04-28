@@ -9,8 +9,11 @@ interface Props {
   title?: string;
   description?: string;
   image?: string;
+  imageWidth?: number;
+  imageHeight?: number;
   noindex?: boolean;
   type?: string;
+  preloadImage?: string;
 }
 
 const GA4_ID = 'G-82JBBLX2LT';
@@ -20,8 +23,11 @@ const {
   title = "周孟翰醫師｜泌尿專科．下半身的守護者",
   description = "新店高美泌尿科診所院長周孟翰醫師，專精於攝護腺肥大微創手術、泌尿道結石、性功能障礙與私密處健康。提供隱私、專業且溫暖的診療服務。",
   image = "/images/og-default.jpg",
+  imageWidth = 1200,
+  imageHeight = 630,
   noindex = false,
   type = "website",
+  preloadImage,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -33,7 +39,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
     <meta name="generator" content={Astro.generator} />
+    {preloadImage && <link rel="preload" as="image" href={preloadImage} />}
     
     <!-- SEO Meta Tags -->
     <title>{title}</title>
@@ -48,6 +56,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={new URL(image, Astro.site)} />
+    <meta property="og:image:width" content={String(imageWidth)} />
+    <meta property="og:image:height" content={String(imageHeight)} />
+    <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:locale" content="zh_TW" />
     <meta property="og:site_name" content="周孟翰醫師｜泌尿專科．下半身的守護者" />
 
