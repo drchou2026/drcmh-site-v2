@@ -255,7 +255,7 @@ export default config({
       // 👇 文章攤平：直接存在 blog 資料夾下
       path: 'src/content/blog/*',
       format: { contentField: 'content' },
-      columns: ['title', 'date'],
+      columns: ['title', 'date', 'updatedDate'],
       // 🟢 新增這一行：預覽網址設定
       // 這樣在編輯文章時，頂部會出現一個「眼睛」或「連結」圖示，點擊直接跳到該文章
       previewUrl: '/blog/{slug}',
@@ -266,6 +266,10 @@ export default config({
         }),
 
         date: fields.date({ label: '發布日期', defaultValue: { kind: 'today' } }),
+        updatedDate: fields.date({
+          label: '最後更新日期 (選填)',
+          description: '若文章有實質性更新，填入今天日期。會影響排序與前端顯示的日期。留空則以發布日期為準。',
+        }),
         author: fields.text({ label: '作者', defaultValue: '周孟翰 醫師', }),
         category: fields.multiselect({
           label: '文章分類 (可複選)',

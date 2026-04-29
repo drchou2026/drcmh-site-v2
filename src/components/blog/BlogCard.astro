@@ -91,8 +91,9 @@ const resolvedBodyImage = resolveBodyImage(firstBodyImage);
 
 const excerpt = advancedData?.excerpt || advancedData?.seoDescription || autoExcerpt || '點擊閱讀全文...';
 const cardExcerpt = excerpt.length > 40 ? `${excerpt.slice(0, 40)}...` : excerpt;
-// 格式化日期
-const formattedDate = post.data.date.toISOString().split('T')[0].replace(/-/g, '.');
+// 格式化日期 — 若有更新日期則顯示較新的那個
+const effectiveDate = post.data.updatedDate ?? post.data.date;
+const formattedDate = effectiveDate.toISOString().split('T')[0].replace(/-/g, '.');
 ---
 
 <article 

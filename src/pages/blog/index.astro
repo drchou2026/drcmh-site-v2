@@ -11,9 +11,11 @@ import { getCollection } from 'astro:content';
 const allPosts = await getCollection('blog');
 
 // 2. 依照日期排序 (新 -> 舊)
-const sortedPosts = allPosts.sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
-);
+const sortedPosts = allPosts.sort((a, b) => {
+  const aDate = (a.data.updatedDate ?? a.data.date).valueOf();
+  const bDate = (b.data.updatedDate ?? b.data.date).valueOf();
+  return bDate - aDate;
+});
 
 // 3. 提取所有分類 (用於篩選器)，並保持預設順序
 const ORDERED_CATEGORIES = ['排尿困擾與攝護腺', '私密健康與性傳染病', '微創治療與手術', '男性性功能與荷爾蒙', '一般泌尿疾病'];

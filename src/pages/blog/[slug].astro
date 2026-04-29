@@ -96,14 +96,9 @@ if (relatedPosts.length < 3) {
   relatedPosts = [...relatedPosts, ...randomFill];
 }
 
-const formattedDate = post.data.date
-  .toISOString()
-  .split("T")[0]
-  .replace(/-/g, ".");
-const formattedUpdatedDate = post.data.updatedDate
-  ?.toISOString()
-  .split("T")[0]
-  .replace(/-/g, ".");
+const effectiveDate = post.data.updatedDate ?? post.data.date;
+const formattedDate = effectiveDate.toISOString().split("T")[0].replace(/-/g, ".");
+const isUpdated = !!post.data.updatedDate;
 const readTime = Math.ceil((post.body?.length || 0) / 500);
 
 let ogImageSrc: string | undefined;
@@ -211,14 +206,8 @@ const breadcrumbSchema = {
         >
           <div class="flex items-center gap-2">
             <Calendar size={16} />
-            <span>{formattedDate}</span>
+            <span>{isUpdated ? `更新 ${formattedDate}` : formattedDate}</span>
           </div>
-          {formattedUpdatedDate && (
-            <div class="flex items-center gap-2 text-accent/70">
-              <Calendar size={16} />
-              <span>更新 {formattedUpdatedDate}</span>
-            </div>
-          )}
           <div class="flex items-center gap-2">
             <User size={16} />
             <span>{post.data.author || "周孟翰 醫師"}</span>

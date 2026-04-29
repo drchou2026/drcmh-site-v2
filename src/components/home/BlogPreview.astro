@@ -9,7 +9,11 @@ const allPosts = await getCollection('blog');
 
 // 3. 排序 (日期新 -> 舊) 並只取前 3 篇
 const recentPosts = allPosts
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .sort((a, b) => {
+    const aDate = (a.data.updatedDate ?? a.data.date).valueOf();
+    const bDate = (b.data.updatedDate ?? b.data.date).valueOf();
+    return bDate - aDate;
+  })
   .slice(0, 3);
 ---
 
