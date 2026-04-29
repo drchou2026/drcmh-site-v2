@@ -1,0 +1,260 @@
+---
+export const prerender = true;
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/common/Header.astro";
+import { ArrowRight, CheckCircle2, ChevronRight } from "lucide-react";
+
+const title = "私密健康與性傳染病診治 | 新店高美泌尿科 周孟翰醫師";
+const description =
+  "新店高美泌尿科診所周孟翰醫師提供菜花（HPV）、性病篩檢、PrEP/PEP 預防投藥、HPV疫苗接種與包皮手術。環境私密、過程保密，大坪林捷運站步行1分鐘。";
+
+const pageUrl = "https://drcmh.com/treatments/sexual-health";
+
+const medicalServiceSchema = {
+  "@context": "https://schema.org",
+  "@type": "MedicalProcedure",
+  name: "私密健康與性傳染病診治",
+  description: description,
+  url: pageUrl,
+  bodyLocation: "生殖泌尿系統",
+  performer: {
+    "@type": "Physician",
+    "@id": "https://drcmh.com/#physician",
+    name: "周孟翰",
+    medicalSpecialty: "Urology",
+    worksFor: {
+      "@type": "MedicalClinic",
+      "@id": "https://drcmh.com/#clinic",
+      name: "新店高美泌尿科診所",
+    },
+  },
+};
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "首頁", item: "https://drcmh.com/" },
+    { "@type": "ListItem", position: 2, name: "主治項目", item: "https://drcmh.com/treatments/" },
+    { "@type": "ListItem", position: 3, name: "私密健康與性傳染病", item: pageUrl },
+  ],
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "在新店大坪林附近哪裡可以做性病篩檢？",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "新店高美泌尿科診所（捷運大坪林站步行約 1 分鐘）提供全套性傳染病篩檢，包含梅毒、淋病、披衣菌、HIV。診所環境私密，全程尊重隱私，可直接前往現場掛號。",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "菜花（尖性濕疣）治療後為什麼容易復發？",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "目前治療方式（雷射、冷凍、電燒）可清除可見病灶，但 HPV 病毒可能仍潛伏於皮膚黏膜中。當免疫力下降時可能再發，因此治療後需定期追蹤，並考慮接種 HPV 疫苗預防其他型別感染。",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "PrEP 是什麼？我適合使用嗎？",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "PrEP（暴露前預防性投藥）是 HIV 陰性者在高風險暴露前持續服藥，以預防 HIV 感染，保護效果超過 99%。適合對象包含有多重性伴侶、伴侶 HIV 陽性等高風險族群。需經醫師評估後開立，並定期追蹤腎功能與 HIV 狀態。",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "割包皮手術需要住院嗎？恢復要多久？",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "不需住院。包皮槍手術約 15-20 分鐘，局部麻醉門診完成，術後當天可返家。術後約 1-2 週傷口癒合，完全恢復性生活通常需 4-6 週。周醫師提供包皮槍與雷射兩種方式，可依狀況選擇。",
+      },
+    },
+  ],
+};
+
+const conditions = [
+  { name: "私密處贅生物（菜花）", desc: "HPV 感染引起的尖性濕疣，可見病灶需清除並追蹤" },
+  { name: "性病篩檢與治療", desc: "梅毒、淋病、披衣菌、HIV 等全套篩檢，匿名保密" },
+  { name: "HIV 預防性投藥（PrEP/PEP）", desc: "暴露前或暴露後預防用藥，大幅降低 HIV 感染風險" },
+  { name: "HPV／帶狀皰疹疫苗", desc: "預防 HPV 相關癌症及生殖器疣，成人均可接種" },
+  { name: "包皮手術（包皮槍／雷射）", desc: "包皮過長或包莖的門診手術，傷口整齊恢復快" },
+];
+
+const treatments = [
+  { name: "雷射燒灼 / 冷凍治療", desc: "清除菜花及其他私密處贅生物的標準治療" },
+  { name: "全套性傳染病血液篩檢", desc: "HIV、梅毒、淋病、披衣菌，一次採血完成" },
+  { name: "PrEP 暴露前預防", desc: "每日口服藥物，預防 HIV 感染效果>99%" },
+  { name: "PEP 暴露後緊急投藥", desc: "高風險暴露後 72 小時內啟動，28 天療程" },
+  { name: "Doxy-PEP", desc: "高風險性行為後口服多西環素，預防細菌性 STI" },
+  { name: "包皮槍環切手術", desc: "釘書機式環切，切緣整齊、術後出血少" },
+  { name: "HPV 9 價疫苗接種", desc: "預防 9 種 HPV 型別，男女均建議接種" },
+];
+---
+
+<Layout title={title} description={description}>
+  <Header slot="header" />
+
+  <script type="application/ld+json" set:html={JSON.stringify(medicalServiceSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <!-- Breadcrumb -->
+  <nav class="bg-bg border-b border-gray-100 py-3" aria-label="breadcrumb">
+    <div class="container mx-auto px-6">
+      <ol class="flex items-center gap-2 text-sm text-text/60">
+        <li><a href="/" class="hover:text-primary transition-colors">首頁</a></li>
+        <li><ChevronRight size={14} className="inline" /></li>
+        <li><a href="/treatments/" class="hover:text-primary transition-colors">主治項目</a></li>
+        <li><ChevronRight size={14} className="inline" /></li>
+        <li class="text-primary font-medium">私密健康與性傳染病</li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="bg-gradient-to-br from-primary/5 via-bg to-bg py-16 md:py-24">
+    <div class="container mx-auto px-6 max-w-4xl">
+      <p class="text-accent font-bold text-xs tracking-[0.2em] uppercase mb-4">SEXUAL HEALTH & STI</p>
+      <h1 class="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-primary mb-6 leading-tight">
+        私密健康與性傳染病
+      </h1>
+      <blockquote class="border-l-4 border-accent pl-6 bg-accent/5 py-4 pr-4 rounded-r-xl mb-8">
+        <p class="text-text/80 leading-relaxed">
+          <strong>摘要：</strong>周孟翰醫師於新店高美泌尿科診所提供私密健康全方位服務，包含菜花（HPV）治療、性傳染病完整篩檢、HIV 預防性投藥（PrEP/PEP）、HPV 9 價疫苗接種與包皮手術。診所環境私密，全程尊重個人隱私，是大坪林、七張、景美一帶居民的信賴選擇。
+        </p>
+      </blockquote>
+      <div class="flex flex-wrap gap-3">
+        <a
+          href="/booking"
+          class="inline-flex items-center gap-2 px-8 py-3 bg-accent text-white font-bold rounded-full shadow-lg hover:bg-primary transition-all duration-300"
+        >
+          <span>預約看診</span>
+          <ArrowRight size={18} />
+        </a>
+        <div class="inline-flex items-center gap-2 px-5 py-3 bg-surface border border-gray-200 rounded-full text-sm text-text/70">
+          <span>🔒 全程保密，無需擔心隱私問題</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Conditions -->
+  <section class="py-16 bg-surface">
+    <div class="container mx-auto px-6 max-w-4xl">
+      <h2 class="text-2xl md:text-3xl font-serif font-bold text-primary mb-4">診治範圍</h2>
+      <p class="text-text/70 mb-10">
+        私密健康問題往往難以啟齒，周醫師以尊重與專業的態度提供完整評估與治療。
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {conditions.map((c) => (
+          <div class="flex items-start gap-4 bg-bg rounded-xl p-5 border border-gray-100">
+            <CheckCircle2 size={20} className="text-accent shrink-0 mt-0.5" />
+            <div>
+              <p class="font-bold text-primary text-sm mb-1">{c.name}</p>
+              <p class="text-text/70 text-sm">{c.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Treatments -->
+  <section class="py-16 bg-bg">
+    <div class="container mx-auto px-6 max-w-4xl">
+      <h2 class="text-2xl md:text-3xl font-serif font-bold text-primary mb-4">治療與預防選項</h2>
+      <p class="text-text/70 mb-10">
+        從篩檢到治療，從疫苗到預防性投藥，提供完整的私密健康管理方案。
+      </p>
+      <div class="space-y-4">
+        {treatments.map((t) => (
+          <div class="flex items-start gap-4 bg-surface rounded-xl p-5 border border-gray-100 hover:border-accent/30 transition-colors">
+            <div class="w-2 h-2 rounded-full bg-accent shrink-0 mt-2"></div>
+            <div>
+              <p class="font-bold text-primary mb-1">{t.name}</p>
+              <p class="text-text/70 text-sm">{t.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div class="mt-10 bg-primary/5 border border-primary/20 rounded-2xl p-6">
+        <p class="font-bold text-primary mb-2">隱私保護說明</p>
+        <p class="text-text/70 text-sm leading-relaxed">
+          診所採取嚴格個資保護措施，性病相關診療紀錄依規定保密。您可放心就醫，
+          周醫師會以客觀、不帶評判的態度為您提供專業建議。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Related Blog Posts -->
+  <section class="py-12 bg-surface">
+    <div class="container mx-auto px-6 max-w-4xl">
+      <h2 class="text-xl font-bold text-primary mb-6">延伸閱讀</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <a href="/blog/genital-warts" class="flex items-center gap-3 bg-bg rounded-xl p-4 border border-gray-100 hover:border-accent/30 hover:shadow-sm transition-all group">
+          <ArrowRight size={16} className="text-accent shrink-0 group-hover:translate-x-1 transition-transform" />
+          <span class="text-sm text-text group-hover:text-primary transition-colors">關於菜花你需要知道的四個真相</span>
+        </a>
+        <a href="/blog/hpv-vaccine" class="flex items-center gap-3 bg-bg rounded-xl p-4 border border-gray-100 hover:border-accent/30 hover:shadow-sm transition-all group">
+          <ArrowRight size={16} className="text-accent shrink-0 group-hover:translate-x-1 transition-transform" />
+          <span class="text-sm text-text group-hover:text-primary transition-colors">甚麼是 HPV 疫苗？我應該施打嗎？</span>
+        </a>
+        <a href="/blog/std-medication-prevention" class="flex items-center gap-3 bg-bg rounded-xl p-4 border border-gray-100 hover:border-accent/30 hover:shadow-sm transition-all group">
+          <ArrowRight size={16} className="text-accent shrink-0 group-hover:translate-x-1 transition-transform" />
+          <span class="text-sm text-text group-hover:text-primary transition-colors">如何透過藥物預防性傳染病（PrEP/PEP）</span>
+        </a>
+        <a href="/blog/circumcision-stapler-selection" class="flex items-center gap-3 bg-bg rounded-xl p-4 border border-gray-100 hover:border-accent/30 hover:shadow-sm transition-all group">
+          <ArrowRight size={16} className="text-accent shrink-0 group-hover:translate-x-1 transition-transform" />
+          <span class="text-sm text-text group-hover:text-primary transition-colors">包皮槍怎麼選？割包皮手術方式比較</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="py-16 bg-bg">
+    <div class="container mx-auto px-6 max-w-4xl">
+      <h2 class="text-2xl md:text-3xl font-serif font-bold text-primary mb-10">常見問題</h2>
+      <div class="space-y-4">
+        {faqSchema.mainEntity.map((q) => (
+          <details class="bg-surface rounded-xl border border-gray-100 group">
+            <summary class="flex items-center justify-between p-6 cursor-pointer list-none font-bold text-primary hover:text-accent transition-colors">
+              {q.name}
+              <ChevronRight size={18} className="shrink-0 transition-transform group-open:rotate-90 text-accent" />
+            </summary>
+            <div class="px-6 pb-6 text-text/70 text-sm leading-relaxed">
+              {q.acceptedAnswer.text}
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-16 bg-primary">
+    <div class="container mx-auto px-6 max-w-2xl text-center">
+      <h2 class="text-2xl md:text-3xl font-serif font-bold text-white mb-4">讓難以啟齒的煩惱，有地方說</h2>
+      <p class="text-gray-300 mb-8 leading-relaxed">
+        周孟翰醫師以尊重與專業，協助您處理私密健康問題。新店大坪林站附近，交通便利。
+      </p>
+      <a
+        href="/booking"
+        class="inline-flex items-center gap-2 px-10 py-4 bg-accent text-white font-bold rounded-full shadow-xl hover:bg-white hover:text-primary transition-all duration-300"
+      >
+        <span>立即預約看診</span>
+        <ArrowRight size={18} />
+      </a>
+      <p class="text-white text-sm mt-4">新北市新店區二十張路 5 號 1 樓｜捷運大坪林站步行 1 分鐘</p>
+    </div>
+  </section>
+</Layout>

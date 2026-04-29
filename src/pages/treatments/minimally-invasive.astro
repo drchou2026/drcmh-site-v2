@@ -1,0 +1,242 @@
+---
+export const prerender = true;
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/common/Header.astro";
+import { ArrowRight, CheckCircle2, ChevronRight } from "lucide-react";
+
+const title = "微創治療與泌尿手術 | 新店高美泌尿科 周孟翰醫師";
+const description =
+  "新店高美泌尿科診所周孟翰醫師提供UroLift攝護腺拉提、Rezūm水蒸氣消融、攝護腺雷射手術、尿失禁微創手術等先進療程。傷口小、恢復快，大坪林捷運站步行1分鐘。";
+
+const pageUrl = "https://drcmh.com/treatments/minimally-invasive";
+
+const medicalServiceSchema = {
+  "@context": "https://schema.org",
+  "@type": "MedicalProcedure",
+  name: "微創治療與泌尿手術",
+  description: description,
+  url: pageUrl,
+  procedureType: "Surgical",
+  bodyLocation: "攝護腺、膀胱、骨盆底",
+  performer: {
+    "@type": "Physician",
+    "@id": "https://drcmh.com/#physician",
+    name: "周孟翰",
+    medicalSpecialty: "Urology",
+    worksFor: {
+      "@type": "MedicalClinic",
+      "@id": "https://drcmh.com/#clinic",
+      name: "新店高美泌尿科診所",
+    },
+  },
+};
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "首頁", item: "https://drcmh.com/" },
+    { "@type": "ListItem", position: 2, name: "主治項目", item: "https://drcmh.com/treatments/" },
+    { "@type": "ListItem", position: 3, name: "微創治療與手術", item: pageUrl },
+  ],
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "UroLift 和傳統攝護腺手術有什麼差別？",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "UroLift® 是以微型支架將攝護腺側葉撐開，不切除也不加熱組織，手術約 15-30 分鐘，可在門診或輕度麻醉下完成。最大優點是不影響射精功能，適合仍有性需求的患者。傳統 TURP 雷射手術效果較持久，但可能造成逆行性射精。",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Rezūm 水蒸氣消融治療效果能維持多久？",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Rezūm® 臨床研究顯示療效可維持 5 年以上，80% 以上患者有明顯症狀改善。治療一次即可，利用水蒸氣的熱能精準破壞增生的攝護腺組織，2-4 週後組織自然吸收，術後 3 個月達最佳效果。",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "攝護腺雷射手術可以健保給付嗎？",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "HoLEP（鉸刀式雷射剜除術）及綠光雷射汽化術在符合適應症的情況下可申請健保給付，但需要住院 1-2 天。UroLift® 及 Rezūm® 目前為自費治療，周醫師會在門診說明各選項費用與適合度。",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "微創雷射結紮（舒眠）是什麼手術？",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "微創雷射結紮（即精索靜脈曲張雷射結紮術）是使用雷射能量精準處理精索靜脈曲張，在舒眠麻醉下進行，傷口僅 0.5-1 公分，術後恢復快。適合有男性不孕問題或陰囊不適的患者。",
+      },
+    },
+  ],
+};
+
+const procedures = [
+  {
+    name: "UroLift® 攝護腺拉提手術",
+    badge: "保留射精功能",
+    desc: "以微型植入物撐開攝護腺側葉，不切除、不加熱，門診完成，即刻改善排尿。",
+    details: ["不影響射精功能", "手術約 15-30 分鐘", "局部或輕度麻醉", "當天可返家"],
+  },
+  {
+    name: "Rezūm® 水蒸氣消融",
+    badge: "一次性治療",
+    desc: "利用水蒸氣熱能精準消融增生攝護腺組織，治療一次即可，不需重複。",
+    details: ["不影響性功能", "9 秒短暫治療", "3 個月達最佳效果", "療效維持 5 年以上"],
+  },
+  {
+    name: "攝護腺雷射手術（HoLEP／綠光）",
+    badge: "健保給付選項",
+    desc: "鉸刀式雷射完整剜除增生組織，適合攝護腺體積大、藥物無效的患者。",
+    details: ["健保給付（符合適應症）", "住院 1-2 天", "根治性療效持久", "需術後留置導尿管"],
+  },
+  {
+    name: "尿失禁微創手術（TVT-O／TOT）",
+    badge: "女性適用",
+    desc: "中段尿道懸吊帶手術，針對應力性尿失禁，手術 30 分鐘，有效率超過 85%。",
+    details: ["應力性尿失禁首選", "傷口微小", "手術 30-40 分鐘", "成功率 >85%"],
+  },
+  {
+    name: "微創雷射結紮（舒眠麻醉）",
+    badge: "精索靜脈曲張",
+    desc: "雷射精準處理精索靜脈曲張，舒眠麻醉下進行，傷口小、恢復快。",
+    details: ["改善男性不孕", "傷口 < 1 公分", "舒眠麻醉，無恐懼感", "術後隔天可活動"],
+  },
+];
+---
+
+<Layout title={title} description={description}>
+  <Header slot="header" />
+
+  <script type="application/ld+json" set:html={JSON.stringify(medicalServiceSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <!-- Breadcrumb -->
+  <nav class="bg-bg border-b border-gray-100 py-3" aria-label="breadcrumb">
+    <div class="container mx-auto px-6">
+      <ol class="flex items-center gap-2 text-sm text-text/60">
+        <li><a href="/" class="hover:text-primary transition-colors">首頁</a></li>
+        <li><ChevronRight size={14} className="inline" /></li>
+        <li><a href="/treatments/" class="hover:text-primary transition-colors">主治項目</a></li>
+        <li><ChevronRight size={14} className="inline" /></li>
+        <li class="text-primary font-medium">微創治療與手術</li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="bg-gradient-to-br from-primary/5 via-bg to-bg py-16 md:py-24">
+    <div class="container mx-auto px-6 max-w-4xl">
+      <p class="text-accent font-bold text-xs tracking-[0.2em] uppercase mb-4">MINIMALLY INVASIVE SURGERY</p>
+      <h1 class="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-primary mb-6 leading-tight">
+        微創治療與手術
+      </h1>
+      <blockquote class="border-l-4 border-accent pl-6 bg-accent/5 py-4 pr-4 rounded-r-xl mb-8">
+        <p class="text-text/80 leading-relaxed">
+          <strong>摘要：</strong>周孟翰醫師於新店高美泌尿科診所導入多項先進微創技術，包含 UroLift® 攝護腺拉提、Rezūm® 水蒸氣消融、攝護腺雷射手術（HoLEP）、尿失禁中段尿道懸吊帶手術與精索靜脈曲張雷射結紮術。手術傷口小、恢復快，並依患者需求提供健保與自費選項說明。
+        </p>
+      </blockquote>
+      <a
+        href="/booking"
+        class="inline-flex items-center gap-2 px-8 py-3 bg-accent text-white font-bold rounded-full shadow-lg hover:bg-primary transition-all duration-300"
+      >
+        <span>諮詢手術選項</span>
+        <ArrowRight size={18} />
+      </a>
+    </div>
+  </section>
+
+  <!-- Procedures -->
+  <section class="py-16 bg-surface">
+    <div class="container mx-auto px-6 max-w-4xl">
+      <h2 class="text-2xl md:text-3xl font-serif font-bold text-primary mb-4">手術項目介紹</h2>
+      <p class="text-text/70 mb-10">
+        周醫師具備達文西機器手臂手術資格，並熟悉多種微創泌尿手術，會依攝護腺大小、症狀嚴重程度與患者需求，推薦最適合的術式。
+      </p>
+      <div class="space-y-6">
+        {procedures.map((p) => (
+          <div class="bg-bg rounded-2xl border border-gray-100 hover:border-accent/30 hover:shadow-md transition-all p-6">
+            <div class="flex items-start justify-between gap-4 mb-3">
+              <h3 class="text-lg font-bold text-primary">{p.name}</h3>
+              <span class="shrink-0 text-xs font-bold text-accent bg-accent/10 px-3 py-1 rounded-full">{p.badge}</span>
+            </div>
+            <p class="text-text/70 text-sm mb-4">{p.desc}</p>
+            <ul class="grid grid-cols-2 gap-2">
+              {p.details.map((d) => (
+                <li class="flex items-center gap-2 text-xs text-text/60">
+                  <CheckCircle2 size={13} className="text-accent shrink-0" />
+                  {d}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Related Blog Posts -->
+  <section class="py-12 bg-bg">
+    <div class="container mx-auto px-6 max-w-4xl">
+      <h2 class="text-xl font-bold text-primary mb-6">延伸閱讀</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <a href="/blog/bph-urolift-rezum" class="flex items-center gap-3 bg-surface rounded-xl p-4 border border-gray-100 hover:border-accent/30 hover:shadow-sm transition-all group">
+          <ArrowRight size={16} className="text-accent shrink-0 group-hover:translate-x-1 transition-transform" />
+          <span class="text-sm text-text group-hover:text-primary transition-colors">攝護腺微創手術大PK｜UroLift® 與 Rezūm 怎麼選？</span>
+        </a>
+        <a href="/blog/circumcision-stapler-selection" class="flex items-center gap-3 bg-surface rounded-xl p-4 border border-gray-100 hover:border-accent/30 hover:shadow-sm transition-all group">
+          <ArrowRight size={16} className="text-accent shrink-0 group-hover:translate-x-1 transition-transform" />
+          <span class="text-sm text-text group-hover:text-primary transition-colors">包皮槍怎麼選？割包皮手術方式比較</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="py-16 bg-surface">
+    <div class="container mx-auto px-6 max-w-4xl">
+      <h2 class="text-2xl md:text-3xl font-serif font-bold text-primary mb-10">常見問題</h2>
+      <div class="space-y-4">
+        {faqSchema.mainEntity.map((q) => (
+          <details class="bg-bg rounded-xl border border-gray-100 group">
+            <summary class="flex items-center justify-between p-6 cursor-pointer list-none font-bold text-primary hover:text-accent transition-colors">
+              {q.name}
+              <ChevronRight size={18} className="shrink-0 transition-transform group-open:rotate-90 text-accent" />
+            </summary>
+            <div class="px-6 pb-6 text-text/70 text-sm leading-relaxed">
+              {q.acceptedAnswer.text}
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-16 bg-primary">
+    <div class="container mx-auto px-6 max-w-2xl text-center">
+      <h2 class="text-2xl md:text-3xl font-serif font-bold text-white mb-4">先進技術導入，傷口小恢復快</h2>
+      <p class="text-gray-300 mb-8 leading-relaxed">
+        想了解哪種手術最適合您的狀況？歡迎至新店高美泌尿科診所，由周醫師親自評估說明。
+      </p>
+      <a
+        href="/booking"
+        class="inline-flex items-center gap-2 px-10 py-4 bg-accent text-white font-bold rounded-full shadow-xl hover:bg-white hover:text-primary transition-all duration-300"
+      >
+        <span>立即預約看診</span>
+        <ArrowRight size={18} />
+      </a>
+      <p class="text-white text-sm mt-4">新北市新店區二十張路 5 號 1 樓｜捷運大坪林站步行 1 分鐘</p>
+    </div>
+  </section>
+</Layout>

@@ -343,7 +343,132 @@
 
 ---
 
-## 七、文章發布優先順序總表
+## 七、治療項目頁（/treatments/）策略
+
+### 7A. 為什麼需要獨立治療頁？
+
+**SEO 效益：**
+- 首頁的 Expertise 卡片是 JavaScript 渲染的內容簡介，Google 無法為每個治療項目單獨建立索引入口
+- 獨立的 `/treatments/XXX` 頁面讓 Google 可以針對「新店攝護腺雷射手術」、「新店尿失禁微創手術」等**術式級關鍵字**建立獨立排名
+- 每個治療頁可放置 `MedicalProcedure` JSON-LD schema，讓 Google 將其識別為醫療服務頁
+
+**GEO / AI 搜尋效益：**
+- Perplexity、Gemini 回答「新店哪裡可以做 UroLift」時，有獨立頁面才能被直接引用
+- 治療頁的結構（症狀 → 治療方式 → 恢復期 → FAQ）是 AI 最喜歡擷取的格式
+
+**Google Business Profile (GBP) 連動效益：**
+- GBP「服務項目」(Services) 欄位可逐項填入，並連結對應的 `/treatments/XXX` 頁面
+- Google 本地搜尋演算法會比對 GBP 服務列表與網站頁面內容；兩者對齊時，**知識面板 (Knowledge Panel) 的服務推薦機率顯著提升**
+- GBP 貼文可定期連結各治療頁，帶動點擊信號
+
+---
+
+### 7B. 建議的治療頁清單與 URL
+
+| 治療大項 | 建議 URL slug | 目標關鍵字（示例） |
+|---|---|---|
+| 排尿困擾與攝護腺 | `/treatments/urinary-prostate` | 攝護腺肥大治療新店、攝護腺炎怎麼辦、頻尿夜尿治療 |
+| 私密健康與性傳染病 | `/treatments/sexual-health` | 菜花治療新店、性病篩檢大坪林、包皮手術新店 |
+| 微創治療與手術 | `/treatments/minimally-invasive` | UroLift新店、攝護腺雷射手術、Rezūm水蒸氣消融 |
+| 男性性功能與荷爾蒙 | `/treatments/male-sexual-health` | 勃起功能障礙治療、低能量震波治療新店、男性更年期評估 |
+| 一般泌尿疾病 | `/treatments/general-urology` | 腎結石治療新店、疝氣手術新店、血尿評估 |
+
+**選擇性加入：子項目頁（第二階段）**
+
+若流量驗證後某術式搜尋量明顯，可再拆子頁：
+- `/treatments/urolift` — UroLift 攝護腺拉提手術專頁
+- `/treatments/kidney-stones` — 尿路結石 / 軟式輸尿管鏡專頁
+- `/treatments/circumcision` — 包皮手術（包皮槍/雷射）專頁
+
+---
+
+### 7C. 治療頁建議結構（每頁）
+
+```
+H1: [治療項目名稱] — 新店高美泌尿科
+AI blockquote: > **摘要：** 周孟翰醫師於新店高美泌尿科…（含醫師全名 + 診所名）
+
+## 什麼是 [治療項目]？
+（2-3 段說明，第一段直接給出定義 → GEO 友好）
+
+## 常見症狀
+（條列式 → Google snippet 友好）
+
+## 治療方式與流程
+（含術式比較表格 → 決策型搜尋）
+
+## 術後恢復與注意事項
+
+## 費用與健保說明
+（透明化 → 高轉化）
+
+## 常見問題（FAQ）
+（3-5 題 → FAQ Schema → GEO 引用）
+
+## 預約看診 CTA
+```
+
+---
+
+### 7D. 技術實作建議
+
+**方案 A（建議）：Content Collection + 動態路由**
+- 新增 `src/content/treatments/` collection（YAML 格式）
+- 建立 `src/pages/treatments/[slug].astro` 動態路由（`prerender = true`）
+- 可透過 Keystatic CMS 編輯，不需動程式碼
+- `Expertise.astro` 的卡片改為連結到對應 treatment 頁面
+
+**方案 B（快速）：靜態頁面**
+- 直接在 `src/pages/treatments/` 下建立 5 個 `.astro` 檔案
+- 資料硬寫在頁面中，適合初期快速驗證
+
+**JSON-LD Schema（每頁必加）：**
+```json
+{
+  "@type": "MedicalProcedure",
+  "name": "攝護腺拉提手術 (UroLift)",
+  "description": "...",
+  "procedureType": "Surgical",
+  "bodyLocation": "攝護腺",
+  "followup": "...",
+  "performer": {
+    "@type": "Physician",
+    "name": "周孟翰",
+    "worksFor": {
+      "@type": "MedicalClinic",
+      "name": "新店高美泌尿科診所"
+    }
+  }
+}
+```
+
+---
+
+### 7E. GBP 服務項目對齊清單
+
+治療頁上線後，同步至 Google Business Profile「服務」欄位：
+
+| GBP 服務分類 | GBP 服務項目 | 對應頁面 |
+|---|---|---|
+| 泌尿科治療 | 攝護腺肥大治療 | `/treatments/urinary-prostate` |
+| 泌尿科治療 | 攝護腺炎治療 | `/treatments/urinary-prostate` |
+| 泌尿科治療 | 尿路結石治療 | `/treatments/general-urology` |
+| 泌尿科治療 | 疝氣手術 | `/treatments/general-urology` |
+| 泌尿科治療 | 血尿評估 | `/treatments/general-urology` |
+| 微創手術 | UroLift 攝護腺拉提 | `/treatments/minimally-invasive` |
+| 微創手術 | Rezūm 水蒸氣消融 | `/treatments/minimally-invasive` |
+| 微創手術 | 攝護腺雷射手術 | `/treatments/minimally-invasive` |
+| 微創手術 | 包皮手術 | `/treatments/sexual-health` |
+| 男性健康 | 勃起功能障礙 | `/treatments/male-sexual-health` |
+| 男性健康 | 男性更年期評估 | `/treatments/male-sexual-health` |
+| 男性健康 | 低能量震波治療 | `/treatments/male-sexual-health` |
+| 性病防治 | 性病篩檢 | `/treatments/sexual-health` |
+| 性病防治 | PrEP/PEP 預防投藥 | `/treatments/sexual-health` |
+| 性病防治 | HPV 疫苗 | `/treatments/sexual-health` |
+
+---
+
+## 八、文章發布優先順序總表
 
 | 優先權 | 主題 | 理由 | 建議月份 |
 |---|---|---|---|

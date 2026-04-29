@@ -1,0 +1,246 @@
+---
+export const prerender = true;
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/common/Header.astro";
+import { ArrowRight, CheckCircle2, ChevronRight } from "lucide-react";
+
+const title = "男性性功能與荷爾蒙治療 | 新店高美泌尿科 周孟翰醫師";
+const description =
+  "新店高美泌尿科診所周孟翰醫師專治勃起功能障礙、早洩、男性更年期（睪固酮低下）與男性不孕。提供低能量震波治療、荷爾蒙補充療法，保密專業，大坪林捷運站步行1分鐘。";
+
+const pageUrl = "https://drcmh.com/treatments/male-sexual-health";
+
+const medicalServiceSchema = {
+  "@context": "https://schema.org",
+  "@type": "MedicalProcedure",
+  name: "男性性功能與荷爾蒙治療",
+  description: description,
+  url: pageUrl,
+  bodyLocation: "生殖系統、內分泌",
+  performer: {
+    "@type": "Physician",
+    "@id": "https://drcmh.com/#physician",
+    name: "周孟翰",
+    medicalSpecialty: "Urology",
+    worksFor: {
+      "@type": "MedicalClinic",
+      "@id": "https://drcmh.com/#clinic",
+      name: "新店高美泌尿科診所",
+    },
+  },
+};
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "首頁", item: "https://drcmh.com/" },
+    { "@type": "ListItem", position: 2, name: "主治項目", item: "https://drcmh.com/treatments/" },
+    { "@type": "ListItem", position: 3, name: "男性性功能與荷爾蒙", item: pageUrl },
+  ],
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "勃起困難只是心理問題嗎？",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "不一定。勃起功能障礙（ED）的成因是多面向的，不只是心理，還可能是心血管疾病、糖尿病、高血壓、荷爾蒙失調或神經功能問題的早期訊號。ED 可以是心血管疾病的前兆，建議接受完整的臨床評估、抽血與風險評估，而非單純當成心理問題處理。",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "低能量震波治療勃起功能障礙的效果如何？",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "低能量震波治療（LI-ESWT）透過聲波刺激陰莖海綿體血管新生，改善血流。對輕中度血管性 ED 患者效果明顯，療程約 6-12 次，非侵入性、無痛，不需停用其他藥物。部分患者可在治療後減少或停用 PDE5 抑制劑（如威而鋼）。",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "男性更年期補充睪固酮安全嗎？會致癌嗎？",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "在定期監測下，睪固酮補充療法（TRT）對多數患者是安全的。目前研究顯示 TRT 不會增加攝護腺癌風險，但有活躍攝護腺癌的患者不建議補充。TRT 前需評估症狀、血中睪固酮濃度、攝護腺特異抗原（PSA），治療中定期追蹤血球與 PSA。",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "男性不孕症在泌尿科可以評估嗎？",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "可以。男性不孕約占不孕夫妻案例的 40-50%。泌尿科可評估精索靜脈曲張、荷爾蒙問題、阻塞性無精症等。精索靜脈曲張是最常見可治療的原因，手術矯正後有機會改善精液品質，提升自然受孕機率。",
+      },
+    },
+  ],
+};
+
+const conditions = [
+  { name: "勃起功能障礙（ED）", desc: "輕中重度 ED 評估，排除血管、神經、荷爾蒙原因" },
+  { name: "早洩、射精控制困擾", desc: "心理與生理因素評估，藥物或行為治療" },
+  { name: "男性更年期（睪固酮低下）", desc: "疲倦、性慾降低、情緒低落的荷爾蒙根本評估" },
+  { name: "男性不孕症諮詢", desc: "精索靜脈曲張、荷爾蒙問題、精液品質評估" },
+  { name: "低能量震波治療", desc: "非侵入性，改善血管性 ED，刺激血管新生" },
+];
+
+const treatments = [
+  { name: "口服 PDE5 抑制劑", desc: "威而鋼、犀利士等，最常用的第一線 ED 治療" },
+  { name: "低能量震波治療（LI-ESWT）", desc: "6-12 次療程，改善海綿體血流，效果持久" },
+  { name: "睪固酮補充療法（TRT）", desc: "注射或凝膠，改善男性更年期症狀，定期監測" },
+  { name: "精索靜脈曲張手術", desc: "改善男性不孕，提升精液品質" },
+  { name: "早洩藥物治療", desc: "Dapoxetine 等按需服藥，延長射精時間" },
+  { name: "人工陰莖植入術（重度 ED）", desc: "藥物無效時的最後選項，滿意度高達 90%+" },
+];
+---
+
+<Layout title={title} description={description}>
+  <Header slot="header" />
+
+  <script type="application/ld+json" set:html={JSON.stringify(medicalServiceSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <!-- Breadcrumb -->
+  <nav class="bg-bg border-b border-gray-100 py-3" aria-label="breadcrumb">
+    <div class="container mx-auto px-6">
+      <ol class="flex items-center gap-2 text-sm text-text/60">
+        <li><a href="/" class="hover:text-primary transition-colors">首頁</a></li>
+        <li><ChevronRight size={14} className="inline" /></li>
+        <li><a href="/treatments/" class="hover:text-primary transition-colors">主治項目</a></li>
+        <li><ChevronRight size={14} className="inline" /></li>
+        <li class="text-primary font-medium">男性性功能與荷爾蒙</li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="bg-gradient-to-br from-primary/5 via-bg to-bg py-16 md:py-24">
+    <div class="container mx-auto px-6 max-w-4xl">
+      <p class="text-accent font-bold text-xs tracking-[0.2em] uppercase mb-4">MALE SEXUAL HEALTH</p>
+      <h1 class="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-primary mb-6 leading-tight">
+        男性性功能與荷爾蒙
+      </h1>
+      <blockquote class="border-l-4 border-accent pl-6 bg-accent/5 py-4 pr-4 rounded-r-xl mb-8">
+        <p class="text-text/80 leading-relaxed">
+          <strong>摘要：</strong>周孟翰醫師於新店高美泌尿科診所，針對男性勃起功能障礙（ED）、早洩、男性更年期（睪固酮低下）及男性不孕症提供完整評估與治療。提供低能量震波治療（LI-ESWT）、睪固酮補充療法（TRT）及精索靜脈曲張手術，協助男性找回健康自信，全程保密、尊重隱私。
+        </p>
+      </blockquote>
+      <a
+        href="/booking"
+        class="inline-flex items-center gap-2 px-8 py-3 bg-accent text-white font-bold rounded-full shadow-lg hover:bg-primary transition-all duration-300"
+      >
+        <span>預約看診</span>
+        <ArrowRight size={18} />
+      </a>
+    </div>
+  </section>
+
+  <!-- Conditions -->
+  <section class="py-16 bg-surface">
+    <div class="container mx-auto px-6 max-w-4xl">
+      <h2 class="text-2xl md:text-3xl font-serif font-bold text-primary mb-4">診治範圍</h2>
+      <p class="text-text/70 mb-10">
+        男性性功能問題往往牽涉心血管、內分泌與心理多個面向，需要整合性評估才能找到根本原因。
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {conditions.map((c) => (
+          <div class="flex items-start gap-4 bg-bg rounded-xl p-5 border border-gray-100">
+            <CheckCircle2 size={20} className="text-accent shrink-0 mt-0.5" />
+            <div>
+              <p class="font-bold text-primary text-sm mb-1">{c.name}</p>
+              <p class="text-text/70 text-sm">{c.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Treatments -->
+  <section class="py-16 bg-bg">
+    <div class="container mx-auto px-6 max-w-4xl">
+      <h2 class="text-2xl md:text-3xl font-serif font-bold text-primary mb-4">治療選項</h2>
+      <p class="text-text/70 mb-10">
+        治療方案依據評估結果、患者年齡與目標制定，從保守的口服藥物到低能量震波治療，均有完整選項。
+      </p>
+      <div class="space-y-4">
+        {treatments.map((t) => (
+          <div class="flex items-start gap-4 bg-surface rounded-xl p-5 border border-gray-100 hover:border-accent/30 transition-colors">
+            <div class="w-2 h-2 rounded-full bg-accent shrink-0 mt-2"></div>
+            <div>
+              <p class="font-bold text-primary mb-1">{t.name}</p>
+              <p class="text-text/70 text-sm">{t.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div class="mt-10 bg-primary/5 border border-primary/20 rounded-2xl p-6">
+        <p class="font-bold text-primary mb-2">重要提醒</p>
+        <p class="text-text/70 text-sm leading-relaxed">
+          勃起功能障礙可能是心血管疾病、糖尿病的早期訊號。就醫不只是解決性功能問題，
+          更是對整體健康的全面評估。及早發現潛在問題，才能及早處理。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Related Blog Posts -->
+  <section class="py-12 bg-surface">
+    <div class="container mx-auto px-6 max-w-4xl">
+      <h2 class="text-xl font-bold text-primary mb-6">延伸閱讀</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <a href="/blog/male-andropause" class="flex items-center gap-3 bg-bg rounded-xl p-4 border border-gray-100 hover:border-accent/30 hover:shadow-sm transition-all group">
+          <ArrowRight size={16} className="text-accent shrink-0 group-hover:translate-x-1 transition-transform" />
+          <span class="text-sm text-text group-hover:text-primary transition-colors">甚麼是男性更年期？</span>
+        </a>
+        <a href="/blog/sexual-health-erectile-dysfunction" class="flex items-center gap-3 bg-bg rounded-xl p-4 border border-gray-100 hover:border-accent/30 hover:shadow-sm transition-all group">
+          <ArrowRight size={16} className="text-accent shrink-0 group-hover:translate-x-1 transition-transform" />
+          <span class="text-sm text-text group-hover:text-primary transition-colors">談談性健康與勃起困難</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="py-16 bg-bg">
+    <div class="container mx-auto px-6 max-w-4xl">
+      <h2 class="text-2xl md:text-3xl font-serif font-bold text-primary mb-10">常見問題</h2>
+      <div class="space-y-4">
+        {faqSchema.mainEntity.map((q) => (
+          <details class="bg-surface rounded-xl border border-gray-100 group">
+            <summary class="flex items-center justify-between p-6 cursor-pointer list-none font-bold text-primary hover:text-accent transition-colors">
+              {q.name}
+              <ChevronRight size={18} className="shrink-0 transition-transform group-open:rotate-90 text-accent" />
+            </summary>
+            <div class="px-6 pb-6 text-text/70 text-sm leading-relaxed">
+              {q.acceptedAnswer.text}
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-16 bg-primary">
+    <div class="container mx-auto px-6 max-w-2xl text-center">
+      <h2 class="text-2xl md:text-3xl font-serif font-bold text-white mb-4">重振自信，從專業評估開始</h2>
+      <p class="text-gray-300 mb-8 leading-relaxed">
+        周孟翰醫師在新店大坪林站附近提供男性健康完整評估，保密、專業、不帶評判。
+      </p>
+      <a
+        href="/booking"
+        class="inline-flex items-center gap-2 px-10 py-4 bg-accent text-white font-bold rounded-full shadow-xl hover:bg-white hover:text-primary transition-all duration-300"
+      >
+        <span>立即預約看診</span>
+        <ArrowRight size={18} />
+      </a>
+      <p class="text-white text-sm mt-4">新北市新店區二十張路 5 號 1 樓｜捷運大坪林站步行 1 分鐘</p>
+    </div>
+  </section>
+</Layout>

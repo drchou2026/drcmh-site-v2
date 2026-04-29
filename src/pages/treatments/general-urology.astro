@@ -1,0 +1,269 @@
+---
+export const prerender = true;
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/common/Header.astro";
+import { ArrowRight, CheckCircle2, ChevronRight } from "lucide-react";
+
+const title = "一般泌尿疾病診治 | 新店高美泌尿科 周孟翰醫師";
+const description =
+  "新店高美泌尿科診所周孟翰醫師診治泌尿道感染、尿路結石（軟式輸尿管鏡）、血尿評估、疝氣修補、陰囊水腫與精索靜脈曲張。大坪林捷運站步行1分鐘，專業細心診治。";
+
+const pageUrl = "https://drcmh.com/treatments/general-urology";
+
+const medicalServiceSchema = {
+  "@context": "https://schema.org",
+  "@type": "MedicalProcedure",
+  name: "一般泌尿疾病診治",
+  description: description,
+  url: pageUrl,
+  bodyLocation: "腎臟、輸尿管、膀胱、尿道、陰囊",
+  performer: {
+    "@type": "Physician",
+    "@id": "https://drcmh.com/#physician",
+    name: "周孟翰",
+    medicalSpecialty: "Urology",
+    worksFor: {
+      "@type": "MedicalClinic",
+      "@id": "https://drcmh.com/#clinic",
+      name: "新店高美泌尿科診所",
+    },
+  },
+};
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "首頁", item: "https://drcmh.com/" },
+    { "@type": "ListItem", position: 2, name: "主治項目", item: "https://drcmh.com/treatments/" },
+    { "@type": "ListItem", position: 3, name: "一般泌尿疾病", item: pageUrl },
+  ],
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "腎結石一定要開刀嗎？什麼大小需要手術？",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "5mm 以下結石約 70% 有機會自然排出，建議多喝水觀察。超過 10mm 或造成腎積水、反覆感染、疼痛難忍者，通常建議手術治療。手術方式包含體外震波碎石（ESWL）及軟式輸尿管鏡取石術，可依結石位置、大小選擇最合適的方式。",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "血尿一定是癌症嗎？",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "不一定。血尿的原因很多，包含泌尿道感染、結石、攝護腺出血、劇烈運動等，但也可能是泌尿道惡性腫瘤的早期警訊。特別是「無痛性肉眼血尿」（不痛但尿液明顯紅色）需高度警覺，應立即就醫做完整評估，包含超音波與膀胱鏡檢查。",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "疝氣一定要開刀嗎？可以觀察嗎？",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "一旦確診疝氣，原則上建議手術修補，因為疝氣不會自行痊癒，且有腸子嵌頓（卡住）的風險。手術方式有傳統開放式與腹腔鏡微創兩種，周醫師會依患者年齡、疝氣大小與體況建議合適術式，多數可在全身麻醉下 1-2 小時內完成。",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "在新店哪裡可以做結石手術？",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "新店高美泌尿科診所院長周孟翰醫師專精泌尿道結石診治，可在門診完成結石評估，並協助安排軟式輸尿管鏡取石術或體外震波碎石等治療。診所位於新北市新店區二十張路 5 號，捷運大坪林站步行約 1 分鐘。",
+      },
+    },
+  ],
+};
+
+const conditions = [
+  { name: "泌尿道感染", desc: "急性膀胱炎、腎盂腎炎、反覆性感染的評估與治療" },
+  { name: "尿路結石", desc: "腎結石、輸尿管結石、膀胱結石，軟式輸尿管鏡取石" },
+  { name: "血尿評估", desc: "肉眼或顯微鏡下血尿，排除腫瘤、結石、感染等原因" },
+  { name: "疝氣修補", desc: "腹股溝疝氣、復發疝氣，微創或開放式修補手術" },
+  { name: "陰囊水腫 / 精索靜脈曲張", desc: "陰囊腫大評估，影響生育力的精索靜脈曲張處理" },
+];
+
+const treatments = [
+  {
+    name: "軟式輸尿管鏡取石術（RIRS）",
+    desc: "從自然管道進入，不需打洞，適合腎臟與輸尿管中段結石",
+    highlight: true,
+  },
+  {
+    name: "體外震波碎石術（ESWL）",
+    desc: "非侵入性，利用震波在體外碎石，適合特定大小與位置的結石",
+    highlight: false,
+  },
+  {
+    name: "抗生素治療（泌尿道感染）",
+    desc: "針對病原菌選擇適當抗生素，並追蹤根本原因防止復發",
+    highlight: false,
+  },
+  {
+    name: "腹腔鏡疝氣修補",
+    desc: "微創手術，傷口小、疼痛少、恢復快，可同時處理雙側疝氣",
+    highlight: false,
+  },
+  {
+    name: "精索靜脈曲張手術",
+    desc: "顯微或腹腔鏡手術，改善精液品質，提升男性生育機率",
+    highlight: false,
+  },
+  {
+    name: "膀胱鏡檢查",
+    desc: "血尿或反覆感染時，直接觀察膀胱內部，排除腫瘤或異物",
+    highlight: false,
+  },
+];
+---
+
+<Layout title={title} description={description}>
+  <Header slot="header" />
+
+  <script type="application/ld+json" set:html={JSON.stringify(medicalServiceSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <!-- Breadcrumb -->
+  <nav class="bg-bg border-b border-gray-100 py-3" aria-label="breadcrumb">
+    <div class="container mx-auto px-6">
+      <ol class="flex items-center gap-2 text-sm text-text/60">
+        <li><a href="/" class="hover:text-primary transition-colors">首頁</a></li>
+        <li><ChevronRight size={14} className="inline" /></li>
+        <li><a href="/treatments/" class="hover:text-primary transition-colors">主治項目</a></li>
+        <li><ChevronRight size={14} className="inline" /></li>
+        <li class="text-primary font-medium">一般泌尿疾病</li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="bg-gradient-to-br from-primary/5 via-bg to-bg py-16 md:py-24">
+    <div class="container mx-auto px-6 max-w-4xl">
+      <p class="text-accent font-bold text-xs tracking-[0.2em] uppercase mb-4">GENERAL UROLOGY</p>
+      <h1 class="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-primary mb-6 leading-tight">
+        一般泌尿疾病
+      </h1>
+      <blockquote class="border-l-4 border-accent pl-6 bg-accent/5 py-4 pr-4 rounded-r-xl mb-8">
+        <p class="text-text/80 leading-relaxed">
+          <strong>摘要：</strong>周孟翰醫師於新店高美泌尿科診所提供全面的一般泌尿疾病診治，包含泌尿道感染、尿路結石（軟式輸尿管鏡取石術）、血尿評估（含膀胱鏡）、疝氣修補手術，以及陰囊水腫、精索靜脈曲張的評估與手術。擅長以微創方式精準處理，降低術後不適。
+        </p>
+      </blockquote>
+      <a
+        href="/booking"
+        class="inline-flex items-center gap-2 px-8 py-3 bg-accent text-white font-bold rounded-full shadow-lg hover:bg-primary transition-all duration-300"
+      >
+        <span>預約看診</span>
+        <ArrowRight size={18} />
+      </a>
+    </div>
+  </section>
+
+  <!-- Conditions -->
+  <section class="py-16 bg-surface">
+    <div class="container mx-auto px-6 max-w-4xl">
+      <h2 class="text-2xl md:text-3xl font-serif font-bold text-primary mb-4">診治範圍</h2>
+      <p class="text-text/70 mb-10">
+        從感染到結石、從血尿到腫塊，提供系統性評估，確認原因後再制定最適合的治療計畫。
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {conditions.map((c) => (
+          <div class="flex items-start gap-4 bg-bg rounded-xl p-5 border border-gray-100">
+            <CheckCircle2 size={20} className="text-accent shrink-0 mt-0.5" />
+            <div>
+              <p class="font-bold text-primary text-sm mb-1">{c.name}</p>
+              <p class="text-text/70 text-sm">{c.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Treatments -->
+  <section class="py-16 bg-bg">
+    <div class="container mx-auto px-6 max-w-4xl">
+      <h2 class="text-2xl md:text-3xl font-serif font-bold text-primary mb-4">治療方式</h2>
+      <p class="text-text/70 mb-10">
+        周醫師擅長軟式輸尿管鏡取石術（RIRS），此為目前處理腎臟與輸尿管結石最微創的手術方式之一。
+      </p>
+      <div class="space-y-4">
+        {treatments.map((t) => (
+          <div class={`flex items-start gap-4 rounded-xl p-5 border transition-colors ${t.highlight ? "bg-accent/5 border-accent/30" : "bg-surface border-gray-100 hover:border-accent/30"}`}>
+            <div class={`w-2 h-2 rounded-full shrink-0 mt-2 ${t.highlight ? "bg-accent" : "bg-primary/40"}`}></div>
+            <div>
+              <div class="flex items-center gap-2 mb-1">
+                <p class="font-bold text-primary">{t.name}</p>
+                {t.highlight && <span class="text-xs font-bold text-accent bg-accent/10 px-2 py-0.5 rounded-full">核心專長</span>}
+              </div>
+              <p class="text-text/70 text-sm">{t.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div class="mt-10 bg-primary/5 border border-primary/20 rounded-2xl p-6">
+        <p class="font-bold text-primary mb-2">血尿警訊</p>
+        <p class="text-text/70 text-sm leading-relaxed">
+          無痛性肉眼血尿（不痛但尿液明顯為紅色）是需要高度警覺的症狀，即使只出現一次也不應忽視。
+          可能是膀胱癌、腎癌等泌尿道腫瘤的早期訊號，建議立即安排超音波及膀胱鏡評估。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Related Blog Posts -->
+  <section class="py-12 bg-surface">
+    <div class="container mx-auto px-6 max-w-4xl">
+      <h2 class="text-xl font-bold text-primary mb-6">延伸閱讀</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <a href="/blog/hydronephrosis" class="flex items-center gap-3 bg-bg rounded-xl p-4 border border-gray-100 hover:border-accent/30 hover:shadow-sm transition-all group">
+          <ArrowRight size={16} className="text-accent shrink-0 group-hover:translate-x-1 transition-transform" />
+          <span class="text-sm text-text group-hover:text-primary transition-colors">認識腎積水：尿路阻塞的警訊</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="py-16 bg-bg">
+    <div class="container mx-auto px-6 max-w-4xl">
+      <h2 class="text-2xl md:text-3xl font-serif font-bold text-primary mb-10">常見問題</h2>
+      <div class="space-y-4">
+        {faqSchema.mainEntity.map((q) => (
+          <details class="bg-surface rounded-xl border border-gray-100 group">
+            <summary class="flex items-center justify-between p-6 cursor-pointer list-none font-bold text-primary hover:text-accent transition-colors">
+              {q.name}
+              <ChevronRight size={18} className="shrink-0 transition-transform group-open:rotate-90 text-accent" />
+            </summary>
+            <div class="px-6 pb-6 text-text/70 text-sm leading-relaxed">
+              {q.acceptedAnswer.text}
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-16 bg-primary">
+    <div class="container mx-auto px-6 max-w-2xl text-center">
+      <h2 class="text-2xl md:text-3xl font-serif font-bold text-white mb-4">常見問題也需要專業細心診治</h2>
+      <p class="text-gray-300 mb-8 leading-relaxed">
+        泌尿道感染、結石、血尿都不應輕忽。周孟翰醫師在新店大坪林提供完整評估，讓您安心。
+      </p>
+      <a
+        href="/booking"
+        class="inline-flex items-center gap-2 px-10 py-4 bg-accent text-white font-bold rounded-full shadow-xl hover:bg-white hover:text-primary transition-all duration-300"
+      >
+        <span>立即預約看診</span>
+        <ArrowRight size={18} />
+      </a>
+      <p class="text-white text-sm mt-4">新北市新店區二十張路 5 號 1 樓｜捷運大坪林站步行 1 分鐘</p>
+    </div>
+  </section>
+</Layout>

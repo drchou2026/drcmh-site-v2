@@ -1,0 +1,249 @@
+---
+export const prerender = true;
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/common/Header.astro";
+import { ArrowRight, CheckCircle2, ChevronRight } from "lucide-react";
+
+const title = "排尿困擾與攝護腺治療 | 新店高美泌尿科 周孟翰醫師";
+const description =
+  "新店高美泌尿科診所周孟翰醫師，專治頻尿、夜尿、攝護腺肥大、攝護腺炎與尿失禁。提供UroLift、Rezūm、雷射等多種微創治療選項，大坪林捷運站步行1分鐘。";
+
+const pageUrl = "https://drcmh.com/treatments/urinary-prostate";
+
+const medicalServiceSchema = {
+  "@context": "https://schema.org",
+  "@type": "MedicalProcedure",
+  name: "排尿困擾與攝護腺治療",
+  description: description,
+  url: pageUrl,
+  procedureType: "Surgical",
+  bodyLocation: "攝護腺、膀胱、尿道",
+  performer: {
+    "@type": "Physician",
+    "@id": "https://drcmh.com/#physician",
+    name: "周孟翰",
+    medicalSpecialty: "Urology",
+    worksFor: {
+      "@type": "MedicalClinic",
+      "@id": "https://drcmh.com/#clinic",
+      name: "新店高美泌尿科診所",
+    },
+  },
+};
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "首頁", item: "https://drcmh.com/" },
+    { "@type": "ListItem", position: 2, name: "主治項目", item: "https://drcmh.com/treatments/" },
+    { "@type": "ListItem", position: 3, name: "排尿困擾與攝護腺", item: pageUrl },
+  ],
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "攝護腺肥大一定要開刀嗎？",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "不一定。症狀輕微者可先嘗試藥物治療與生活調整。若藥物效果不佳，或出現反覆尿滯留、膀胱結石、腎功能受損等併發症時，才建議考慮手術。目前有 UroLift、Rezūm 水蒸氣消融、雷射手術等多種微創選項，可在不傷害性功能的前提下改善排尿。",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "頻尿、夜尿一定是攝護腺肥大造成的嗎？",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "不一定。頻尿和夜尿的原因很多，包括攝護腺肥大、膀胱過動症、泌尿道感染、夜間多尿症、睡眠呼吸中止症、糖尿病或某些藥物副作用。需要區分是「排尿阻塞型」還是「膀胱儲尿障礙型」，才能對症治療。",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "尿失禁可以治療嗎？",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "可以。應力性尿失禁（如大笑、咳嗽漏尿）可透過凱格爾運動、藥物或微創手術改善；急迫性尿失禁（急尿忍不住）則以藥物治療為主。建議先至泌尿科評估類型，再選擇最適合的治療方式。",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "在新店哪裡可以看攝護腺肥大？",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "新店高美泌尿科診所位於新北市新店區二十張路 5 號 1 樓，距捷運大坪林站步行約 1 分鐘。院長周孟翰醫師專精攝護腺微創手術，提供 UroLift、Rezūm、雷射手術等多種治療選項。",
+      },
+    },
+  ],
+};
+
+const conditions = [
+  { name: "頻尿、夜尿、急尿", desc: "排尿次數過多，影響睡眠品質與日常生活" },
+  { name: "排尿困難、尿流變細", desc: "尿柱細、需用力解尿、有殘尿感" },
+  { name: "尿失禁、漏尿", desc: "應力性或急迫性尿失禁，漏尿造成生活困擾" },
+  { name: "攝護腺肥大（BPH）", desc: "良性攝護腺肥大壓迫尿道，影響排尿功能" },
+  { name: "攝護腺炎", desc: "急性或慢性發炎，引起骨盆疼痛與排尿不適" },
+];
+
+const treatments = [
+  { name: "UroLift® 攝護腺拉提", desc: "不切除、不熱傷，保留性功能，門診即可完成" },
+  { name: "Rezūm® 水蒸氣消融", desc: "水蒸氣精準消融增生組織，一次性治療" },
+  { name: "攝護腺雷射手術", desc: "HoLEP 或綠光雷射，健保給付選項" },
+  { name: "藥物治療", desc: "α阻斷劑、5α還原酶抑制劑，適用輕中度症狀" },
+  { name: "骨盆底肌訓練 / 生理回饋", desc: "非侵入性，改善尿失禁與膀胱過動" },
+];
+---
+
+<Layout title={title} description={description}>
+  <Header slot="header" />
+
+  <!-- JSON-LD Schemas -->
+  <script type="application/ld+json" set:html={JSON.stringify(medicalServiceSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <!-- Breadcrumb -->
+  <nav class="bg-bg border-b border-gray-100 py-3" aria-label="breadcrumb">
+    <div class="container mx-auto px-6">
+      <ol class="flex items-center gap-2 text-sm text-text/60">
+        <li><a href="/" class="hover:text-primary transition-colors">首頁</a></li>
+        <li><ChevronRight size={14} className="inline" /></li>
+        <li><a href="/treatments/" class="hover:text-primary transition-colors">主治項目</a></li>
+        <li><ChevronRight size={14} className="inline" /></li>
+        <li class="text-primary font-medium">排尿困擾與攝護腺</li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="bg-gradient-to-br from-primary/5 via-bg to-bg py-16 md:py-24">
+    <div class="container mx-auto px-6 max-w-4xl">
+      <p class="text-accent font-bold text-xs tracking-[0.2em] uppercase mb-4">UROLOGY TREATMENT</p>
+      <h1 class="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-primary mb-6 leading-tight">
+        排尿困擾與攝護腺
+      </h1>
+      <blockquote class="border-l-4 border-accent pl-6 bg-accent/5 py-4 pr-4 rounded-r-xl mb-8">
+        <p class="text-text/80 leading-relaxed">
+          <strong>摘要：</strong>周孟翰醫師於新店高美泌尿科診所提供全方位排尿困擾診治，包含攝護腺肥大、攝護腺炎、尿失禁與頻尿夜尿問題。針對攝護腺肥大，提供 UroLift®、Rezūm® 水蒸氣消融、雷射手術等微創選項，可依患者年齡、性功能需求與攝護腺大小量身規劃治療方案。
+        </p>
+      </blockquote>
+      <a
+        href="/booking"
+        class="inline-flex items-center gap-2 px-8 py-3 bg-accent text-white font-bold rounded-full shadow-lg hover:bg-primary transition-all duration-300"
+      >
+        <span>預約看診</span>
+        <ArrowRight size={18} />
+      </a>
+    </div>
+  </section>
+
+  <!-- Conditions -->
+  <section class="py-16 bg-surface">
+    <div class="container mx-auto px-6 max-w-4xl">
+      <h2 class="text-2xl md:text-3xl font-serif font-bold text-primary mb-4">常見症狀與診治範圍</h2>
+      <p class="text-text/70 mb-10">以下症狀可能源於攝護腺、膀胱或尿道的問題，建議及早評估確認原因。</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {conditions.map((c) => (
+          <div class="flex items-start gap-4 bg-bg rounded-xl p-5 border border-gray-100">
+            <CheckCircle2 size={20} className="text-accent shrink-0 mt-0.5" />
+            <div>
+              <p class="font-bold text-primary text-sm mb-1">{c.name}</p>
+              <p class="text-text/70 text-sm">{c.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Treatments -->
+  <section class="py-16 bg-bg">
+    <div class="container mx-auto px-6 max-w-4xl">
+      <h2 class="text-2xl md:text-3xl font-serif font-bold text-primary mb-4">治療方式</h2>
+      <p class="text-text/70 mb-10">
+        周醫師會依據症狀嚴重程度、攝護腺大小、患者年齡與性功能需求，提供個人化的治療建議。
+      </p>
+      <div class="space-y-4">
+        {treatments.map((t) => (
+          <div class="flex items-start gap-4 bg-surface rounded-xl p-5 border border-gray-100 hover:border-accent/30 transition-colors">
+            <div class="w-2 h-2 rounded-full bg-accent shrink-0 mt-2"></div>
+            <div>
+              <p class="font-bold text-primary mb-1">{t.name}</p>
+              <p class="text-text/70 text-sm">{t.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div class="mt-10 bg-primary/5 border border-primary/20 rounded-2xl p-6">
+        <p class="font-bold text-primary mb-2">費用與健保說明</p>
+        <p class="text-text/70 text-sm leading-relaxed">
+          攝護腺雷射手術（HoLEP）及部分藥物可申請健保給付；UroLift® 與 Rezūm® 目前為自費治療。
+          周醫師將於門診說明各選項的費用、適應症及預期效果，協助您做出最適合的決定。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Related Blog Posts CTA -->
+  <section class="py-12 bg-surface">
+    <div class="container mx-auto px-6 max-w-4xl">
+      <h2 class="text-xl font-bold text-primary mb-6">延伸閱讀</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <a href="/blog/bph" class="flex items-center gap-3 bg-bg rounded-xl p-4 border border-gray-100 hover:border-accent/30 hover:shadow-sm transition-all group">
+          <ArrowRight size={16} className="text-accent shrink-0 group-hover:translate-x-1 transition-transform" />
+          <span class="text-sm text-text group-hover:text-primary transition-colors">搞懂攝護腺肥大如何擠壓你的排尿通道</span>
+        </a>
+        <a href="/blog/bph-urolift-rezum" class="flex items-center gap-3 bg-bg rounded-xl p-4 border border-gray-100 hover:border-accent/30 hover:shadow-sm transition-all group">
+          <ArrowRight size={16} className="text-accent shrink-0 group-hover:translate-x-1 transition-transform" />
+          <span class="text-sm text-text group-hover:text-primary transition-colors">攝護腺微創手術大PK｜UroLift® 與 Rezūm 怎麼選？</span>
+        </a>
+        <a href="/blog/stress-urinary-incontinence" class="flex items-center gap-3 bg-bg rounded-xl p-4 border border-gray-100 hover:border-accent/30 hover:shadow-sm transition-all group">
+          <ArrowRight size={16} className="text-accent shrink-0 group-hover:translate-x-1 transition-transform" />
+          <span class="text-sm text-text group-hover:text-primary transition-colors">大笑就漏尿？帶你認識應力性尿失禁</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="py-16 bg-bg">
+    <div class="container mx-auto px-6 max-w-4xl">
+      <h2 class="text-2xl md:text-3xl font-serif font-bold text-primary mb-10">常見問題</h2>
+      <div class="space-y-4">
+        {faqSchema.mainEntity.map((q) => (
+          <details class="bg-surface rounded-xl border border-gray-100 group">
+            <summary class="flex items-center justify-between p-6 cursor-pointer list-none font-bold text-primary hover:text-accent transition-colors">
+              {q.name}
+              <ChevronRight size={18} className="shrink-0 transition-transform group-open:rotate-90 text-accent" />
+            </summary>
+            <div class="px-6 pb-6 text-text/70 text-sm leading-relaxed">
+              {q.acceptedAnswer.text}
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-16 bg-primary">
+    <div class="container mx-auto px-6 max-w-2xl text-center">
+      <h2 class="text-2xl md:text-3xl font-serif font-bold text-white mb-4">準備好解決排尿困擾了嗎？</h2>
+      <p class="text-gray-300 mb-8 leading-relaxed">
+        周孟翰醫師於新店大坪林站附近，提供完整的泌尿科評估與個人化治療方案。
+      </p>
+      <a
+        href="/booking"
+        class="inline-flex items-center gap-2 px-10 py-4 bg-accent text-white font-bold rounded-full shadow-xl hover:bg-white hover:text-primary transition-all duration-300"
+      >
+        <span>立即預約看診</span>
+        <ArrowRight size={18} />
+      </a>
+      <p class="text-white text-sm mt-4">新北市新店區二十張路 5 號 1 樓｜捷運大坪林站步行 1 分鐘</p>
+    </div>
+  </section>
+</Layout>
