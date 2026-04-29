@@ -63,14 +63,6 @@ const faqSchema = {
     },
     {
       "@type": "Question",
-      name: "攝護腺雷射手術可以健保給付嗎？",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "HoLEP（鉸刀式雷射剜除術）及綠光雷射汽化術在符合適應症的情況下可申請健保給付，但需要住院 1-2 天。UroLift® 及 Rezūm® 目前為自費治療，周醫師會在門診說明各選項費用與適合度。",
-      },
-    },
-    {
-      "@type": "Question",
       name: "微創雷射結紮（舒眠）是什麼手術？",
       acceptedAnswer: {
         "@type": "Answer",
@@ -83,34 +75,28 @@ const faqSchema = {
 const procedures = [
   {
     name: "UroLift® 攝護腺拉提手術",
-    badge: "保留射精功能",
+    // badge: "保留射精功能",
     desc: "以微型植入物撐開攝護腺側葉，不切除、不加熱，門診完成，短時間改善排尿阻塞狀況。",
     details: ["不影響射精功能", "手術約 15-30 分鐘", "局部或靜脈式全身麻醉", "當天可返家"],
   },
   {
     name: "Rezūm® 水蒸氣消融",
-    badge: "一次性治療",
+    // badge: "一次性治療",
     desc: "利用水蒸氣熱能精準消融增生攝護腺組織。",
     details: ["不影響性功能", "3 個月達最佳效果", "療效維持 5 年以上"],
-  },
-  {
-    name: "攝護腺雷射手術（HoLEP／綠光）",
-    badge: "屬於自費項目",
-    desc: "以氣化或剜除雷射處理增生組織，適合攝護腺體積大、藥物無效的患者。",
-    details: ["屬於自費項目", "根治性療效持久", "依術中狀況判定留置導尿管天數"],
-  },
+  },  
   {
     name: "尿失禁微創手術",
-    badge: "女性適用",
+    // badge: "女性適用",
     desc: "於尿道黏膜下注射填充物或PRP治療，針對輕度至中度應力性尿失禁，手術約 30 分鐘，有效率超過 85%。",
     details: ["應力性尿失禁首選", "傷口微小", "手術約 30 分鐘", "成功率 >85%"],
-  },
-  {
-    name: "精索靜脈結紮手術（舒眠麻醉）",
-    badge: "精索靜脈曲張",
-    desc: "小刀口處理精索靜脈曲張，舒眠麻醉下進行，傷口小、恢復快。",
-    details: ["改善男性次發性不孕成因", "傷口2.5-3公分", "舒眠麻醉，無恐懼感", "術後隔天可活動"],
-  },
+  }//,
+  // {
+  //   name: "精索靜脈結紮手術（舒眠麻醉）",
+  //   badge: "精索靜脈曲張",
+  //   desc: "小刀口處理精索靜脈曲張，舒眠麻醉下進行，傷口小、恢復快。",
+  //   details: ["改善男性次發性不孕成因", "傷口2.5-3公分", "舒眠麻醉，無恐懼感", "術後隔天可活動"],
+  // },
 ];
 ---
 
@@ -143,7 +129,7 @@ const procedures = [
       </h1>
       <blockquote class="border-l-4 border-accent pl-6 bg-accent/5 py-4 pr-4 rounded-r-xl mb-8">
         <p class="text-text/80 leading-relaxed">
-          <strong>摘要：</strong>周孟翰醫師於新店高美泌尿科診所導入多項先進微創技術，包含 UroLift® 攝護腺拉提、Rezūm® 水蒸氣消融、攝護腺雷射手術（HoLEP）、尿失禁中段尿道懸吊帶手術與精索靜脈曲張雷射結紮術。手術傷口小、恢復快，並依患者需求提供健保與自費選項說明。
+          <strong>摘要：</strong>周孟翰醫師於新店高美泌尿科診所導入多項先進微創技術，包含 UroLift® 攝護腺拉提、Rezūm® 水蒸氣消融、攝護腺雷射手術（HoLEP）、尿失禁中段尿道懸吊帶手術與精索靜脈曲張雷射結紮術。手術傷口小、恢復快，並依患者需求提供治療選項說明。
         </p>
       </blockquote>
       <a
@@ -168,7 +154,7 @@ const procedures = [
           <div class="bg-bg rounded-2xl border border-gray-100 hover:border-accent/30 hover:shadow-md transition-all p-6">
             <div class="flex items-start justify-between gap-4 mb-3">
               <h3 class="text-lg font-bold text-primary">{p.name}</h3>
-              <span class="shrink-0 text-xs font-bold text-accent bg-accent/10 px-3 py-1 rounded-full">{p.badge}</span>
+              {/* <span class="shrink-0 text-xs font-bold text-accent bg-accent/10 px-3 py-1 rounded-full">{p.badge}</span> */}
             </div>
             <p class="text-text/70 text-sm mb-4">{p.desc}</p>
             <ul class="grid grid-cols-2 gap-2">
