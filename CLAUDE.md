@@ -107,3 +107,13 @@ Fonts: Noto Serif TC (headings, `font-serif`) and Noto Sans TC (body, `font-sans
 Blog posts automatically emit two structured data schemas (in `[slug].astro`):
 - `MedicalWebPage` with `speakable` CSS selectors (`h1`, `blockquote`, `h2`, `h3`)
 - `BreadcrumbList` with 3 levels (home → blog index → article)
+
+### Content Policy — Fees & Pricing
+
+**Never mention fees, pricing, or payment information anywhere on the site.** This includes:
+- 費用、自費、收費、診療費、手術費 (fees/costs of any kind)
+- 健保給付、部分負擔、自付額 (NHI coverage or co-pays)
+- 價格、多少錢、NT$、元 (prices or amounts)
+- 補助、理賠、保險給付 (subsidies or insurance reimbursements)
+
+This applies to all content: blog posts (`.mdx`), treatment pages, FAQ, news, and any UI copy. Omit fee-related keywords from SEO targets and article outlines as well. The goal is to avoid controversy or misunderstanding about medical costs.
