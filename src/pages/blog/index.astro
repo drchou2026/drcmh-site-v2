@@ -111,11 +111,11 @@ const allCategories = ORDERED_CATEGORIES.filter(cat =>
 </style>
 
 <script>
-  // 為了確保頁面切換 (View Transitions) 後也能運作，建議包在事件內
+  // 為了確保頁面切換 (View Transitions) 後也能運作，需要移除 once: true
   document.addEventListener('astro:page-load', () => {
     initFilter();
-  }, { once: true });
-  
+  });
+
   initFilter();
 
   function initFilter() {
