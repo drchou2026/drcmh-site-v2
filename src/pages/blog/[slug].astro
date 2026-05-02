@@ -147,6 +147,16 @@ const breadcrumbSchema = {
     { "@type": "ListItem", "position": 3, "name": post.data.title, "item": articleUrl },
   ],
 };
+
+const faqSchema = post.data.faq?.length ? {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": post.data.faq.map(({ question, answer }) => ({
+    "@type": "Question",
+    "name": question,
+    "acceptedAnswer": { "@type": "Answer", "text": answer },
+  })),
+} : null;
 ---
 
 <Layout
@@ -330,6 +340,7 @@ const breadcrumbSchema = {
 
   <script is:inline type="application/ld+json" set:html={JSON.stringify(medicalWebPageSchema)} />
   <script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  {faqSchema && <script is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)} />}
 
   <Footer slot="footer" />
 </Layout>

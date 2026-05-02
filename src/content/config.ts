@@ -16,6 +16,10 @@ const blog = defineCollection({
       return str.split(',').map((s) => s.trim()).filter(Boolean);
     }),
     coverImage: image().optional(),
+    faq: z.array(z.object({
+      question: z.string(),
+      answer: z.string(),
+    })).optional(),
 
     // 🟢 對應 Keystatic 的 Conditional 欄位 (advanced)
     advanced: z.union([
