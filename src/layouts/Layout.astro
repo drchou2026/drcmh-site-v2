@@ -103,7 +103,90 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   </main>
 
 	<Footer slot="footer" />
-    
+
+  <script>
+    (function () {
+      let toastEl: HTMLElement | null = null;
+      let hideTimer: ReturnType<typeof setTimeout> | null = null;
+
+      function getToast(): HTMLElement {
+        if (!toastEl || !toastEl.isConnected) {
+          toastEl = document.createElement('div');
+          toastEl.id = 'copyright-toast';
+          toastEl.setAttribute('aria-live', 'polite');
+          toastEl.setAttribute('role', 'status');
+          toastEl.setAttribute('data-pagefind-ignore', '');
+          toastEl.style.cssText = [
+            'position:fixed',
+            'z-index:10000',
+            'padding:8px 14px',
+            'background:rgba(33,39,47,0.92)',
+            'color:#fff',
+            'font-size:13px',
+            'font-family:"Noto Sans TC",sans-serif',
+            'line-height:1.5',
+            'border-radius:6px',
+            'pointer-events:none',
+            'opacity:0',
+            'transition:opacity 200ms ease',
+            'max-width:240px',
+            'white-space:nowrap',
+            'box-shadow:0 4px 12px rgba(0,0,0,0.25)',
+            'user-select:none',
+            '-webkit-user-select:none',
+          ].join(';');
+          toastEl.textContent = '本站內容受著作權保護';
+          document.body.appendChild(toastEl);
+        }
+        return toastEl;
+      }
+
+      function showToast(x: number, y: number): void {
+        const toast = getToast();
+
+        if (hideTimer !== null) {
+          clearTimeout(hideTimer);
+          hideTimer = null;
+        }
+
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        const OFFSET = 12;
+        const approxW = 200;
+        const approxH = 36;
+
+        let left = x + OFFSET;
+        let top = y + OFFSET;
+        if (left + approxW > vw) left = x - approxW - OFFSET;
+        if (top + approxH > vh) top = y - approxH - OFFSET;
+        if (left < 0) left = OFFSET;
+        if (top < 0) top = OFFSET;
+
+        toast.style.left = left + 'px';
+        toast.style.top = top + 'px';
+        toast.style.transition = 'opacity 200ms ease';
+        toast.style.opacity = '0';
+
+        void toast.offsetWidth;
+
+        toast.style.opacity = '1';
+
+        hideTimer = setTimeout(function () {
+          toast.style.transition = 'opacity 300ms ease';
+          toast.style.opacity = '0';
+          hideTimer = null;
+        }, 2000);
+      }
+
+      document.addEventListener('contextmenu', function (e: MouseEvent) {
+        if (e.target instanceof Element && e.target.tagName === 'IMG') {
+          e.preventDefault();
+          showToast(e.clientX, e.clientY);
+        }
+      });
+    })();
+  </script>
+
   </body>
 </html>
 
