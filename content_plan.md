@@ -499,5 +499,5 @@ nocturia ──→ overactive-bladder-oab、bph
 | ⏳ 待完成 | 產後尿失禁與骨盆底肌修復（在地） | `postpartum-urinary-incontinence` | 2026-07 |
 | ⏳ 待完成 | 達文西機器手臂手術介紹 | `robotic-surgery-da-vinci` | 2026-08 |
 | ⏳ 待完成 | 膀胱鏡與尿動力學檢查說明 | `cystoscopy-urodynamics` | 2026-09 |
-| ⏳ 待完成 | /treatments/ 治療頁（5 頁） | — | 2026-Q3 |
+| ✅ 完成 | /treatments/ 治療頁（5 頁 + index） | — | 2026-05 |
 | ⏳ 待完成 | FAQ GEO 問答補充（5 則） | — | 2026-06 |

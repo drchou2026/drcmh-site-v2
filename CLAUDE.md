@@ -65,6 +65,8 @@ After the frontmatter and before the first `##` heading, add an MDX blockquote f
 
 **Never add a disclaimer inside `.mdx` files** — `Disclaimer.astro` is auto-injected by `[slug].astro` after `<Content />`.
 
+**MDX character escaping** — MDX parses `<` as a JSX tag opener. Any `<` followed by a digit (e.g. `<200 mL`, `<3 cm`, `<25%`) will cause a build error. Always escape these as `&lt;` (e.g. `&lt;200 mL`). The same applies to `>` before a digit in ambiguous contexts — use `&gt;` to be safe.
+
 ### Image Storage
 
 - Blog images: `src/assets/images/blog/[article-slug]/`
