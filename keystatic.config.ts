@@ -295,6 +295,18 @@ export default config({
           description: '🌟提示：上傳前強烈建議先到 https://squoosh.app/ 壓縮圖片，這會大幅提升網頁載入速度！封面圖片建議 1200x628 像素，比例約 1.91:1，有助於社群分享時顯示效果。',
         }),
 
+        faq: fields.array(
+          fields.object({
+            question: fields.text({ label: '問題 (Q)' }),
+            answer: fields.text({ label: '回答 (A)', multiline: true }),
+          }),
+          {
+            label: 'FAQ Schema（結構化問答，供 Google 富搜尋結果使用）',
+            description: '每篇文章建議加入 3–5 題，會自動注入 FAQPage JSON-LD。',
+            itemLabel: props => props.fields.question.value || '新增問答',
+          }
+        ),
+
         content: fields.mdx({
           label: '文章內文',
           description: '🌟提示：若要在內文插入圖片，強烈建議先到 https://squoosh.app/ 壓縮後再上傳，確保網頁載入流暢！',
