@@ -11,9 +11,10 @@ const blog = defineCollection({
     updatedDate: z.date().optional(),
     author: z.string().default('周孟翰 醫師'),
     category: z.array(z.enum(['排尿困擾與攝護腺', '私密健康與性傳染病', '微創治療與手術', '男性性功能與荷爾蒙', '一般泌尿疾病'])).default(['一般泌尿疾病']),
-    tags: z.string().optional().transform((str) => {
-      if (!str) return [];
-      return str.split(',').map((s) => s.trim()).filter(Boolean);
+    tags: z.union([z.string(), z.array(z.string())]).optional().transform((value) => {
+      if (!value) return [];
+      if (Array.isArray(value)) return value.map((s) => s.trim()).filter(Boolean);
+      return value.split(',').map((s) => s.trim()).filter(Boolean);
     }),
     coverImage: image().optional(),
     faq: z.array(z.object({
